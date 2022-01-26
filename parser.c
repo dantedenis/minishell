@@ -47,8 +47,29 @@ char	*slash(char *str, int *i)
 	return (str);
 }
 
-char	*dollar(char *str, int *i, char **envp)
+char	*dollar(char *str, int *i)
 {
+	int		j;
+	char	*tmp;
+	char	*tmp2;
+	char	*half1;
+
+	j = (*i)++;
+	while (ft_isalnum(str[*i]))
+		(*i)++;
+	tmp = ft_substr(str, j + 1, *i - j - 1);
+	tmp2 = ft_substr(str, 0, j);
+	half1 = ft_strjoin(tmp2, getenv(tmp));
+	free(tmp);
+	if (half1 == NULL)
+		half1 = tmp2;
+	else
+		free(tmp2);
+	tmp = ft_strdup(str + *i);
+	str = ft_strjoin(half1, tmp);
+	*i = ft_strlen(half1);
+	free(tmp);
+	free(half1);
 	return (str);
 }
 
@@ -74,7 +95,7 @@ char	*quote(char *str, int *i)
 	return (str);
 }
 
-char	*double_quote(char *str, int *i, char **envp)
+char	*double_quote(char *str, int *i)
 {
 	int	j;
 	t_list	*tmp = NULL;
@@ -85,7 +106,7 @@ char	*double_quote(char *str, int *i, char **envp)
 	while (str[*i] != '"')
 	{
 		if (str[*i] == '$')
-			str = dollar(str, i, envp);
+			str = dollar(str, i);
 		else if (str[*i] == '\\')
 			str = slash(str, i);
 		++(*i);
@@ -112,7 +133,9 @@ char	*parser(char *str, char **envp)
 		if (str[i] == '\'')
 			str = quote(str, &i);
 		else if (str[i] == '"')
-			str = double_quote(str, &i, envp);
+			str = double_quote(str, &i);
+		else if (str[i] == '$')
+			str = dollar(str, &i);
 		++i;
 	}
 	return (str);
@@ -123,7 +146,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*str;
 	char	*tmp;
 
-	str = ft_strdup("abb\"\\$ zxc\"aaa");
+	str = ft_strdup("\"abc $USERzxc\"");
 	tmp = parser(str, envp);
 	printf("%s\n", tmp);
 	free(tmp);
