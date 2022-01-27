@@ -3,6 +3,12 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+int	ft_error(char *str)
+{
+	ft_putendl_fd(str, 2);
+	return (1);
+}
+
 int	preparser(char *str)
 {
 	char	quote;
@@ -23,10 +29,14 @@ int	preparser(char *str)
 
 void	print_list(t_list *lst)
 {
+	int	i;
+	
+	i = 0;
 	while (lst)
 	{
-		printf("%s\n", lst->content);
+		printf("cmd %d: %s\n", i, lst->content);
 		lst = lst->next;
+		++i;
 	}
 }
 
@@ -66,6 +76,7 @@ char	*dollar(char *str, int *i)
 	else
 		free(tmp2);
 	tmp = ft_strdup(str + *i);
+	free(str);
 	str = ft_strjoin(half1, tmp);
 	*i = ft_strlen(half1);
 	free(tmp);
@@ -123,7 +134,7 @@ char	*double_quote(char *str, int *i)
 	return (joined2);
 }
 
-char	*parser(char *str, char **envp)
+char	*parser(char *str)
 {
 	int		i;
 	
@@ -141,14 +152,49 @@ char	*parser(char *str, char **envp)
 	return (str);
 }
 
+t_list	*split_cmds(char *str)
+{
+	char	quote;
+	t_list	*ret;
+	int		i;
+	int		j;
+
+	quote = 0;
+	i = 0;
+	ret = NULL;
+	while (str[i])
+	{
+		j = i;
+		while (str[i] && (str[i] != ';' || quote))
+		{
+			if (!quote && (str[i] == '\'' || str[i] == '"'))
+				quote = str[i];
+			else if (quote && str[i] == quote)
+				quote = 0;
+			++i;
+		}
+		if (!quote)
+			ft_lstadd_back(&ret, ft_lstnew(parser(ft_substr(str, j, i - j))));
+		if (str[i])
+			++i;
+	}
+	return (ret);
+}
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
 	char	*tmp;
+	t_list	*cmds;
 
-	str = ft_strdup("\"abc $USERzxc\"");
-	tmp = parser(str, envp);
-	printf("%s\n", tmp);
-	free(tmp);
+	str = ft_strdup(" echo $USER zxc ; ls -la ; echo \" zxc;aboba \"");
+	if (preparser(str))
+		return (ft_error("preparser error"));
+	cmds = split_cmds(str);
+	print_list(cmds);
+	ft_lstclear(&cmds, free);
+	// checking leaks
+	while (1) ; 
 	return (0);
 }
