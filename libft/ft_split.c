@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 15:36:31 by lcoreen           #+#    #+#             */
-/*   Updated: 2021/10/10 15:36:34 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/02 16:59:13 by ivan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,6 @@ static char	*ft_substrdup(char const *s, char c)
 	return (dup);
 }
 
-static char	**ft_freearr(char **arr, size_t len)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < len)
-	{
-		free(arr[i]);
-		++i;
-	}
-	free(arr);
-	return (NULL);
-}
-
 char	**ft_split(char const *s, char c)
 {
 	char	**ret;
@@ -90,7 +76,7 @@ char	**ft_split(char const *s, char c)
 		{
 			ret[i] = ft_substrdup(s, c);
 			if (ret[i] == NULL)
-				return (ft_freearr(ret, i));
+				return (ft_freearr(ret));
 			++i;
 		}
 		while (*s && *s != c)
