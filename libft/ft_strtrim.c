@@ -3,41 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/10 15:25:26 by lcoreen           #+#    #+#             */
-/*   Updated: 2021/10/10 15:25:28 by lcoreen          ###   ########.fr       */
+/*   Created: 2021/10/10 17:54:22 by bstrong           #+#    #+#             */
+/*   Updated: 2021/10/10 17:54:22 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_charinset(char ch, char const *set)
-{
-	while (*set)
-	{
-		if (ch == *set)
-			return (1);
-		++set;
-	}
-	return (0);
-}
-
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t	begin;
-	size_t	end;
+	char	*result;
+	size_t	size;
 
-	if (s1 == NULL || set == NULL)
+	if (!s1 || !set)
 		return (NULL);
-	if (*s1 == '\0')
-		return ((char *) s1);
-	begin = 0;
-	end = ft_strlen(s1) - 1;
-	while (ft_charinset(s1[begin], set))
-		++begin;
-	if (begin != end + 1)
-		while (ft_charinset(s1[end], set))
-			--end;
-	return (ft_substr(s1, begin, end - begin + 1));
+	while (*s1 && ft_strchr(set, *s1))
+		++s1;
+	size = ft_strlen(s1);
+	while (size && ft_strchr(set, s1[size]))
+		--size;
+	result = ft_substr(s1, 0, size + 1);
+	return (result);
 }

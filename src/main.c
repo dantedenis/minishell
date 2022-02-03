@@ -1,9 +1,6 @@
 #include "minishell.h"
 
-void	sig_handler(int signal, siginfo_t *siginfo, void *context)
-{
-	//обработка сигналов.
-}
+t_env	*g_env;
 
 int main(int argc, char **argv, char **env)
 {
@@ -15,6 +12,7 @@ int main(int argc, char **argv, char **env)
 	sig_act.sa_flags = SA_SIGINFO;
 	sigaction(SIGQUIT, &sig_act, NULL);
 	//sigaction(SIGQUIT, &sig_act, NULL);		//найти инфу какие сигналы ловить
+	put_wellcome();
 	while (1)
 	{
 		if (!(str_input = readline("MINISHELL >> ")))

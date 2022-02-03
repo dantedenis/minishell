@@ -3,48 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/10 15:10:24 by lcoreen           #+#    #+#             */
-/*   Updated: 2021/10/10 16:53:06 by lcoreen          ###   ########.fr       */
+/*   Created: 2021/10/10 00:32:17 by bstrong           #+#    #+#             */
+/*   Updated: 2021/10/10 00:32:17 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	ft_diglen(const char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] >= '0' && str[i] <= '9')
-		++i;
-	return (i);
-}
-
 int	ft_atoi(const char *str)
 {
-	int	sign;
-	int	res;
+	long long	result;
+	int			neg;
 
-	sign = 1;
-	res = 0;
-	while (*str == '\t' || *str == '\n' || *str == '\v'\
-		|| *str == '\f' || *str == ' ' || *str == '\r')
+	result = 0;
+	neg = 1;
+	while (*str && (*str == ' ' || *str == '\n' || *str == '\t'
+			|| *str == '\v' || *str == '\f' || *str == '\r'))
 		++str;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign *= -1;
-		++str;
-	}
-	if (ft_isdigit(*str) && ((ft_diglen(str) > 19) || (ft_diglen(str) == 19 \
-					&& ft_strncmp(str, "9223372036854775807", 19) > 0)))
-		return ((-sign - 1) / 2);
+	if (*str == '+' || *str == '-')
+		if (*str++ == '-')
+			neg = -1;
 	while (*str >= '0' && *str <= '9')
 	{
-		res = res * 10 + *str - '0';
-		++str;
+		result = result * 10 + *str++ - '0';
+		if (result > INT_MAX && neg == 1)
+			return (-1);
+		if (result > ((long long)INT_MAX + 1L) && neg == -1)
+			return (0);
 	}
-	return (res * sign);
+	return (result * neg);
 }

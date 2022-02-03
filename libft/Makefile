@@ -1,47 +1,61 @@
-NAME	=	libft.a
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/10/08 09:38:50 by bstrong           #+#    #+#              #
+#    Updated: 2022/01/02 00:16:46 by bstrong          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-SRC		=	ft_isalpha.c	ft_isdigit.c	ft_isalnum.c\
-			ft_atoi.c		ft_bzero.c		ft_calloc.c\
-			ft_isascii.c	ft_isprint.c	ft_memchr.c\
-			ft_memcmp.c		ft_memmove.c	ft_memset.c\
-			ft_strchr.c		ft_strdup.c		ft_strlcat.c\
-			ft_strlcpy.c	ft_strlen.c		ft_strncmp.c\
-			ft_strnstr.c	ft_strrchr.c	ft_tolower.c\
-			ft_toupper.c	ft_memcpy.c		ft_strtrim.c\
-			ft_strjoin.c	ft_substr.c		ft_split.c\
-			ft_itoa.c		ft_strmapi.c	ft_striteri.c\
-			ft_putchar_fd.c	ft_putstr_fd.c	ft_putendl_fd.c\
-			ft_putnbr_fd.c
+NAME = libft.a
+CC = clang
+FLAGS = -Wall -Wextra -Werror
 
-SRC_B	=	ft_lstadd_back_bonus.c	ft_lstadd_front_bonus.c	ft_lstclear_bonus.c\
-            ft_lstdelone_bonus.c	ft_lstlast_bonus.c		ft_lstnew_bonus.c\
-            ft_lstsize_bonus.c		ft_lstiter_bonus.c		ft_lstmap_bonus.c
+LIST =	ft_atoi.c		ft_bzero.c		ft_calloc.c \
+		ft_isalnum.c	ft_isalpha.c	ft_isascii.c \
+		ft_isdigit.c	ft_isprint.c	ft_memchr.c \
+		ft_memcmp.c		ft_memcpy.c		ft_memset.c \
+		ft_putchar_fd.c	ft_putendl_fd.c	ft_split.c\
+		ft_strchr.c		ft_strdup.c		ft_strlcat.c \
+		ft_strlcpy.c	ft_strlen.c		ft_strncmp.c \
+		ft_strnstr.c	ft_strrchr.c	ft_tolower.c \
+		ft_itoa.c		ft_memmove.c	ft_toupper.c \
+		ft_striteri.c	ft_strjoin.c	ft_strmapi.c \
+		ft_strtrim.c	ft_substr.c		ft_putstr_fd.c	ft_putnbr_fd.c
 
-HEADER	= 	libft.h
-OBJ		=	${SRC:%.c=%.o}
-OBJ_B	=	${SRC_B:%.c=%.o}
+LIST_B =	ft_lstnew.c		ft_lstadd_front.c	ft_lstsize.c \
+			ft_lstlast.c	ft_lstadd_back.c	ft_lstiter.c \
+			ft_lstclear.c	ft_lstdelone.c		ft_lstmap.c
 
-CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -I${HEADER}
+OBJ			= $(addprefix $(OBJ_PATH), $(patsubst %.c,%.o,$(LIST)))
+OBJ_B		= $(addprefix $(OBJ_PATH), $(patsubst %.c,%.o,$(LIST_B)))
+OBJ_PATH	= ./bin/
 
-.PHONY	:	all clean fclean re bonus
+HEADER = libft.h
 
-all		:	${NAME}
+.PHONY : all clean fclean re bonus
 
-${NAME}	:	${OBJ} ${HEADER}
-	ar rcs ${NAME} $?
+all: $(OBJ_PATH) $(NAME)
 
-%.o : %.c ${HEADER}
-	${CC} ${CFLAGS} -c $< -o $@
+$(OBJ_PATH):
+	mkdir -p $(OBJ_PATH)
 
-bonus	:
-	make OBJ="${OBJ_B}" all
+$(NAME): $(OBJ)
+	ar rc $(NAME) $?
 
-clean	:
-	rm -f ${OBJ} ${OBJ_B}
+$(OBJ_PATH)%.o : %.c $(HEADER)
+	$(CC) $(FLAGS) -c $< -o $@
 
-fclean	:	clean
-	rm -f ${NAME}
+bonus: $(OBJ) $(OBJ_B)
+	ar rcs $(NAME) $?
 
-re		:	fclean all
+clean:
+	rm -rf $(OBJ_PATH)
 
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
