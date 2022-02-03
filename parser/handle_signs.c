@@ -1,5 +1,4 @@
-#include "libft.h"
-#include "command.h"
+#include "minishell.h"
 
 char	*slash(char *str, int *i, int in_quotes)
 {
@@ -58,7 +57,7 @@ char	*double_quote(char *str, int *i)
 	{
 		if (str[*i] == '$')
 		{
-			lst_lstadd_back(&lst, ft_lstnew(ft_substr(str, j, *i - j)));
+			ft_lstadd_back(&lst, ft_lstnew(ft_substr(str, j, *i - j)));
 			tmp = dollar(str, i);
 			if (tmp)
 				ft_lstadd_back(&lst, ft_lstnew(tmp));
@@ -66,7 +65,7 @@ char	*double_quote(char *str, int *i)
 		}
 		else if (str[*i] == '\\')
 		{
-			lst_lstadd_back(&lst, ft_lstnew(ft_substr(str, j, *i - j)));
+			ft_lstadd_back(&lst, ft_lstnew(ft_substr(str, j, *i - j)));
 			tmp = slash(str, i, 1);
 			ft_lstadd_back(&lst, ft_lstnew(tmp));
 			j = *i;
@@ -86,7 +85,7 @@ int	redir(t_cmd *cmd, char *str, int *i)
 	char	*file;
 
 	find_word = 0;
-	type_redir = str[*i++];
+	type_redir = str[(*i)++];
 	while (str[*i] && ((!find_word && is_space(str[*i])) ||
 			!is_space(str[*i])))
 	{
@@ -94,7 +93,7 @@ int	redir(t_cmd *cmd, char *str, int *i)
 			find_word = *i;
 		++(*i);
 	}
-	file = ft_substr(str, find_word, i - find_word);
+	file = ft_substr(str, find_word, *i - find_word);
 	open_file(cmd, file, type_redir);
 	return (0);
 }

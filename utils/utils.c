@@ -41,7 +41,7 @@ int	open_file(t_cmd *cmd, char *file, char redir)
 	{
 		if (cmd->inf != -1)
 			close(cmd->inf);
-		cmd->inf = open(file, O_RDONLY);
+		cmd->inf = open(file, O_RDONLY, 0644);
 	}
 	return (0);
 }
@@ -55,19 +55,19 @@ int	close_files(t_cmd *cmd)
 	return (0);
 }
 
-t_cmd	*init_cmd(char *cmd)
-{
-	t_cmd	*elem;
+// t_cmd	*init_cmd(char *cmd)
+// {
+// 	t_cmd	*elem;
 
-	if (cmd == NULL)
-		return (NULL);
-	elem = (t_cmd *) malloc(sizeof(t_cmd));
-	elem->cmd = cmd;
-	elem->inf = -1;
-	elem->outf = -1;
-	elem->is_full_cmd = 0;
-	return (elem);
-}
+// 	if (cmd == NULL)
+// 		return (NULL);
+// 	elem = (t_cmd *) malloc(sizeof(t_cmd));
+// 	elem->cmd = cmd;
+// 	elem->inf = -1;
+// 	elem->outf = -1;
+// 	elem->is_full_cmd = 0;
+// 	return (elem);
+// }
 
 void	free_cmd(void *cmd)
 {
@@ -80,14 +80,10 @@ void	free_cmd(void *cmd)
 
 char	*join_list(t_list *lst)
 {
-	int		size;
 	char	*tmp;
 	char	*ret;
 
-	size = ft_lstsize(lst);
 	ret = ft_strdup(lst->content);
-	if (size == 1)
-		return (lst->content);
 	while (lst->next)
 	{
 		tmp = ft_strjoin(ret, lst->next->content);
@@ -96,4 +92,9 @@ char	*join_list(t_list *lst)
 		lst = lst->next;
 	}
 	return (ret);
+}
+
+int	is_desired_sign(char c)
+{
+	return (c == '\'' || c == '"' || c == '$' || c == '\\');
 }

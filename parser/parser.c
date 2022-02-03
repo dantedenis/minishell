@@ -26,32 +26,74 @@ int preparser(char *str)
 	return (0);
 }
 
+static int	parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
+{
+	int	j;
+	int	started_i;
+
+	j = *i;
+	while (str[*i] && !is_space(str[*i]))	
+	{
+		started_i = *i;
+		if (is_desired_sign(str[*i]) && *i != j)
+			ft_lstadd_back(arg, ft_lstnew(ft_substr(str, j, *i - j)));
+		if (str[*i] == '\'')
+			ft_lstadd_back(arg, ft_lstnew(quote(str, i)));
+		else if (str[*i] == '"')
+			ft_lstadd_back(arg, ft_lstnew(double_quote(str, i)));
+		else if (str[*i] == '$')
+			ft_lstadd_back(arg, ft_lstnew(dollar(str, i)));
+		else if (str[*i] == '\\')
+			ft_lstadd_back(arg, ft_lstnew(slash(str, i, 0)));
+		else if (str[*i] == '<' || str[*i] == '>')
+			redir(cmd, str, i);
+		++(*i);
+		if (started_i + 1 != *i)
+			j = *i;
+	}
+	return (j);
+}
+
+static int	get_arguments(t_cmd *cmd, char *str)
+{
+	t_list	*arg;
+	int		i;
+	int		j;
+	
+	arg = NULL;
+	i = 0;
+	while (str[i])
+	{
+		while (str[i] && is_space(str[i]))
+			++i;
+		if (!str[i])
+			break;
+		j = parse_argument(cmd, &arg, str, &i);
+		if (i != j)
+			ft_lstadd_back(&arg, ft_lstnew(ft_substr(str, j, i - j)));
+		if (arg)
+		{
+			ft_lstadd_back(&cmd->cmd, ft_lstnew(join_list(arg)));
+			ft_lstclear(&arg, free);
+		}
+	}
+	return (0);
+}
+
 static int	parser(char *str, char c, char **env)
 {
 	int 	i;
 	t_cmd	cmd;
-	
+
 	i = 0;
 	cmd.outf = -1;
 	cmd.inf = -1;
-	// cmd.have_pipe = (c == '|');
-	while (str[i])
-	{
-		if (str[i] == '\'')
-			ft_lstadd_back(&cmd.cmd, ft_lstnew(ft_lstnew(quote(str, &i))));
-		else if (str[i] == '"')
-			ft_lstadd_back(&cmd.cmd, ft_lstnew(ft_lstnew(double_quote(str, &i))));
-		else if (str[i] == '$')
-			ft_lstadd_back(&cmd.cmd, ft_lstnew(ft_lstnew(dollar(str, &i))));
-		else if (str[i] == '\\')
-			ft_lstadd_back(&cmd.cmd, ft_lstnew(ft_lstnew(slash(str, &i, 0))));
-		else if (str[i] == '<' || str[i] == '>')
-			redir(&cmd, str, &i);
-		++i;
-	}
+	cmd.cmd = NULL;
+	get_arguments(&cmd, str);
 	execute_cmd(&cmd, c, env);
 	free(str);
 	ft_lstclear(&cmd.cmd, free);
+	close_files(&cmd);
 	return (0);
 }
 

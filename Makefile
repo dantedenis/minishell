@@ -3,7 +3,7 @@ LIB					=	libft.a
 LIBFT				=	${addprefix ${LIB_DIR}, ${LIB}}
 NAME        		=   minishell
 PARSER_FILES   		=   parser.c			handle_signs.c
-PIPE_FILES   		=   execute_cmd.c		run_child.c		parser.c
+PIPE_FILES   		=   execute_cmd.c		parser.c
 UTILS_FILES			=	utils.c				
 # SRC_FILES_BONUS		=	pipex_bonus.c		parser_bonus.c	run_child_bonus.c\
 # 						pipex_utils.c

@@ -1,59 +1,37 @@
 #include "minishell.h"
 #include "command.h"
 
-// int	find_redir(char *str, int *i, char c)
-// {
-// 	size_t	i;
-// 	int		r;
-// 	int		find_word;
-// 	char	*file;
-// 	char	*redir;
-// 	char	*tmp;
-// 	char	*tmp2;
-
-// 	redir = ft_strrchr((const char *) str, c);
-// 	if (!redir)
-// 		return (-1);
-// 	i = redir - str;
-// 	r = i++;
-// 	find_word = 0;
-// 	while (str[i] && ((!find_word && is_space(str[i])) ||
-// 			!is_space(str[i])))
-// 	{
-// 		if (!find_word && !is_space(str[i]))
-// 			find_word = i;
-// 		++i;
-// 	}
-// 	file = ft_substr(str, find_word, i - find_word);
-// 	tmp = ft_substr(str, 0, r);
-// 	tmp2 = ft_strdup(str + i);
-// 	free(str);
-// 	find_word = open_file(file, c);
-// 	if (find_word == -1)
-// 		return (-2 + ft_error("Cant open file"));
-// 	free(file);
-// 	free(tmp);
-// 	free(tmp2);
-// 	return (str);
-// }
-
-int	parse_redir(char *cmd, char c, char **env)
+static char **transform_list_to_array(t_list *lst)
 {
-	t_cmd	info;
-	
-	(void) env;
-	info.is_full_cmd = 0;
-	printf("before finding right redirect: %s\n", cmd);
-	info.outf = find_redir(&cmd, '>');
-	printf("after finding right redirect: %s\n", cmd);
-	info.inf = find_redir(&cmd, '<');
-	printf("after finding left redirect: %s\n", cmd);
-	info.cmd = cmd;
-	if (cmd[0] == '.' || cmd[0] == '/')
-		info.is_full_cmd = 1;
-	execute_cmd(&info, c, env);
+    char    **array;
+    int     size;
+    int     i;
+
+    i = 0;
+    size = ft_lstsize(lst);
+    array = (char **) malloc(sizeof(char *) * (size + 1));
+    while (i < size)
+    {
+        array[i] = lst->content;
+        lst = lst->next;
+        ++i;
+    }
+    array[i] = NULL;
+    return (array);
+}
+
+static void	run_child(t_cmd *info, char **env)
+{
+	char	*cmd;
+	char	**new_argv;
+
+	new_argv = transform_list_to_array(info->cmd);
+	cmd = get_cmd(new_argv[0]);
+	execve(cmd, new_argv, env);
+	perror("execve");
 	free(cmd);
-	return (0);
+	ft_freearr(new_argv);
+	exit(1);
 }
 
 int	execute_cmd(t_cmd *cmd, char c, char **env)
@@ -67,26 +45,29 @@ int	execute_cmd(t_cmd *cmd, char c, char **env)
 	if (child == 0)
 	{
 		if (c == '|')
+        {
 			close(pipefd[0]);
+            dup2(pipefd[1], 1);
+            close(pipefd[1]);
+        }
 		if (cmd->inf != -1)
 			dup2(cmd->inf, 0);
 		if (cmd->outf != -1)
 			dup2(cmd->outf, 1);
-		else
-			dup2(pipefd[1], 1);
-		if (c == '|')
-			close(pipefd[1]);
 		close_files(cmd);
 		run_child(cmd, env);
 	}
 	else if (child > 0)
 	{
-		close(pipefd[1]);
-		dup2(pipefd[0], 0);
+		if (c == '|')
+        {
+            close(pipefd[1]);
+		    dup2(pipefd[0], 0);
+            close(pipefd[0]);
+        }
 		wait(NULL);
-		close(pipefd[0]);
 		close_files(cmd);
 	}
 	return (0);
 }
-// TODO: Check leaks
+
