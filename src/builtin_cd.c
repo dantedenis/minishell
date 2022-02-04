@@ -25,12 +25,26 @@ static void	change_dir(char *path, int flag)
 
 int	bin_cd(char **argv)
 {
-	char	*path_home;
-
-	path_home = get_value_env("HOME");
 	if (!argv[0])
 	{
-		change_dir(path_home, 0);
+		change_dir(get_value_env("HOME"), 0);
 		return (0);
 	}
+	if (argv[1])
+		ft_putstr_fd("cd: too many arguments\n", 2);
+	else
+	{
+		if (!ft_strncmp(argv[0], "--", 3))
+		{
+			change_dir(get_value_env("HOME"), 0);
+			return (0);
+		}
+		else if (!ft_strncmp(argv[0], "-", 2))
+		{
+			change_dir(get_value_env("OLDPWD"), 1);
+			return (0);
+		}
+		change_dir(argv[0], 0);
+	}
+	return (0);
 }
