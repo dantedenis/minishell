@@ -6,6 +6,11 @@
 # include "command.h"
 # include <sys/types.h>
 # include <sys/wait.h>
+# define RIGHT_REDIR 0
+# define DOUBLE_RIGHT_REDIR 1
+# define LEFT_REDIR 2
+# define DOUBLE_LEFT_REDIR 3
+
 int	preparser(char *str);
 int	ft_error(char *str);
 int	split_cmds(char *str, char **env);
@@ -18,5 +23,7 @@ char	*get_cmd(char *str);
 int		is_space(char c);
 char	*join_list(t_list *lst);
 int	is_desired_sign(char c);
+int	is_redirect(char c);
+int	check_redirect(char *str);
 
 #endif

@@ -89,6 +89,8 @@ static int	parser(char *str, char c, char **env)
 	cmd.outf = -1;
 	cmd.inf = -1;
 	cmd.cmd = NULL;
+	cmd.heredoc_flag = 0;
+	cmd.is_full_cmd = -1;
 	get_arguments(&cmd, str);
 	execute_cmd(&cmd, c, env);
 	free(str);

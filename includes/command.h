@@ -8,9 +8,11 @@ typedef struct s_cmd
 	int		outf;
 	int		is_full_cmd;
 	int		have_pipe;
+	int		heredoc_pipe;
+	int		heredoc_flag;
 }   t_cmd;
 t_cmd	*init_cmd(char *cmd);
 void	free_cmd(void *cmd);
-int	open_file(t_cmd *cmd, char *file, char redir);
+int	open_file(t_cmd *cmd, char *file, int type);
 
 #endif

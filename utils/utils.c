@@ -1,7 +1,4 @@
-#include "libft.h"
-#include <stdio.h>
-#include <fcntl.h>
-#include "command.h"
+#include "minishell.h"
 
 int	ft_error(char *str)
 {
@@ -29,19 +26,25 @@ void	print_list(t_list *lst)
 	}
 }
 
-int	open_file(t_cmd *cmd, char *file, char redir)
+int	open_file(t_cmd *cmd, char *file, int type)
 {
-	if (redir == '>')
+	if (type == RIGHT_REDIR)
 	{
 		if (cmd->outf != -1)
 			close(cmd->outf);
 		cmd->outf = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	}
-	else if (redir == '<')
+	else if (type == LEFT_REDIR)
 	{
 		if (cmd->inf != -1)
 			close(cmd->inf);
 		cmd->inf = open(file, O_RDONLY, 0644);
+	}
+	else if (type == DOUBLE_RIGHT_REDIR)
+	{
+		if (cmd->outf != -1)
+			close(cmd->outf);
+		cmd->outf = open(file, O_CREAT | O_RDWR | O_APPEND, 0644);
 	}
 	return (0);
 }
@@ -98,3 +101,24 @@ int	is_desired_sign(char c)
 {
 	return (c == '\'' || c == '"' || c == '$' || c == '\\');
 }
+
+int	is_redirect(char c)
+{
+	return (c == '<' || c == '>');
+}
+
+int	check_redirect(char *str)
+{
+	char	redir;
+
+	redir = str[0];
+	if (str[1] == str[0])
+	{
+		if (str[0] == '>')
+			return (DOUBLE_RIGHT_REDIR);
+		else if (str[1] == '<')
+			return (DOUBLE_LEFT_REDIR);
+	}
+	if (str[0] == '>')
+		return (RIGHT_REDIR);
+	return (LEFT_REDIR);
