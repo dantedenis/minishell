@@ -47,7 +47,8 @@ static int	parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
 			ft_lstadd_back(arg, ft_lstnew(slash(str, i, 0)));
 		else if (str[*i] == '<' || str[*i] == '>')
 			redir(cmd, str, i);
-		++(*i);
+		if (str[*i])
+			++(*i);
 		if (started_i + 1 != *i)
 			j = *i;
 	}
@@ -89,13 +90,15 @@ static int	parser(char *str, char c, char **env)
 	cmd.outf = -1;
 	cmd.inf = -1;
 	cmd.cmd = NULL;
-	cmd.heredoc_flag = 0;
 	cmd.is_full_cmd = -1;
+	cmd.heredoc_flag = 0;
 	get_arguments(&cmd, str);
 	execute_cmd(&cmd, c, env);
 	free(str);
 	ft_lstclear(&cmd.cmd, free);
-	close_files(&cmd);
+	// close_files_and_pipe(&cmd);
+	// if (cmd.type_redirect == DOUBLE_LEFT_REDIR)
+		// dup2(g_dup_stdin, 0);
 	return (0);
 }
 
@@ -124,6 +127,7 @@ static int	split_pipe(char *str, char **env)
 		if (str[i])
 			++i;
 	}
+	// dup2(g_dup_stdin, 0);
 	free(str);
 	return (0);
 }

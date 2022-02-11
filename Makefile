@@ -45,13 +45,13 @@ OBJ					=	${SRC:%.c=%.o}
 all :   ${NAME}
 
 ${LIBFT}	:	${SRC_LIBFT} ${INC_LIBFT}
-	cd ${LIB_DIR} && ${MAKE}
+	cd ${LIB_DIR} && ${MAKE} && ${MAKE} bonus
 
 %.o :   %.c ${LIBFT}
 	${CC} ${CFLAGS} -c $< -o $@
 
 ${NAME} :  ${OBJ} ${INC}
-	${CC} -o ${NAME} ${OBJ} ${CFLAGS} -L${LIB_DIR} -lft 
+	${CC} -o ${NAME} ${OBJ} ${CFLAGS} -lreadline -L${LIB_DIR} -lft 
 
 bonus	:	${LIBFT}
 	@make OBJ="${OBJ_BONUS}" INC=${INC_BONUS} all

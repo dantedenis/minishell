@@ -81,11 +81,11 @@ char	*double_quote(char *str, int *i)
 int	redir(t_cmd *cmd, char *str, int *i)
 {
 	int	find_word;
-	int		type_redirect;
 	char	*file;
 
 	find_word = 0;
-	type_redirect = check_redirect(str + *i);
+	cmd->type_redirect = check_redirect(str + *i);
+	*i += cmd->type_redirect % 2 + 1;
 	while (str[*i] && ((!find_word && is_space(str[*i])) ||
 			!is_space(str[*i])))
 	{
@@ -94,7 +94,10 @@ int	redir(t_cmd *cmd, char *str, int *i)
 		++(*i);
 	}
 	file = ft_substr(str, find_word, *i - find_word);
-	open_file(cmd, file, type_redirect);
+	if (cmd->type_redirect == DOUBLE_LEFT_REDIR)
+		here_doc(cmd, file);
+	else
+		open_file(cmd, file);
 	free(file);
 	return (0);
 }
