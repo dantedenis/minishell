@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 16:56:51 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/02 17:00:20 by ivan             ###   ########.fr       */
+/*   Updated: 2022/02/11 15:39:51 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ char	*get_cmd(char *str)
 	char	*paths;
 	char	*cmd;
 
+	
 	paths = getenv("PATH");
 	printf("PATH: %s", paths);
 	if (!paths)
