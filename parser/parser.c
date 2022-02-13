@@ -6,33 +6,15 @@ char *slash(char *str, int *i, int in_quotes);
 char *dollar(char *str, int *i);
 char *quote(char *str, int *i);
 char *double_quote(char *str, int *i);
-int	redir(t_cmd *cmd, char *str, int *i);
+int redir(t_cmd *cmd, char *str, int *i);
 
-int preparser(char *str)
+static int parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
 {
-	char quote;
-
-	quote = 0;
-	while (*str)
-	{
-		if (!quote && (*str == '\'' || *str == '"'))
-			quote = *str;
-		else if (quote && *str == quote)
-			quote = 0;
-		++str;
-	}
-	if (quote)
-		return (1);
-	return (0);
-}
-
-static int	parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
-{
-	int	j;
-	int	started_i;
+	int j;
+	int started_i;
 
 	j = *i;
-	while (str[*i] && !is_space(str[*i]))	
+	while (str[*i] && !is_space(str[*i]))
 	{
 		started_i = *i;
 		if (is_desired_sign(str[*i]) && *i != j)
@@ -46,7 +28,10 @@ static int	parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
 		else if (str[*i] == '\\')
 			ft_lstadd_back(arg, ft_lstnew(slash(str, i, 0)));
 		else if (str[*i] == '<' || str[*i] == '>')
-			redir(cmd, str, i);
+		{
+			if (redir(cmd, str, i) == 1)
+				return (-1);
+		}
 		if (str[*i])
 			++(*i);
 		if (started_i + 1 != *i)
@@ -55,12 +40,12 @@ static int	parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
 	return (j);
 }
 
-static int	get_arguments(t_cmd *cmd, char *str)
+static int get_arguments(t_cmd *cmd, char *str)
 {
-	t_list	*arg;
-	int		i;
-	int		j;
-	
+	t_list *arg;
+	int i;
+	int j;
+
 	arg = NULL;
 	i = 0;
 	while (str[i])
@@ -70,6 +55,11 @@ static int	get_arguments(t_cmd *cmd, char *str)
 		if (!str[i])
 			break;
 		j = parse_argument(cmd, &arg, str, &i);
+		if (j == -1)
+		{
+			ft_lstclear(&arg, free);
+			return (1);
+		}
 		if (i != j)
 			ft_lstadd_back(&arg, ft_lstnew(ft_substr(str, j, i - j)));
 		if (arg)
@@ -81,34 +71,41 @@ static int	get_arguments(t_cmd *cmd, char *str)
 	return (0);
 }
 
-static int	parser(char *str, char c, char **env)
+static int parser(char *str, char c, int dup_stdin, char **env)
 {
-	int 	i;
 	t_cmd	cmd;
+	int		pipefd[2];
 
-	i = 0;
+	if (c == '|')
+		pipe(pipefd);
 	cmd.outf = -1;
 	cmd.inf = -1;
 	cmd.cmd = NULL;
 	cmd.is_full_cmd = -1;
 	cmd.heredoc_flag = 0;
-	get_arguments(&cmd, str);
-	execute_cmd(&cmd, c, env);
+	if (get_arguments(&cmd, str) == 0)
+		execute_cmd(&cmd, pipefd, c, env);
+	if (c == '|')
+	{
+		dup2(pipefd[0], 0);
+		close(pipefd[0]);
+		close(pipefd[1]);
+	}
 	free(str);
 	ft_lstclear(&cmd.cmd, free);
-	// close_files_and_pipe(&cmd);
-	// if (cmd.type_redirect == DOUBLE_LEFT_REDIR)
-		// dup2(g_dup_stdin, 0);
+	if (cmd.type_redirect == DOUBLE_LEFT_REDIR)
+		dup2(dup_stdin, 0);
 	return (0);
 }
 
-
-static int	split_pipe(char *str, char **env)
+static int split_pipe(char *str, char **env)
 {
-	char quote;
-	int i;
-	int j;
+	char	quote;
+	int		i;
+	int		j;
+	int		dup_stdin;
 
+	dup_stdin = dup(0);
 	quote = 0;
 	i = 0;
 	while (str[i])
@@ -123,16 +120,16 @@ static int	split_pipe(char *str, char **env)
 			++i;
 		}
 		if (!quote)
-			parser(ft_substr(str, j, i - j), str[i], env);
+			parser(ft_substr(str, j, i - j), str[i], dup_stdin, env);
 		if (str[i])
 			++i;
 	}
-	// dup2(g_dup_stdin, 0);
+	dup2(dup_stdin, 0);
 	free(str);
 	return (0);
 }
 
-int	split_cmds(char *str, char **env)
+int split_cmds(char *str, char **env)
 {
 	char quote;
 	int i;

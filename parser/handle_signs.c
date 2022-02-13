@@ -80,7 +80,7 @@ char	*double_quote(char *str, int *i)
 
 int	redir(t_cmd *cmd, char *str, int *i)
 {
-	int	find_word;
+	int		find_word;
 	char	*file;
 
 	find_word = 0;
@@ -96,8 +96,11 @@ int	redir(t_cmd *cmd, char *str, int *i)
 	file = ft_substr(str, find_word, *i - find_word);
 	if (cmd->type_redirect == DOUBLE_LEFT_REDIR)
 		here_doc(cmd, file);
-	else
-		open_file(cmd, file);
+	else if (open_file(cmd, file) == 1)
+	{
+		free(file);
+		return (1);
+	}
 	free(file);
 	return (0);
 }

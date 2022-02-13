@@ -7,6 +7,8 @@
 # include "command.h"
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <errno.h>
+# include <string.h>
 # define RIGHT_REDIR 0
 # define DOUBLE_RIGHT_REDIR 1
 # define LEFT_REDIR 2
@@ -18,7 +20,7 @@ int	split_cmds(char *str, char **env);
 void	print_list(t_list *lst);
 t_cmd	*new_cmd(char *cmd);
 int	parse_redir(char *cmd, char c, char **env);
-int	execute_cmd(t_cmd *cmd, char c, char **env);
+int	execute_cmd(t_cmd *cmd, int *pipefd, char c, char **env);
 int	close_files_and_pipe(t_cmd *cmd);
 char	*get_cmd(char *str);
 int		is_space(char c);

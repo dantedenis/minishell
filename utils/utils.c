@@ -2,7 +2,8 @@
 
 int	ft_error(char *str)
 {
-	ft_putendl_fd(str, 2);
+	ft_putstr_fd("minishell: ", 2);
+	perror(str);
 	return (1);
 }
 
@@ -33,18 +34,24 @@ int	open_file(t_cmd *cmd, char *file)
 		if (cmd->outf != -1)
 			close(cmd->outf);
 		cmd->outf = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (cmd->outf < 0)
+			return (ft_error(file));
 	}
 	else if (cmd->type_redirect == LEFT_REDIR)
 	{
 		if (cmd->inf != -1)
 			close(cmd->inf);
 		cmd->inf = open(file, O_RDONLY, 0644);
+		if (cmd->inf < 0)
+			return (ft_error(file));
 	}
 	else if (cmd->type_redirect == DOUBLE_RIGHT_REDIR)
 	{
 		if (cmd->outf != -1)
 			close(cmd->outf);
 		cmd->outf = open(file, O_CREAT | O_RDWR | O_APPEND, 0644);
+		if (cmd->outf < 0)
+			return (ft_error(file));
 	}
 	return (0);
 }

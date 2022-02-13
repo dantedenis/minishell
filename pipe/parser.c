@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 16:56:51 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/11 15:39:51 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/13 15:44:48 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ char	*get_cmd(char *str)
 	char	*paths;
 	char	*cmd;
 
-	
+	if (str[0] == '.' || str[0] == '/')
+		return (ft_strdup(str));
 	paths = getenv("PATH");
 	printf("PATH: %s", paths);
 	if (!paths)

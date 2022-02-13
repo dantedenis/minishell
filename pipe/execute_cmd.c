@@ -28,7 +28,7 @@ static void	run_child(t_cmd *info, char **env)
 	new_argv = transform_list_to_array(info->cmd);
 	cmd = get_cmd(new_argv[0]);
 	execve(cmd, new_argv, env);
-	perror("execve");
+	ft_error(new_argv[0]);
 	free(cmd);
 	ft_freearr(new_argv);
 	exit(1);
@@ -44,7 +44,7 @@ int	here_doc(t_cmd *cmd, char *stop)
 		close(cmd->heredoc_pipe[1]);
 	}
 	if (pipe(cmd->heredoc_pipe) < 0)
-		return (ft_error("pipe in heredoc"));
+		return (ft_error("pipe"));
 	line = readline("> ");
 	if (!line)
 		return (ft_error("malloc"));
@@ -56,21 +56,18 @@ int	here_doc(t_cmd *cmd, char *stop)
 		free(line);
 		line = readline("> ");
 		if (!line)
-			return (ft_error("malloc"));
+			return (ft_error("readline"));
 	}
 	cmd->heredoc_flag = 1;
 	free(line);
 	return (0);
 }
 
-int	execute_cmd(t_cmd *cmd, char c, char **env)
+int	execute_cmd(t_cmd *cmd, int *pipefd, char c, char **env)
 {
-	int		pipefd[2];
 	pid_t	child;
 	int		status;
 
-	if (c == '|')
-		pipe(pipefd);
 	child = fork();
 	if (child == 0)
 	{
@@ -81,26 +78,16 @@ int	execute_cmd(t_cmd *cmd, char c, char **env)
 		if (cmd->outf != -1)
 			dup2(cmd->outf, 1);
 		if (c == '|')
-			dup2(pipefd[1], 1);		
-		if (c == '|')
 		{
+			dup2(pipefd[1], 1);
 			close(pipefd[0]);
 			close(pipefd[1]);
 		}
 		close_files_and_pipe(cmd);
 		run_child(cmd, env);
 	}
-	else if (child > 0)
-	{
-		close_files_and_pipe(cmd);
-		if (c == '|')
-		{
-			dup2(pipefd[0], 0);
-			close(pipefd[0]);
-			close(pipefd[1]);
-		}
-		waitpid(child, &status, 0);
-	}
+	close_files_and_pipe(cmd);
+	waitpid(child, &status, 0);
 	return (0);
 }
 
