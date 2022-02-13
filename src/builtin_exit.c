@@ -14,7 +14,8 @@
 
 void	bin_exit(t_list *list) //+ то что нужно очистить
 {
-	ft_lstclear(list, free);
+	(void) list;
+	//ft_lstclear(list, free);
 	//
 	//	add
 	//

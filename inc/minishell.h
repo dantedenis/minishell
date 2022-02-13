@@ -16,8 +16,9 @@
 # include "libft.h"
 # include <stdio.h>
 # include <signal.h>
-//# include <readline/redline.h>
-//# include <readline/history.h>
+# include <termios.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 typedef struct s_env
 {
@@ -33,7 +34,7 @@ typedef struct s_env
 
 extern t_env	*g_env;
 
-int		parse_env(char **str);
+void	parse_env(char **str);
 char	*get_value_env(char *key);
 void	put_env(char *str);
 void	reverse_stack(t_env **head);
@@ -44,7 +45,7 @@ t_env	*get_env(char *key);
 **	BUILTIN_UTILS
 */
 
-int		bin_echo(t_list **ptr);
+int		bin_echo(char *str);
 void	bin_env(void);
 void	bin_exit(t_list *list);
 int		bin_pwd(void);

@@ -16,15 +16,18 @@ FLAGS		= -Wall -Wextra -Werror
 
 OBJ_PATH	=	./bin/
 SRC_PATH	=	./src/
-SRC_LST		=	main.c	parser.c
 
-HEADERS	= ./inc/minishell.h
+SRC_LST		=	main.c	builtin_cd.c builtin_echo.c builtin_env.c\
+				builtin_exit.c	builtin_export.c	builtin_pwd.c\
+				builtin_unset.c	global_env.c	signal_well.c
 
 SRC		= $(addprefix $(SRC_PATH), $(SRC_LST))
 
+HEADERS	= ./inc/minishell.h
+
 OBJ		= $(addprefix $(OBJ_PATH), $(patsubst %.c,%.o,$(SRC_LST)))
 
-LIBS	= -L./libft -lft
+LIBS	= -L./libft -lft -L/opt/homebrew/opt/readline/lib -lreadline
 
 .PHONY : all clean fclean re
 
@@ -40,7 +43,7 @@ $(NAME): $(OBJ)
 	$(CC) $(OBJ) $(LIBS) -o $@
 
 $(OBJ_PATH)%.o : $(SRC_PATH)%.c $(HEADERS)
-	$(CC) $(FLAGS) -I ./inc -I ./libft -c $< -o $@
+	$(CC) $(FLAGS) -I ./inc -I ./libft -I /opt/homebrew/opt/readline/include -c $< -o $@
 
 clean:
 	make -C ./libft clean

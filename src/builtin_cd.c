@@ -4,6 +4,7 @@ static void	change_dir(char *path, int flag)
 {
 	char	*cwd;
 
+	(void) flag;
 	cwd = getcwd(NULL, 0);
 	if(!chdir(path))
 	{

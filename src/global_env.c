@@ -57,7 +57,7 @@ void	reverse_stack(t_env **head)
 	*head = prev;
 }
 
-int		parse_env(char **str)
+void		parse_env(char **str)
 {
 	while (*str)
 		put_env(*str++);
