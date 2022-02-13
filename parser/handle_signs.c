@@ -87,7 +87,7 @@ int	redir(t_cmd *cmd, char *str, int *i)
 	cmd->type_redirect = check_redirect(str + *i);
 	*i += cmd->type_redirect % 2 + 1;
 	while (str[*i] && ((!find_word && is_space(str[*i])) ||
-			!is_space(str[*i])))
+			(!is_space(str[*i]) && !is_redirect(str[*i]))))
 	{
 		if (!find_word && !is_space(str[*i]))
 			find_word = *i;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_cmd.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
+/*   Updated: 2022/02/13 22:11:09 by lcoreen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "command.h"
 
@@ -27,6 +39,8 @@ static void	run_child(t_cmd *info, char **env)
 
 	new_argv = transform_list_to_array(info->cmd);
 	cmd = get_cmd(new_argv[0]);
+	if (!cmd)
+		exit(ft_error(new_argv[0]));
 	execve(cmd, new_argv, env);
 	ft_error(new_argv[0]);
 	free(cmd);
@@ -90,4 +104,3 @@ int	execute_cmd(t_cmd *cmd, int *pipefd, char c, char **env)
 	waitpid(child, &status, 0);
 	return (0);
 }
-

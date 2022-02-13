@@ -31,36 +31,32 @@ int	open_file(t_cmd *cmd, char *file)
 {
 	if (cmd->type_redirect == RIGHT_REDIR)
 	{
-		if (cmd->outf != -1)
+		if (cmd->outf >= 0)
 			close(cmd->outf);
 		cmd->outf = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
-		if (cmd->outf < 0)
-			return (ft_error(file));
 	}
 	else if (cmd->type_redirect == LEFT_REDIR)
 	{
-		if (cmd->inf != -1)
+		if (cmd->inf >= 0)
 			close(cmd->inf);
 		cmd->inf = open(file, O_RDONLY, 0644);
-		if (cmd->inf < 0)
-			return (ft_error(file));
 	}
 	else if (cmd->type_redirect == DOUBLE_RIGHT_REDIR)
 	{
-		if (cmd->outf != -1)
+		if (cmd->outf >= 0)
 			close(cmd->outf);
 		cmd->outf = open(file, O_CREAT | O_RDWR | O_APPEND, 0644);
-		if (cmd->outf < 0)
-			return (ft_error(file));
 	}
+	if (cmd->inf == -1 || cmd->outf == -1)
+		return (ft_error(file));
 	return (0);
 }
 
 int	close_files_and_pipe(t_cmd *cmd)
 {
-	if (cmd->inf != -1)
+	if (cmd->inf >= 0)
 		close(cmd->inf);
-	if (cmd->outf != -1)
+	if (cmd->outf >= 0)
 		close(cmd->outf);
 	if (cmd->heredoc_flag)
 	{

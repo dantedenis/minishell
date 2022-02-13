@@ -1,12 +1,16 @@
-#include "libft.h"
-#include <stdio.h>
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
+/*   Updated: 2022/02/13 22:23:37 by lcoreen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-char *slash(char *str, int *i, int in_quotes);
-char *dollar(char *str, int *i);
-char *quote(char *str, int *i);
-char *double_quote(char *str, int *i);
-int redir(t_cmd *cmd, char *str, int *i);
+#include "minishell.h"
 
 static int parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
 {
@@ -32,7 +36,7 @@ static int parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
 			if (redir(cmd, str, i) == 1)
 				return (-1);
 		}
-		if (str[*i])
+		if (str[*i] && (!is_redirect(str[*i]) && str[*i] != '$'))
 			++(*i);
 		if (started_i + 1 != *i)
 			j = *i;
@@ -78,8 +82,8 @@ static int parser(char *str, char c, int dup_stdin, char **env)
 
 	if (c == '|')
 		pipe(pipefd);
-	cmd.outf = -1;
-	cmd.inf = -1;
+	cmd.outf = -2;
+	cmd.inf = -2;
 	cmd.cmd = NULL;
 	cmd.is_full_cmd = -1;
 	cmd.heredoc_flag = 0;
@@ -125,6 +129,7 @@ static int split_pipe(char *str, char **env)
 			++i;
 	}
 	dup2(dup_stdin, 0);
+	close(dup_stdin);
 	free(str);
 	return (0);
 }

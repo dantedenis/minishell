@@ -13,7 +13,7 @@
 # define DOUBLE_RIGHT_REDIR 1
 # define LEFT_REDIR 2
 # define DOUBLE_LEFT_REDIR 3
-// int	g_dup_stdin;
+
 int	preparser(char *str);
 int	ft_error(char *str);
 int	split_cmds(char *str, char **env);
@@ -29,4 +29,15 @@ int	is_desired_sign(char c);
 int	is_redirect(char c);
 int	check_redirect(char *str);
 int	here_doc(t_cmd *cmd, char *stop);
+
+/*
+** HANDLE SPEC SYMBOLS
+*/
+
+char *slash(char *str, int *i, int in_quotes);
+char *dollar(char *str, int *i);
+char *quote(char *str, int *i);
+char *double_quote(char *str, int *i);
+int redir(t_cmd *cmd, char *str, int *i);
+
 #endif

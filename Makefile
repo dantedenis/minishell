@@ -5,8 +5,7 @@ NAME        		=   minishell
 PARSER_FILES   		=   parser.c			handle_signs.c	preparser.c
 PIPE_FILES   		=   execute_cmd.c		parser.c
 UTILS_FILES			=	utils.c				
-# SRC_FILES_BONUS		=	pipex_bonus.c		parser_bonus.c	run_child_bonus.c\
-# 						pipex_utils.c
+# SRC_FILES_BONUS		=	pipex_bonus.c		parser_bonus.c	run_child_bonus.c
 PARSER_DIR			=	parser/
 PIPE_DIR			=	pipe/
 UTILS_DIR			=	utils/
