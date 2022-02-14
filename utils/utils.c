@@ -14,42 +14,17 @@ int		is_space(char c)
 }
 
 
-void	print_list(t_list *lst)
+void	print_list(t_list *lst, char *lstname)
 {
 	int	i;
 	
 	i = 0;
 	while (lst)
 	{
-		printf("cmd %d: %s\n", i, lst->content);
+		printf("%s %d: %s\n", lstname, i, lst->content);
 		lst = lst->next;
 		++i;
 	}
-}
-
-int	open_file(t_cmd *cmd, char *file)
-{
-	if (cmd->type_redirect == RIGHT_REDIR)
-	{
-		if (cmd->outf >= 0)
-			close(cmd->outf);
-		cmd->outf = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	}
-	else if (cmd->type_redirect == LEFT_REDIR)
-	{
-		if (cmd->inf >= 0)
-			close(cmd->inf);
-		cmd->inf = open(file, O_RDONLY, 0644);
-	}
-	else if (cmd->type_redirect == DOUBLE_RIGHT_REDIR)
-	{
-		if (cmd->outf >= 0)
-			close(cmd->outf);
-		cmd->outf = open(file, O_CREAT | O_RDWR | O_APPEND, 0644);
-	}
-	if (cmd->inf == -1 || cmd->outf == -1)
-		return (ft_error(file));
-	return (0);
 }
 
 int	close_files_and_pipe(t_cmd *cmd)
@@ -80,19 +55,28 @@ char	*join_list(t_list *lst)
 	char	*tmp;
 	char	*ret;
 
-	ret = ft_strdup(lst->content);
+	ret = NULL;
 	while (lst->next)
 	{
-		tmp = ft_strjoin(ret, lst->next->content);
-		free(ret);
-		ret = tmp;
+		if (!ret && lst->content)
+			ret = ft_strdup(lst->content);
+		if (ret && lst->next->content)
+		{
+			tmp = ft_strjoin(ret, lst->next->content);
+			free(ret);
+			ret = tmp;
+		}
 		lst = lst->next;
 	}
+	if (!ret && lst->content)
+		ret = ft_strdup(lst->content);
 	return (ret);
 }
 
-int	is_desired_sign(char c)
+int	is_desired_sign(char c, int is_heredoc)
 {
+	if (is_heredoc)
+		return (c == '$');
 	return (c == '\'' || c == '"' || c == '$' || c == '\\');
 }
 

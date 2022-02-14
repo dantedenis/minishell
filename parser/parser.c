@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/13 22:23:37 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/14 17:55:04 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
 	while (str[*i] && !is_space(str[*i]))
 	{
 		started_i = *i;
-		if (is_desired_sign(str[*i]) && *i != j)
+		if (is_desired_sign(str[*i], 0) && *i != j)
 			ft_lstadd_back(arg, ft_lstnew(ft_substr(str, j, *i - j)));
 		if (str[*i] == '\'')
 			ft_lstadd_back(arg, ft_lstnew(quote(str, i)));
@@ -75,7 +75,7 @@ static int get_arguments(t_cmd *cmd, char *str)
 	return (0);
 }
 
-static int parser(char *str, char c, int dup_stdin, char **env)
+static int parser(char *str, char c, char **env)
 {
 	t_cmd	cmd;
 	int		pipefd[2];
@@ -97,8 +97,6 @@ static int parser(char *str, char c, int dup_stdin, char **env)
 	}
 	free(str);
 	ft_lstclear(&cmd.cmd, free);
-	if (cmd.type_redirect == DOUBLE_LEFT_REDIR)
-		dup2(dup_stdin, 0);
 	return (0);
 }
 
@@ -124,7 +122,7 @@ static int split_pipe(char *str, char **env)
 			++i;
 		}
 		if (!quote)
-			parser(ft_substr(str, j, i - j), str[i], dup_stdin, env);
+			parser(ft_substr(str, j, i - j), str[i], env);
 		if (str[i])
 			++i;
 	}

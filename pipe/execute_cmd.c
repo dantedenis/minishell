@@ -6,12 +6,11 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/13 22:11:09 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/14 17:54:26 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "command.h"
 
 static char **transform_list_to_array(t_list *lst)
 {
@@ -48,35 +47,6 @@ static void	run_child(t_cmd *info, char **env)
 	exit(1);
 }
 
-int	here_doc(t_cmd *cmd, char *stop)
-{
-	char	*line;
-
-	if (cmd->heredoc_flag)
-	{
-		close(cmd->heredoc_pipe[0]);
-		close(cmd->heredoc_pipe[1]);
-	}
-	if (pipe(cmd->heredoc_pipe) < 0)
-		return (ft_error("pipe"));
-	line = readline("> ");
-	if (!line)
-		return (ft_error("malloc"));
-	while (line)
-	{
-		if (!ft_strcmp(stop, line))
-			break ;
-		ft_putendl_fd(line, cmd->heredoc_pipe[1]);
-		free(line);
-		line = readline("> ");
-		if (!line)
-			return (ft_error("readline"));
-	}
-	cmd->heredoc_flag = 1;
-	free(line);
-	return (0);
-}
-
 int	execute_cmd(t_cmd *cmd, int *pipefd, char c, char **env)
 {
 	pid_t	child;
@@ -85,18 +55,18 @@ int	execute_cmd(t_cmd *cmd, int *pipefd, char c, char **env)
 	child = fork();
 	if (child == 0)
 	{
-		if (cmd->inf != -1)
-			dup2(cmd->inf, 0);
-		if (cmd->heredoc_flag)
-			dup2(cmd->heredoc_pipe[0], 0);
-		if (cmd->outf != -1)
-			dup2(cmd->outf, 1);
 		if (c == '|')
 		{
 			dup2(pipefd[1], 1);
 			close(pipefd[0]);
 			close(pipefd[1]);
 		}
+		if (cmd->inf != -1)
+			dup2(cmd->inf, 0);
+		if (cmd->heredoc_flag)
+			dup2(cmd->heredoc_pipe[0], 0);
+		if (cmd->outf != -1)
+			dup2(cmd->outf, 1);
 		close_files_and_pipe(cmd);
 		run_child(cmd, env);
 	}
