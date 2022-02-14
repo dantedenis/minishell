@@ -14,5 +14,5 @@ int	main(int argc, char **argv, char **env)
 	return (0);
 }
 
-// TODO: обрабатывать доллар в heredoc и в redirect
-// 			> > > неправильная запись >>abc>>zxc
+// TODO: << stop cat | << stop cat
+
