@@ -1,18 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/10 17:24:41 by bstrong           #+#    #+#             */
-/*   Updated: 2021/10/10 17:24:41 by bstrong          ###   ########.fr       */
+/*   Created: 2022/02/04 23:33:12 by bstrong           #+#    #+#             */
+/*   Updated: 2022/02/04 23:33:12 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_isdigit(int c)
+int	bin_export(char *key, char *value)
 {
-	return (c >= '0' && c <= '9');
+	t_env	*temp;
+
+	temp = get_env(key);
+	if (!temp)
+	{
+		temp = (t_env *) malloc(sizeof(t_env));
+		if (!temp)
+			return (1);
+		temp->key = ft_strdup(key);
+		temp->value = ft_strdup(value);
+		temp->next = g_env;
+		g_env = temp;
+	}
+	else
+	{
+		free(temp->value);
+		temp->value = ft_strdup(value);
+	}
+	return (0);
 }

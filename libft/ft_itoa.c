@@ -3,55 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/10 15:35:09 by lcoreen           #+#    #+#             */
-/*   Updated: 2021/10/10 15:35:10 by lcoreen          ###   ########.fr       */
+/*   Created: 2021/10/10 00:26:25 by bstrong           #+#    #+#             */
+/*   Updated: 2021/10/10 00:26:25 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	ft_intlen(int n)
+static short	len_rank(int num)
 {
-	size_t	len;
+	int	rank;
 
-	len = 0;
-	if (n <= 0)
-		++len;
-	while (n)
+	rank = 0;
+	while (num)
 	{
-		n /= 10;
-		++len;
+		num /= 10;
+		++rank;
 	}
-	return (len);
+	return (rank);
 }
 
 char	*ft_itoa(int n)
 {
-	size_t	len;
-	size_t	i;
-	char	*ret;
-	int		flag;
+	char	buf[12];
+	short	rank;
 
-	len = ft_intlen(n);
-	ret = (char *) malloc(len + 1);
-	if (ret == NULL)
-		return (NULL);
-	flag = 1;
+	rank = 0;
+	if (n == INT_MIN)
+		return (ft_strdup("-2147483648"));
+	if (n == 0)
+		return (ft_strdup("0"));
+	ft_bzero(buf, 12);
 	if (n < 0)
 	{
-		ret[0] = '-';
-		flag = -1;
+		buf[0] = '-';
+		n = -n;
+		++rank;
 	}
-	else if (n == 0)
-		ret[0] = '0';
-	i = len;
+	rank += len_rank(n);
 	while (n)
 	{
-		ret[--i] = (n % 10) * flag + '0';
+		buf[--rank] = n % 10 + '0';
 		n /= 10;
 	}
-	ret[len] = '\0';
-	return (ret);
+	return (ft_strdup(buf));
 }

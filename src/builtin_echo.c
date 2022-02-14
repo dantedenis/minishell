@@ -1,18 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/10 17:24:41 by bstrong           #+#    #+#             */
-/*   Updated: 2021/10/10 17:24:41 by bstrong          ###   ########.fr       */
+/*   Created: 2022/02/04 23:33:02 by bstrong           #+#    #+#             */
+/*   Updated: 2022/02/04 23:33:02 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+///////////////////////////////
+/*
+**		НУЖНО ИГРАТЬ ОТ ПАРАМЕТРА
+*/
+//////////////////////////
 
-int	ft_isdigit(int c)
+
+#include "minishell.h"
+
+int	bin_echo(char *str)
 {
-	return (c >= '0' && c <= '9');
+	int		flag_n;
+
+	flag_n = ft_strncmp(str, "-n", 2);
+	if (!flag_n)
+		str = str + 2;
+	ft_putstr_fd(str, 1);
+	if (!flag_n)
+		write(1, "\n", 1);
+	return (0);
 }

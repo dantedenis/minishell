@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/10 15:22:09 by lcoreen           #+#    #+#             */
-/*   Updated: 2021/10/10 15:22:13 by lcoreen          ###   ########.fr       */
+/*   Created: 2021/10/10 17:43:22 by bstrong           #+#    #+#             */
+/*   Updated: 2021/10/10 17:43:22 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,18 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*ret;
-	size_t	i;
+	char	*result;
+	size_t	len1;
+	size_t	len2;
 
 	if (s1 == NULL || s2 == NULL)
 		return (NULL);
-	ret = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (ret == NULL)
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	result = (char *)ft_calloc(len1 + len2 + 1, 1);
+	if (!result)
 		return (NULL);
-	i = 0;
-	while (*s1)
-	{
-		ret[i] = *s1;
-		++s1;
-		++i;
-	}
-	while (*s2)
-	{
-		ret[i] = *s2;
-		++s2;
-		++i;
-	}
-	ret[i] = '\0';
-	return (ret);
+	ft_strlcpy(result, s1, len1 + 1);
+	ft_strlcpy(result + len1, s2, len2 + 1);
+	return (result);
 }

@@ -1,7 +1,33 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
+#    Updated: 2022/02/14 20:15:41 by lcoreen          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 LIB_DIR				=	libft/
 LIB					=	libft.a
 LIBFT				=	${addprefix ${LIB_DIR}, ${LIB}}
-NAME        		=   minishell
+NAME				=   minishell
+OBJ_PATH			=	./bin/
+SRC_PATH			=	./src/
+
+SRC_LST				=	builtin_cd.c	builtin_echo.c		builtin_env.c\
+						builtin_exit.c	builtin_export.c	builtin_pwd.c\
+						builtin_unset.c	global_env.c		signal_well.c
+
+SRC					= $(addprefix $(SRC_PATH), $(SRC_LST))
+
+HEADERS				= ./inc/minishell.h
+
+OBJ					= $(addprefix $(OBJ_PATH), $(patsubst %.c,%.o,$(SRC_LST)))
+
+LIBS				= -L./libft -lft -L/opt/homebrew/opt/readline/lib -lreadline
 PARSER_FILES   		=   parser.c			handle_signs.c	preparser.c\
 						redirect.c
 PIPE_FILES   		=   execute_cmd.c		parser.c
@@ -36,7 +62,7 @@ UTILS_SRC			=	${addprefix ${UTILS_DIR}, ${UTILS_FILES}}
 # SRC_BONUS			=	${addprefix ${SRC_DIR}, ${SRC_FILES_BONUS}}
 INC					=	${addprefix ${INC_DIR}, ${INC_FILES}}
 # INC_BONUS			=	${addprefix ${INC_DIR}, ${INC_FILES_BONUS}}
-SRC					=	main.c				${PARSER_SRC}	${UTILS_SRC}\
+SRC					+=	main.c				${PARSER_SRC}	${UTILS_SRC}\
 						${PIPE_SRC}
 OBJ					=	${SRC:%.c=%.o}
 # OBJ_BONUS			=	${SRC_BONUS:%.c=%.o}
@@ -64,3 +90,28 @@ fclean  :   clean
 	@cd ${LIB_DIR} && ${MAKE} fclean
 
 re		:	fclean all
+
+
+# all: $(LIBS) $(OBJ_PATH) $(NAME)
+
+# $(LIBS):
+# 	make -C ./libft all
+
+# $(OBJ_PATH):
+# 	mkdir -p $(OBJ_PATH)
+
+# $(NAME): $(OBJ)
+# 	$(CC) $(OBJ) $(LIBS) -o $@
+
+# $(OBJ_PATH)%.o : $(SRC_PATH)%.c $(HEADERS)
+# 	$(CC) $(FLAGS) -I ./inc -I ./libft -I /opt/homebrew/opt/readline/include -c $< -o $@
+
+# clean:
+# 	make -C ./libft clean
+# 	rm -rf $(OBJ_PATH)
+
+# fclean: clean
+# 	make -C ./libft fclean 
+# 	rm -f $(NAME)
+
+# re: fclean all
