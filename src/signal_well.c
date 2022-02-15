@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-void	put_wellcome()
+void	put_wellcome(t_data *data)
 {
 	char	*buf;
 
-	if ((buf = get_value_env("LOGNAME")))
+	if ((buf = get_value_env(data->env, "LOGNAME")))
 	{
 		ft_putstr_fd("\033[5;34mHI ", 1);
 		ft_putstr_fd(buf, 1);

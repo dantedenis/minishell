@@ -12,20 +12,59 @@
 
 #include "minishell.h"
 
-t_env	*g_env;
+static t_data	*init_data(char **env)
+{
+	t_data	*data;
+
+	data = (t_data *) malloc(sizeof(t_data));
+	data->dup_stdin = dup(0);
+	data->status = 0;
+	parse_env(env, &data->env);
+	return (data);
+}
+
+static void	free_env(t_env **env)
+{
+	t_env	*temp;
+	t_env	*del_elem;
+
+	temp = *env;
+	while (temp)
+	{
+		del_elem = temp;
+		temp = temp->next;
+		free(del_elem->key);
+		free(del_elem->value);
+		free(del_elem->str);
+	}
+	*env = NULL;
+}
+
+
+static void	free_data(t_data **data)
+{
+	t_data	*tmp;
+
+	tmp = *data;
+	close(tmp->dup_stdin);
+	free_env(&tmp->env);
+	*data = NULL;
+}
 
 int main(int argc, char **argv, char **env)
 {
 	struct sigaction	sig_act;
 	char				*str_input;
+	t_data				*data;
 
+	data = init_data(env);
 	(void) argc;
 	(void) argv;
 	sig_act.sa_sigaction = sig_handler;
 	sig_act.sa_flags = SA_SIGINFO;
 	sigaction(SIGQUIT, &sig_act, NULL);
 	//sigaction(SIGQUIT, &sig_act, NULL);		//найти инфу какие сигналы ловить
-	put_wellcome();
+	put_wellcome(data);
 	while (1)
 	{
 		if (!(str_input = readline("MINISHELL >> ")))
@@ -34,9 +73,10 @@ int main(int argc, char **argv, char **env)
 		if (preparser(str_input))
 			ft_putendl_fd("Error: unclosed quotes", 2);
 		else
-			split_cmds(str_input, env);
+			split_cmds(str_input, data);
 		free(str_input);
 	}
+	free_data(&data);
 	return (0);
 	// TODO: << stop cat | << stop cat
 }

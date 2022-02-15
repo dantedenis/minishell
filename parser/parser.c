@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/14 17:55:04 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/15 17:33:29 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,39 +75,46 @@ static int get_arguments(t_cmd *cmd, char *str)
 	return (0);
 }
 
-static int parser(char *str, char c, char **env)
+static t_cmd	*init_cmd(int have_pipe)
 {
-	t_cmd	cmd;
+	t_cmd	*ret;
+
+	ret = (t_cmd *) malloc(sizeof(t_cmd));
+	ret->inf = -2;
+	ret->outf = -2;
+	ret->have_pipe = have_pipe;
+	ret->heredoc_flag = 0;
+	ret->cmd = NULL;
+	return (ret);	
+}
+
+static int parser(char *str, int have_pipe, t_data *data)
+{
 	int		pipefd[2];
 
-	if (c == '|')
+	if (have_pipe)
 		pipe(pipefd);
-	cmd.outf = -2;
-	cmd.inf = -2;
-	cmd.cmd = NULL;
-	cmd.is_full_cmd = -1;
-	cmd.heredoc_flag = 0;
-	if (get_arguments(&cmd, str) == 0)
-		execute_cmd(&cmd, pipefd, c, env);
-	if (c == '|')
+	data->cmd = init_cmd(have_pipe);
+	if (get_arguments(data->cmd, str) == 0)
+		execute_cmd(data, pipefd);
+	if (have_pipe)
 	{
 		dup2(pipefd[0], 0);
 		close(pipefd[0]);
 		close(pipefd[1]);
 	}
 	free(str);
-	ft_lstclear(&cmd.cmd, free);
+	ft_lstclear(&data->cmd->cmd, free);
+	free(data->cmd);
 	return (0);
 }
 
-static int split_pipe(char *str, char **env)
+static int split_pipe(char *str, t_data *data)
 {
 	char	quote;
 	int		i;
 	int		j;
-	int		dup_stdin;
 
-	dup_stdin = dup(0);
 	quote = 0;
 	i = 0;
 	while (str[i])
@@ -122,17 +129,16 @@ static int split_pipe(char *str, char **env)
 			++i;
 		}
 		if (!quote)
-			parser(ft_substr(str, j, i - j), str[i], env);
+			parser(ft_substr(str, j, i - j), str[i] == '|', data);
 		if (str[i])
 			++i;
 	}
-	dup2(dup_stdin, 0);
-	close(dup_stdin);
+	dup2(data->dup_stdin, 0);
 	free(str);
 	return (0);
 }
 
-int split_cmds(char *str, char **env)
+int split_cmds(char *str, t_data *data)
 {
 	char quote;
 	int i;
@@ -152,7 +158,7 @@ int split_cmds(char *str, char **env)
 			++i;
 		}
 		if (!quote)
-			split_pipe(ft_substr(str, j, i - j), env);
+			split_pipe(ft_substr(str, j, i - j), data);
 		if (str[i])
 			++i;
 	}

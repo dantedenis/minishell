@@ -33,23 +33,42 @@ typedef struct s_cmd
 	t_list	*cmd;
 	int		inf;
 	int		outf;
-	int		is_full_cmd;
 	int		have_pipe;
-	int		dup_stdin;
 	int		heredoc_pipe[2];
 	int		type_redirect;
 	int		heredoc_flag;
 }   t_cmd;
 
+typedef struct s_data
+{
+	t_env			*env;
+	t_cmd			*cmd;
+	int				dup_stdin;
+	int				status;
+	struct termios	default_tty;
+}	t_data;
+
+/*
+** PARSER
+*/
+
 int	preparser(char *str);
-int	ft_error(char *str);
-int	split_cmds(char *str, char **env);
-void	print_list(t_list *lst, char *lstmane);
-t_cmd	*new_cmd(char *cmd);
-int	parse_redir(char *cmd, char c, char **env);
-int	execute_cmd(t_cmd *cmd, int *pipefd, char c, char **env);
-int	close_files_and_pipe(t_cmd *cmd);
+int	split_cmds(char *str, t_data *env);
+
+/*
+** PIPE_&&_EXECUTION
+*/
+
+int	execute_cmd(t_data *data, int *pipefd);
 char	*get_cmd(char *str);
+
+/*
+** UTILS_FUNCTIONS
+*/
+
+int	ft_error(char *str);
+void	print_list(t_list *lst, char *lstmane);
+int	close_files_and_pipe(t_cmd *cmd);
 int		is_space(char c);
 char	*join_list(t_list *lst);
 int	is_desired_sign(char c, int is_heredoc);
@@ -70,14 +89,14 @@ int redir(t_cmd *cmd, char *str, int *i);
 **	GLOBAL_VALUE_&&_UTILS
 */
 
-extern t_env	*g_env;
 
-void	parse_env(char **str);
-char	*get_value_env(char *key);
-void	put_env(char *str);
+void	parse_env(char **str, t_env **env);
+char	*get_value_env(t_env *env, char *key);
+void	put_env(char *str, t_env **env);
 void	reverse_stack(t_env **head);
 void	print_env(void);
-t_env	*get_env(char *key);
+t_env	*get_env(t_env *env, char *key);
+char	**transform_env_to_array(t_env *env);
 
 /*
 **	BUILTIN_UTILS
@@ -96,6 +115,6 @@ int		bin_cd(char **str);
 */
 
 void	sig_handler(int signal, siginfo_t *siginfo, void *context);
-void	put_wellcome(void);
+void	put_wellcome(t_data *data);
 
 #endif

@@ -12,24 +12,24 @@
 
 #include "minishell.h"
 
-void	put_env(char *data)
+void	put_env(char *data, t_env **env)
 {
 	t_env	*new;
 
 	new = (t_env *) malloc(sizeof(t_env));
 	if (!new)
 		return ;
-	if (g_env)
+	if (*env)
 	{
 		new->str = ft_split(data, '=');
 		new->key = new->str[0];
 		new->value = new->str[1];
-		new->next = g_env;
-		g_env = new;
+		new->next = NULL;
+		*env = new;
 	}
 	else
 	{
-		g_env = new;
+		*env = new;
 		new->next = NULL;
 		new->str = ft_split(data, '=');
 		new->key = new->str[0];
@@ -57,19 +57,19 @@ void	reverse_stack(t_env **head)
 	*head = prev;
 }
 
-void		parse_env(char **str)
+void		parse_env(char **str, t_env **env)
 {
 	while (*str)
-		put_env(*str++);
-	reverse_stack(&g_env);
+		put_env(*str++, env);
+	reverse_stack(env);
 }
 
-char	*get_value_env(char *key)
+char	*get_value_env(t_env *env, char *key)
 {
 	t_env	*temp;
 	int		len_key;
 
-	temp = g_env;
+	temp = env;
 	len_key = ft_strlen(key) + 1;
 	while(temp)
 	{
@@ -80,12 +80,12 @@ char	*get_value_env(char *key)
 	return (NULL);
 }
 
-t_env	*get_env(char *key)
+t_env	*get_env(t_env *env, char *key)
 {
 	t_env	*temp;
 	int		len_key;
 
-	temp = g_env;
+	temp = env;
 	len_key = ft_strlen(key) + 1;
 	while(temp)
 	{
@@ -94,4 +94,37 @@ t_env	*get_env(char *key)
 		temp = temp->next;
 	}
 	return (NULL);
+}
+
+char	*get_item(t_env *env)
+{
+	char	*tmp;
+	char	*ret;
+
+	tmp = ft_strjoin(env->key, "=");
+	ret = ft_strjoin(tmp, env->value);
+	free(tmp);
+	return (ret);	
+}
+
+char	**transform_env_to_array(t_env *env)
+{
+	char    **array;
+	t_env	*tmp;
+	int     i;
+
+	i = 0;
+	tmp = env;
+	while (tmp && ++i)
+		tmp = tmp->next;
+	array = (char **) malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while (env)
+	{
+		array[i] = get_item(env);
+		env = env->next;
+		++i;
+	}
+	array[i] = NULL;
+	return (array);
 }
