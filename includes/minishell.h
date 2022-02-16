@@ -108,7 +108,7 @@ void	bin_exit(t_list *list);
 int		bin_pwd(void);
 int		bin_unset(char *key);
 int		bin_export(char *key, char *value);
-int		bin_cd(char **str);
+int		bin_cd(t_env *env, char **str);
 
 /*
 **	SIGNAL_UTILS_&&_WELCOME

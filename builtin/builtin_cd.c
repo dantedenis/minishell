@@ -24,11 +24,11 @@ static void	change_dir(char *path, int flag)
 	free(cwd);
 }
 
-int	bin_cd(char **argv)
+int	bin_cd(t_env *env, char **argv)
 {
 	if (!argv[0])
 	{
-		change_dir(get_value_env("HOME"), 0);
+		change_dir(get_value_env(env, "HOME"), 0);
 		return (0);
 	}
 	if (argv[1])
@@ -37,12 +37,12 @@ int	bin_cd(char **argv)
 	{
 		if (!ft_strncmp(argv[0], "--", 3))
 		{
-			change_dir(get_value_env("HOME"), 0);
+			change_dir(get_value_env(env, "HOME"), 0);
 			return (0);
 		}
 		else if (!ft_strncmp(argv[0], "-", 2))
 		{
-			change_dir(get_value_env("OLDPWD"), 1);
+			change_dir(get_value_env(env, "OLDPWD"), 1);
 			return (0);
 		}
 		change_dir(argv[0], 0);

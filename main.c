@@ -34,9 +34,9 @@ static void	free_env(t_env **env)
 	{
 		del_elem = temp;
 		temp = temp->next;
-		free(del_elem->key);
-		free(del_elem->value);
-		free(del_elem->str);
+		del_elem->key = NULL;
+		del_elem->value = NULL;
+		ft_freearr(&del_elem->str);
 		free(del_elem);
 	}
 	*env = NULL;
@@ -68,8 +68,7 @@ int main(int argc, char **argv, char **env)
 	sigaction(SIGQUIT, &sig_act, NULL);
 	//sigaction(SIGQUIT, &sig_act, NULL);		//найти инфу какие сигналы ловить
 	put_wellcome(data);
-	int i = 0;
-	while (i < 1)
+	while (1)
 	{
 		if (!(str_input = readline("MINISHELL >> ")))
 			return (EXIT_FAILER);
@@ -79,7 +78,6 @@ int main(int argc, char **argv, char **env)
 		else
 			split_cmds(str_input, data);
 		free(str_input);
-		++i;
 	}
 	free_data(&data);
 	return (0);
