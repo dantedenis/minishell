@@ -10,9 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libft.a
-CC = clang
-FLAGS = -Wall -Wextra -Werror
+NAME	= libft.a
+CC		= clang
+FLAGS	= -Wall -Wextra -Werror
+
+HEADER = libft.h
 
 LIST =	ft_atoi.c		ft_bzero.c		ft_calloc.c \
 		ft_isalnum.c	ft_isalpha.c	ft_isascii.c \
@@ -33,8 +35,6 @@ LIST_B =	ft_lstnew.c		ft_lstadd_front.c	ft_lstsize.c \
 OBJ			= $(addprefix $(OBJ_PATH), $(patsubst %.c,%.o,$(LIST)))
 OBJ_B		= $(addprefix $(OBJ_PATH), $(patsubst %.c,%.o,$(LIST_B)))
 OBJ_PATH	= ./bin/
-
-HEADER = libft.h
 
 .PHONY : all clean fclean re bonus
 

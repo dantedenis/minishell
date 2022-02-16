@@ -13,7 +13,14 @@
 NAME	= minishell
 CC		= clang
 FLAGS	= -Wall -Wextra -Werror
-HEADERS	= ./include/minishell.h
+
+INCLUDE	= -I ./includes -I ./libft -I /opt/homebrew/opt/readline/include
+
+LIBS	= -L./libft -lft -L/opt/homebrew/opt/readline/lib -lreadline
+
+HEADERS	= ./includes/minishell.h
+
+VPATH := ./builtin/ ./parser/ ./utils/ ./pipe/
 
 SRC_BUILTIN	=	./builtin/
 SRC_PARSER	=	./parser/
@@ -31,20 +38,12 @@ SRC_LST_PIPE	=	execute_cmd.c		parser_pipe.c
 
 SRC_LST_UTILS	=	utils.c				global_env.c		signal_well.c
 
-SRC_PATH		=	$(SRC_BUILTIN)
-#$(addprefix $(SRC_BUILTIN), $(SRC_LST_BIN))
-#$(addprefix $(SRC_PARSER), $(SRC_LST_PARS))\
-#$(addprefix $(SRC_PIPE), $(SRC_LST_PIPE))\
-#$(addprefix $(SRC_UTILS), $(SRC_LST_UTILS))
-
 OBJ_PATH		=	./bin/
 
-OBJ				=	$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_BIN)))
-#$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_PARS)))\
-$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_PIPE)))\
-$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_UTILS)))
-
-LIBS			=	-L./libft -lft -L/opt/homebrew/opt/readline/lib -lreadline
+OBJ				=	$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_BIN)))\
+					$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_PARS)))\
+					$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_PIPE)))\
+					$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_UTILS)))
 
 .PHONY	:	all clean fclean re
 
@@ -54,14 +53,13 @@ $(LIBS)	:
 		@make -C ./libft
 
 $(OBJ_PATH)	:
-		echo $(SRC_PATH)
 		mkdir -p $(OBJ_PATH)
 
 $(NAME) : $(OBJ)
 		$(CC) $(OBJ) $(LIBS) -o $@
 
-$(OBJ_PATH)%.o : ./builtin/%.c $(HEADERS)
-		$(CC) $(FLAGS) -I ./inlcude -I ./libft -I /opt/homebrew/opt/readline/include -c $< -o $@
+$(OBJ_PATH)%.o : %.c $(HEADERS)
+		$(CC) $(FLAGS) $(INCLUDE) -c $< -o $@
 
 clean :
 	make -C ./libft clean
