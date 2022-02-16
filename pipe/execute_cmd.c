@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/15 17:44:25 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/16 17:18:29 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ static void	run_child(t_data *data)
 	execve(cmd, new_argv, env);
 	ft_error(new_argv[0]);
 	free(cmd);
-	ft_freearr(new_argv);
-	ft_freearr(env);
+	ft_freearr(&new_argv);
+	ft_freearr(&env);
 	exit(1);
 }
 

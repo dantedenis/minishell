@@ -24,7 +24,7 @@ void	put_env(char *data, t_env **env)
 		new->str = ft_split(data, '=');
 		new->key = new->str[0];
 		new->value = new->str[1];
-		new->next = NULL;
+		new->next = *env;
 		*env = new;
 	}
 	else
@@ -74,7 +74,7 @@ char	*get_value_env(t_env *env, char *key)
 	while(temp)
 	{
 		if (!ft_strncmp(key, temp->key, len_key))
-			return (temp->value);
+			return (ft_strdup(temp->value));
 		temp = temp->next;
 	}
 	return (NULL);

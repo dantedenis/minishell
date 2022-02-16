@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 15:36:31 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/14 19:56:47 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/16 17:17:00 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	**ft_split(char const *s, char c)
 		{
 			ret[i] = ft_substrdup(s, c);
 			if (ret[i] == NULL)
-				return (ft_freearr(ret));
+				return (ft_freearr(&ret));
 			++i;
 		}
 		while (*s && *s != c)

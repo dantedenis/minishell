@@ -17,6 +17,7 @@ static t_data	*init_data(char **env)
 	t_data	*data;
 
 	data = (t_data *) malloc(sizeof(t_data));
+	data->env = NULL;
 	data->dup_stdin = dup(0);
 	data->status = 0;
 	parse_env(env, &data->env);
@@ -36,6 +37,7 @@ static void	free_env(t_env **env)
 		free(del_elem->key);
 		free(del_elem->value);
 		free(del_elem->str);
+		free(del_elem);
 	}
 	*env = NULL;
 }
@@ -48,6 +50,7 @@ static void	free_data(t_data **data)
 	tmp = *data;
 	close(tmp->dup_stdin);
 	free_env(&tmp->env);
+	free(*data);
 	*data = NULL;
 }
 
@@ -65,7 +68,8 @@ int main(int argc, char **argv, char **env)
 	sigaction(SIGQUIT, &sig_act, NULL);
 	//sigaction(SIGQUIT, &sig_act, NULL);		//найти инфу какие сигналы ловить
 	put_wellcome(data);
-	while (1)
+	int i = 0;
+	while (i < 1)
 	{
 		if (!(str_input = readline("MINISHELL >> ")))
 			return (EXIT_FAILER);
@@ -75,6 +79,7 @@ int main(int argc, char **argv, char **env)
 		else
 			split_cmds(str_input, data);
 		free(str_input);
+		++i;
 	}
 	free_data(&data);
 	return (0);
