@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/14 17:46:50 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/17 20:19:45 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static int	here_doc(t_cmd *cmd, char *stop)
 		return (ft_error("malloc"));
 	while (line)
 	{
-		if (!ft_strcmp(stop, line))
+		if (!ft_strncmp(stop, line, ft_strlen(stop)))
 			break ;
 		parsed_line = parse_argument(line, 1);
 		ft_putendl_fd(parsed_line, cmd->heredoc_pipe[1]);
