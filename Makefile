@@ -6,7 +6,7 @@
 #    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/02/17 20:50:04 by bstrong          ###   ########.fr        #
+#    Updated: 2022/02/17 21:14:27 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,9 @@ LIB					=	libft.a
 LIBFT				=	${addprefix ${LIB_DIR}, ${LIB}}
 NAME				=   minishell
 OBJ_PATH			=	./bin/
-SRC_PATH			=	./src/
+SRC_PATH			=	./builtin/
 
-SRC_LST				=	 # builtin_cd.c	builtin_echo.c		builtin_env.c\
+SRC_LST				=	builtin_cd.c	builtin_echo.c		builtin_env.c\
 						builtin_exit.c	builtin_export.c	builtin_pwd.c\
 						builtin_unset.c			
 

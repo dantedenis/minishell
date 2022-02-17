@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/17 20:52:18 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/17 21:15:36 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,17 @@ static int	check_builtin(char *str, t_data *data)
 		data->status = bin_export(&data->env, tmp[0], tmp[1]);
 		ft_freearr(&tmp);
 	}
-	if (!ft_strncmp(str, "echo", 5))
+	else if (!ft_strncmp(str, "echo", 5))
 		data->status = bin_echo(data->cmd->cmd->next);
-	if (!ft_strncmp(str, "exit", 5))
+	else if (!ft_strncmp(str, "exit", 5))
 		bin_exit(data);
-	if (!ft_strncmp(str, "env", 4))
+	else if (!ft_strncmp(str, "env", 4))
 		data->status = bin_env(data->env);
-	if (!ft_strncmp(str, "pwd", 4))
+	else if (!ft_strncmp(str, "pwd", 4))
 		data->status = bin_pwd();
-	if (!ft_strncmp(str, "cd", 3))
+	else if (!ft_strncmp(str, "cd", 3))
 		data->status = bin_cd(&data->env, data->cmd->cmd->next);
-	if (!ft_strncmp(str, "unset", 6))
+	else if (!ft_strncmp(str, "unset", 6))
 		data->status = bin_unset(&data->env, data->cmd->cmd->next->content);
 	else
 		data->fork_status = 1;
@@ -83,7 +83,6 @@ static void	run_child(t_data *data)
 
 int	execute_cmd(t_data *data, int *pipefd)
 {
-	//pid_t	child;
 	int		status;
 
 	if (check_builtin(data->cmd->cmd->content, data) && !fork())
