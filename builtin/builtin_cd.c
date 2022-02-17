@@ -1,14 +1,15 @@
 #include "minishell.h"
 
-static void	change_dir(char *path, int flag)
+static void	change_dir(t_env **env, char *path, int flag)
 {
 	char	*cwd;
 
-	(void) flag;
 	cwd = getcwd(NULL, 0);
-	if(!chdir(path))
+	if (!chdir(path))
 	{
-		bin_export("OLDPWD", cwd);
+		if (flag)
+			ft_putstr_fd(get_env(*env, "OLDPWD"));
+		bin_export(env, "OLDPWD", cwd);
 	}
 	else
 	{
@@ -24,28 +25,20 @@ static void	change_dir(char *path, int flag)
 	free(cwd);
 }
 
-int	bin_cd(t_env *env, char **argv)
+int	bin_cd(t_env **env, t_list *cmd)
 {
-	if (!argv[0])
+	if (!cmd->content)
+		change_dir(env, get_value_env(env, "HOME"), 0);
+	else if (cmd->next->content)
 	{
-		change_dir(get_value_env(env, "HOME"), 0);
-		return (0);
-	}
-	if (argv[1])
 		ft_putstr_fd("cd: too many arguments\n", 2);
-	else
-	{
-		if (!ft_strncmp(argv[0], "--", 3))
-		{
-			change_dir(get_value_env(env, "HOME"), 0);
-			return (0);
-		}
-		else if (!ft_strncmp(argv[0], "-", 2))
-		{
-			change_dir(get_value_env(env, "OLDPWD"), 1);
-			return (0);
-		}
-		change_dir(argv[0], 0);
+		return (1);
 	}
+	else if (!ft_strncmp(cmd->content, "--", 3))
+		change_dir(env, get_value_env(env, "HOME"), 0);
+	else if (!ft_strncmp(cmd->content, "-", 2))
+		change_dir(env, get_value_env(env, "OLDPWD"), 1);
+	else
+		change_dir(env, cmd->content, 0);
 	return (0);
 }

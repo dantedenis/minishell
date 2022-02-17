@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/15 17:33:29 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/17 15:30:07 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,16 @@ static int parser(char *str, int have_pipe, t_data *data)
 		pipe(pipefd);
 	data->cmd = init_cmd(have_pipe);
 	if (get_arguments(data->cmd, str) == 0)
+	{
+		free(str);
 		execute_cmd(data, pipefd);
+	}
 	if (have_pipe)
 	{
 		dup2(pipefd[0], 0);
 		close(pipefd[0]);
 		close(pipefd[1]);
 	}
-	free(str);
 	ft_lstclear(&data->cmd->cmd, free);
 	free(data->cmd);
 	return (0);

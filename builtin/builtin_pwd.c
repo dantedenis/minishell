@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	bin_pwd()
+int	bin_pwd(void)
 {
 	char	*pwd;
 

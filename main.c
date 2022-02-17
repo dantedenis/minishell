@@ -12,47 +12,7 @@
 
 #include "minishell.h"
 
-static t_data	*init_data(char **env)
-{
-	t_data	*data;
-
-	data = (t_data *) malloc(sizeof(t_data));
-	data->env = NULL;
-	data->dup_stdin = dup(0);
-	data->status = 0;
-	parse_env(env, &data->env);
-	return (data);
-}
-
-static void	free_env(t_env **env)
-{
-	t_env	*temp;
-	t_env	*del_elem;
-
-	temp = *env;
-	while (temp)
-	{
-		del_elem = temp;
-		temp = temp->next;
-		del_elem->key = NULL;
-		del_elem->value = NULL;
-		ft_freearr(&del_elem->str);
-		free(del_elem);
-	}
-	*env = NULL;
-}
-
-
-static void	free_data(t_data **data)
-{
-	t_data	*tmp;
-
-	tmp = *data;
-	close(tmp->dup_stdin);
-	free_env(&tmp->env);
-	free(*data);
-	*data = NULL;
-}
+t_data	*init_data(char **env);
 
 int main(int argc, char **argv, char **env)
 {
@@ -68,7 +28,8 @@ int main(int argc, char **argv, char **env)
 	sigaction(SIGQUIT, &sig_act, NULL);
 	//sigaction(SIGQUIT, &sig_act, NULL);		//найти инфу какие сигналы ловить
 	put_wellcome(data);
-	while (1)
+	int i = 0;
+	while (i < 5)
 	{
 		if (!(str_input = readline("MINISHELL >> ")))
 			return (EXIT_FAILER);
@@ -78,8 +39,11 @@ int main(int argc, char **argv, char **env)
 		else
 			split_cmds(str_input, data);
 		free(str_input);
+		++i;
 	}
 	free_data(&data);
 	return (0);
 	// TODO: << stop cat | << stop cat
+	// insert builtin in execute cmd
+	// skip some builtins in pipes
 }

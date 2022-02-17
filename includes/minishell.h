@@ -45,6 +45,7 @@ typedef struct s_data
 	t_cmd			*cmd;
 	int				dup_stdin;
 	int				status;
+	int				fork_status;
 	struct termios	default_tty;
 }	t_data;
 
@@ -74,6 +75,7 @@ char	*join_list(t_list *lst);
 int	is_desired_sign(char c, int is_heredoc);
 int	is_redirect(char c);
 int	check_redirect(char *str);
+void	free_data(t_data **data);
 
 /*
 ** HANDLE_SPEC_SYMBOLS
@@ -102,13 +104,13 @@ char	**transform_env_to_array(t_env *env);
 **	BUILTIN_UTILS
 */
 
-int		bin_echo(char *str);
-void	bin_env(void);
-void	bin_exit(t_list *list);
+int		bin_echo(t_list *cmd);
+int		bin_env(t_env *env);
+void	bin_exit(t_data *data);
 int		bin_pwd(void);
-int		bin_unset(char *key);
-int		bin_export(char *key, char *value);
-int		bin_cd(t_env *env, char **str);
+int		bin_unset(t_env **env, char *key);
+int		bin_export(t_env **env, char *key, char *value);
+int		bin_cd(t_env **env, t_list *cmd);
 
 /*
 **	SIGNAL_UTILS_&&_WELCOME

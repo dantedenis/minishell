@@ -12,13 +12,12 @@
 
 #include "minishell.h"
 
-void	bin_exit(t_list *list) //+ то что нужно очистить
+void	bin_exit(t_data *data) //+ то что нужно очистить
 {
-	(void) list;
-	//ft_lstclear(list, free);
-	//
-	//	add
-	//
+	close_files_and_pipe(data->cmd);
+	ft_lstclear(&data->cmd->cmd, free);
+	free(data->cmd);
+	free_data(&data);
 	rl_clear_history();
 	write(1, "exit\n", 5);
 	exit(1);

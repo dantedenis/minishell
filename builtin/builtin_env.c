@@ -12,14 +12,15 @@
 
 #include "minishell.h"
 
-void	bin_env()
+int	bin_env(t_env *env)
 {
 	t_env	*temp;
 
-	temp = g_env;
+	temp = env;
 	while (temp)
 	{
 		printf("%s=%s\n", temp->key, temp->value);
 		temp = temp->next;
 	}
+	return (0);
 }

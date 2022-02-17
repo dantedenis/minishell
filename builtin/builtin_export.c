@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-int	bin_export(char *key, char *value)
+int	bin_export(t_env **env, char *key, char *value)
 {
 	t_env	*temp;
 
-	temp = get_env(key);
+	temp = get_env(*env, key);
 	if (!temp)
 	{
 		temp = (t_env *) malloc(sizeof(t_env));
@@ -24,8 +24,8 @@ int	bin_export(char *key, char *value)
 			return (1);
 		temp->key = ft_strdup(key);
 		temp->value = ft_strdup(value);
-		temp->next = g_env;
-		g_env = temp;
+		temp->next = *env;
+		*env = temp;
 	}
 	else
 	{
