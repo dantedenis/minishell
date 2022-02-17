@@ -21,7 +21,7 @@ void	sig_handler(int signal, siginfo_t *siginfo, void *context)
 	(void) siginfo;
 	if (signal == SIGINT)
 	{
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();

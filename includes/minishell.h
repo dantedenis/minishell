@@ -2,16 +2,16 @@
 # define MINISHELL_H
 
 # include "libft.h"
-# include <readline/readline.h>
 # include <signal.h>
 # include <termios.h>
-# include <readline/history.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <errno.h>
 # include <string.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # define RIGHT_REDIR 0
 # define DOUBLE_RIGHT_REDIR 1

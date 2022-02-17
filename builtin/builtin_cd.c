@@ -8,7 +8,7 @@ static void	change_dir(t_env **env, char *path, int flag)
 	if (!chdir(path))
 	{
 		if (flag)
-			ft_putstr_fd(get_env(*env, "OLDPWD"));
+			ft_putstr_fd(get_env(*env, "OLDPWD"), 1);
 		bin_export(env, "OLDPWD", cwd);
 	}
 	else

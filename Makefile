@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+         #
+#    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/02/17 15:31:51 by lcoreen          ###   ########.fr        #
+#    Updated: 2022/02/17 20:50:04 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,8 +31,8 @@ LIBS				= -L./libft -lft -L/opt/homebrew/opt/readline/lib -lreadline
 PARSER_FILES   		=   parser.c			handle_signs.c	preparser.c\
 						redirect.c
 PIPE_FILES   		=   execute_cmd.c		get_cmd.c
-UTILS_FILES			=	utils.c				signal_well.c	global_env.c\
-						data.c
+UTILS_FILES			=	utils.c				signal_well.c	global_env.c
+						#data.c
 # SRC_FILES_BONUS		=	pipex_bonus.c		parser_bonus.c	run_child_bonus.c
 PARSER_DIR			=	parser/
 PIPE_DIR			=	pipe/
@@ -72,7 +72,7 @@ OBJ					=	${SRC:%.c=%.o}
 all :   ${NAME}
 
 ${LIBFT}	:	${SRC_LIBFT} ${INC_LIBFT}
-	cd ${LIB_DIR} && ${MAKE} && ${MAKE} bonus
+	cd ${LIB_DIR} && ${MAKE} && ${MAKE}
 
 %.o :   %.c ${LIBFT}
 	${CC} ${CFLAGS} -c $< -o $@
