@@ -23,15 +23,15 @@ int	bin_echo(t_list *cmd)
 {
 	int		flag_n;
 
-	if (!cmd->content)
+	if (!cmd)
 		write(1, "\n", 1);
 	else
 	{
 		flag_n = ft_strncmp(cmd->content, "-n", 3);
-		if (flag_n)
+		if (!flag_n)
 			cmd = cmd->next;
 		ft_putstr_fd(cmd->content, 1);
-		if (!flag_n)
+		if (flag_n)
 			write(1, "\n", 1);
 	}
 	return (0);

@@ -8,7 +8,7 @@ static void	change_dir(t_env **env, char *path, int flag)
 	if (!chdir(path))
 	{
 		if (flag)
-			ft_putstr_fd(get_env(*env, "OLDPWD"));
+			ft_putstr_fd(get_value_env(*env, "OLDPWD"), 1);
 		bin_export(env, "OLDPWD", cwd);
 	}
 	else
@@ -28,16 +28,16 @@ static void	change_dir(t_env **env, char *path, int flag)
 int	bin_cd(t_env **env, t_list *cmd)
 {
 	if (!cmd->content)
-		change_dir(env, get_value_env(env, "HOME"), 0);
+		change_dir(env, get_value_env(*env, "HOME"), 0);
 	else if (cmd->next->content)
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
 		return (1);
 	}
 	else if (!ft_strncmp(cmd->content, "--", 3))
-		change_dir(env, get_value_env(env, "HOME"), 0);
+		change_dir(env, get_value_env(*env, "HOME"), 0);
 	else if (!ft_strncmp(cmd->content, "-", 2))
-		change_dir(env, get_value_env(env, "OLDPWD"), 1);
+		change_dir(env, get_value_env(*env, "OLDPWD"), 1);
 	else
 		change_dir(env, cmd->content, 0);
 	return (0);
