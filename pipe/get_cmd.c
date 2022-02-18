@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 16:56:51 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/18 21:43:13 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/18 22:49:36 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,11 @@ char	*get_cmd(t_env *env, char *str)
 	char	*cmd;
 
 	if (str[0] == '.' || str[0] == '/')
-		return (ft_strdup(str));
+	{
+		if (access(str, X_OK) == 0)
+			return (ft_strdup(str));
+		return (NULL);
+	}
 	path = get_env(env, "PATH");
 	if (!path)
 	{

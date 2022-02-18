@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/18 22:24:58 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/18 23:11:36 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@
 
 typedef struct s_env
 {
-	char			**str;
 	char			*key;
 	char			*value;
 	struct s_env	*next;

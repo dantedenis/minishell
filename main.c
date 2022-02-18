@@ -29,7 +29,7 @@ int main(int argc, char **argv, char **env)
 	int i = -1;
 	while (++i < 5)
 	{
-		if (!(str_input = readline("minishell: ")))
+		if (!(str_input = readline(get_value_env(data->env, "PROMT"))))
 			return (EXIT_FAILER);
 		add_history(str_input);
 		if (preparser(str_input))

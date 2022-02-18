@@ -9,7 +9,6 @@ void	put_wellcome(t_data *data)
 		ft_putstr_fd("\033[5;34mHI ", 1);
 		ft_putstr_fd(buf, 1);
 		ft_putstr_fd("!\nWhat will we do? ) \033[0m\n", 1);
-		free(buf);
 	}
 	else
 		ft_putstr_fd("\033[5m\033[34m HI anonim,!\nWhat will we do? ) \033[0m", 1);

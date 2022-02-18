@@ -15,15 +15,16 @@
 void	put_env(char *data, t_env **env)
 {
 	t_env	*new;
+	char	**item;
 
 	new = (t_env *) malloc(sizeof(t_env));
 	if (!new)
 		return ;
 	if (*env)
 	{
-		new->str = ft_split(data, '=');
-		new->key = new->str[0];
-		new->value = new->str[1];
+		item = ft_split(data, '=');
+		new->key = ft_strdup(item[0]);
+		new->value = ft_strdup(item[1]);
 		new->next = *env;
 		*env = new;
 	}
@@ -31,10 +32,11 @@ void	put_env(char *data, t_env **env)
 	{
 		*env = new;
 		new->next = NULL;
-		new->str = ft_split(data, '=');
-		new->key = new->str[0];
-		new->value = new->str[1];
+		item = ft_split(data, '=');
+		new->key = ft_strdup(item[0]);
+		new->value = ft_strdup(item[1]);
 	}
+	ft_freearr(&item);
 }
 
 void	reverse_stack(t_env **head)
@@ -74,7 +76,7 @@ char	*get_value_env(t_env *env, char *key)
 	while(temp)
 	{
 		if (!ft_strncmp(key, temp->key, len_key))
-			return (ft_strdup(temp->value));
+			return (temp->value);
 		temp = temp->next;
 	}
 	return (NULL);
