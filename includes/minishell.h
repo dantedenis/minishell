@@ -1,24 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
+/*   Updated: 2022/02/18 21:39:47 by lcoreen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include "libft.h"
-# include <readline/readline.h>
 # include <signal.h>
 # include <termios.h>
-# include <readline/history.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <errno.h>
 # include <string.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # define RIGHT_REDIR 0
 # define DOUBLE_RIGHT_REDIR 1
 # define LEFT_REDIR 2
 # define DOUBLE_LEFT_REDIR 3
-
 # define EXIT_FAILER 1
+# define PROMT "👹\033[31;47mMINI⊗HELL\033[0m ⋙ "
 
 typedef struct s_env
 {
@@ -37,7 +49,7 @@ typedef struct s_cmd
 	int		heredoc_pipe[2];
 	int		type_redirect;
 	int		heredoc_flag;
-}   t_cmd;
+}	t_cmd;
 
 typedef struct s_data
 {
@@ -53,8 +65,8 @@ typedef struct s_data
 ** PARSER
 */
 
-int	preparser(char *str);
-int	split_cmds(char *str, t_data *env);
+int		preparser(char *str);
+int		split_cmds(char *str, t_data *env);
 
 /*
 ** PIPE_&&_EXECUTION
@@ -67,14 +79,14 @@ char	*get_cmd(t_env *env, char *str);
 ** UTILS_FUNCTIONS
 */
 
-int	ft_error(char *str);
+int		ft_error(char *str);
 void	print_list(t_list *lst, char *lstmane);
-int	close_files_and_pipe(t_cmd *cmd);
+int		close_files_and_pipe(t_cmd *cmd);
 int		is_space(char c);
 char	*join_list(t_list *lst);
-int	is_desired_sign(char c, int is_heredoc);
-int	is_redirect(char c);
-int	check_redirect(char *str);
+int		is_desired_sign(char c, int is_heredoc);
+int		is_redirect(char c);
+int		check_redirect(char *str);
 void	free_data(t_data **data);
 void	print_arr(char **arr);
 
@@ -82,17 +94,17 @@ void	print_arr(char **arr);
 ** HANDLE_SPEC_SYMBOLS
 */
 
-char *slash(char *str, int *i, int in_quotes);
-char *dollar(char *str, int *i);
-char *quote(char *str, int *i);
-char *double_quote(char *str, int *i);
-int redir(t_cmd *cmd, char *str, int *i);
+char	*slash(char *str, int *i, int in_quotes);
+char	*dollar(char *str, int *i);
+char	*quote(char *str, int *i);
+char	*double_quote(char *str, int *i);
+int		redir(t_cmd *cmd, char *str, int *i);
 
 /*
 **	GLOBAL_VALUE_&&_UTILS
 */
 
-
+t_data	*init_data(char **env);
 void	parse_env(char **str, t_env **env);
 char	*get_value_env(t_env *env, char *key);
 void	put_env(char *str, t_env **env);

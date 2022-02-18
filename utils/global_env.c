@@ -109,9 +109,9 @@ char	*get_item(t_env *env)
 
 char	**transform_env_to_array(t_env *env)
 {
-	char    **array;
+	char	**array;
 	t_env	*tmp;
-	int     i;
+	int		i;
 
 	i = 0;
 	tmp = env;

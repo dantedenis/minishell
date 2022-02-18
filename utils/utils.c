@@ -30,7 +30,7 @@ void	print_list(t_list *lst, char *lstname)
 	i = 0;
 	while (lst)
 	{
-		printf("%s %d: %s\n", lstname, i, lst->content);
+		printf("%s %d: %s\n", lstname, i, (char *)lst->content);
 		lst = lst->next;
 		++i;
 	}

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+         #
+#    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/08 09:38:50 by bstrong           #+#    #+#              #
-#    Updated: 2022/02/16 17:44:26 by lcoreen          ###   ########.fr        #
+#    Updated: 2022/02/17 20:47:09 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ OBJ			= $(addprefix $(OBJ_PATH), $(patsubst %.c,%.o,$(LIST)))
 OBJ_B		= $(addprefix $(OBJ_PATH), $(patsubst %.c,%.o,$(LIST_B)))
 OBJ_PATH	= ./bin/
 
-.PHONY : all clean fclean re bonus
+.PHONY : all clean fclean re
 
 all: $(OBJ_PATH) $(NAME)
 
