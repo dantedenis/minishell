@@ -76,6 +76,7 @@ int	is_desired_sign(char c, int is_heredoc);
 int	is_redirect(char c);
 int	check_redirect(char *str);
 void	free_data(t_data **data);
+void	print_arr(char **arr);
 
 /*
 ** HANDLE_SPEC_SYMBOLS

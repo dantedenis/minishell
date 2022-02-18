@@ -3,12 +3,17 @@
 static void	change_dir(t_env **env, char *path, int flag)
 {
 	char	*cwd;
+	char	*prev_path;
 
 	cwd = getcwd(NULL, 0);
 	if (!chdir(path))
 	{
 		if (flag)
-			ft_putstr_fd(get_value_env(*env, "OLDPWD"), 1);
+		{
+			prev_path = get_value_env(*env, "OLDPWD");
+			ft_putendl_fd(prev_path, 1);
+			free(prev_path);
+		}
 		bin_export(env, "OLDPWD", cwd);
 	}
 	else
@@ -27,9 +32,9 @@ static void	change_dir(t_env **env, char *path, int flag)
 
 int	bin_cd(t_env **env, t_list *cmd)
 {
-	if (!cmd->content)
+	if (!cmd)
 		change_dir(env, get_value_env(*env, "HOME"), 0);
-	else if (cmd->next->content)
+	else if (cmd->next)
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
 		return (1);

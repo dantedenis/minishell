@@ -1,5 +1,14 @@
 #include "minishell.h"
 
+void	print_arr(char **arr)
+{
+	while (*arr)
+	{
+		printf("%s\n", *arr);
+		arr++;
+	}
+}
+
 int	ft_error(char *str)
 {
 	ft_putstr_fd("minishell: ", 2);
