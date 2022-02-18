@@ -61,7 +61,7 @@ int	split_cmds(char *str, t_data *env);
 */
 
 int	execute_cmd(t_data *data, int *pipefd);
-char	*get_cmd(char *str);
+char	*get_cmd(t_env *env, char *str);
 
 /*
 ** UTILS_FUNCTIONS

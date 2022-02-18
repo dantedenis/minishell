@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 16:56:51 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/16 17:18:46 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/18 09:40:24 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,20 +70,23 @@ static char	*find_cmd(char *str, char *cmd)
 	return (temp);
 }
 
-char	*get_cmd(char *str)
+char	*get_cmd(t_env *env, char *str)
 {
-	char	*paths;
+	t_env	*path;
 	char	*cmd;
 
 	if (str[0] == '.' || str[0] == '/')
-		return (ft_strdup(str));
-	paths = getenv("PATH");
-	if (!paths)
+	{
+		if (access(str, X_OK) == 0)
+			return (ft_strdup(str));
+		return (NULL);
+	path = get_env(env, "PATH");
+	if (!path)
 	{
 		if (access(str, X_OK) == 0)
 			return (ft_strdup(str));
 		return (NULL);
 	}
-	cmd = find_cmd(paths, str);
+	cmd = find_cmd(path->value, str);
 	return (cmd);
 }
