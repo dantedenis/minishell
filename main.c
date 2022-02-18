@@ -12,26 +12,24 @@
 
 #include "minishell.h"
 
-t_data	*init_data(char **env);
-
 int main(int argc, char **argv, char **env)
 {
 	struct sigaction	sig_act;
 	char				*str_input;
 	t_data				*data;
 
-	data = init_data(env);
 	(void) argc;
 	(void) argv;
+	data = init_data(env);
 	sig_act.sa_sigaction = sig_handler;
 	sig_act.sa_flags = SA_SIGINFO;
 	sigaction(SIGQUIT, &sig_act, NULL);
 	//sigaction(SIGQUIT, &sig_act, NULL);		//найти инфу какие сигналы ловить
 	put_wellcome(data);
-	int i = 0;
-	while (i < 5)
+	//int i = 0;
+	while (1)
 	{
-		if (!(str_input = readline("MINISHELL >> ")))
+		if (!(str_input = readline(get_value_env(data->env, "PROMT"))))
 			return (EXIT_FAILER);
 		add_history(str_input);
 		if (preparser(str_input))
@@ -39,10 +37,10 @@ int main(int argc, char **argv, char **env)
 		else
 			split_cmds(str_input, data);
 		free(str_input);
-		++i;
+		//++i;
 	}
-	free_data(&data);
-	return (0);
+	//free_data(&data);
+	return (EXIT_SUCCESS);
 	// TODO: << stop cat | << stop cat
 	// insert builtin in execute cmd
 	// skip some builtins in pipes

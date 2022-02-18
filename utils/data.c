@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:26:56 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/17 15:27:25 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/18 21:28:42 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_data	*init_data(char **env)
 	data->dup_stdin = dup(0);
 	data->status = 0;
 	parse_env(env, &data->env);
+	bin_export(&data->env, "PROMT", PROMT);
 	return (data);
 }
 

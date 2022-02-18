@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 16:56:51 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/16 17:18:46 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/18 21:00:57 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,14 @@ static char	*find_cmd(char *str, char *cmd)
 	return (temp);
 }
 
-char	*get_cmd(char *str)
+char	*get_cmd(char *str, t_env *env)
 {
 	char	*paths;
 	char	*cmd;
 
 	if (str[0] == '.' || str[0] == '/')
 		return (ft_strdup(str));
-	paths = getenv("PATH");
+	paths = get_value_env(env, "PATH");
 	if (!paths)
 	{
 		if (access(str, X_OK) == 0)
