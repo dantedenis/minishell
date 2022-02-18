@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/14 17:46:50 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/18 22:30:13 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	open_file(t_cmd *cmd, char *file)
 		cmd->outf = open(parsed_filename, O_CREAT | O_RDWR | O_APPEND, 0644);
 	}
 	if (cmd->inf == -1 || cmd->outf == -1)
-		return (ft_error(file));
+		return (ft_error(file, 1));
 	free(parsed_filename);
 	return (0);
 }
@@ -86,10 +86,10 @@ static int	here_doc(t_cmd *cmd, char *stop)
 		close(cmd->heredoc_pipe[1]);
 	}
 	if (pipe(cmd->heredoc_pipe) < 0)
-		return (ft_error("pipe"));
+		return (ft_error("pipe", 1));
 	line = readline("> ");
 	if (!line)
-		return (ft_error("malloc"));
+		return (ft_error("malloc", 1));
 	while (line)
 	{
 		if (!ft_strcmp(stop, line))
@@ -100,7 +100,7 @@ static int	here_doc(t_cmd *cmd, char *stop)
 		free(parsed_line);
 		line = readline("> ");
 		if (!line)
-			return (ft_error("readline"));
+			return (ft_error("readline", 1));
 	}
 	cmd->heredoc_flag = 1;
 	free(line);
@@ -122,6 +122,8 @@ int	redir(t_cmd *cmd, char *str, int *i)
 			find_word = *i;
 		++(*i);
 	}
+	if (find_word == 0)
+		return (ft_error("syntax error near unexpected token 'newline'", 0) + 1);
 	file = ft_substr(str, find_word, *i - find_word);
 	if (cmd->type_redirect == DOUBLE_LEFT_REDIR)
 		here_doc(cmd, file);

@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 16:56:51 by lcoreen           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/02/18 09:48:21 by lcoreen          ###   ########.fr       */
-=======
-/*   Updated: 2022/02/18 21:00:57 by bstrong          ###   ########.fr       */
->>>>>>> origin/master
+/*   Updated: 2022/02/18 21:43:13 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +77,6 @@ char	*get_cmd(t_env *env, char *str)
 
 	if (str[0] == '.' || str[0] == '/')
 		return (ft_strdup(str));
-	paths = get_value_env(env, "PATH");
-	if (!paths)
-	{
-		if (access(str, X_OK) == 0)
-			return (ft_strdup(str));
-		return (NULL);
-	}
 	path = get_env(env, "PATH");
 	if (!path)
 	{

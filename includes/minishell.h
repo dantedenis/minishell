@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/18 21:39:47 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/18 22:24:58 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define LEFT_REDIR 2
 # define DOUBLE_LEFT_REDIR 3
 # define EXIT_FAILER 1
-# define PROMT "👹\033[31;47mMINI⊗HELL\033[0m ⋙ "
+# define PROMT "👹\033[31;47mMINI⊗HELL\033[0m ⋙  "
 
 typedef struct s_env
 {
@@ -79,7 +79,7 @@ char	*get_cmd(t_env *env, char *str);
 ** UTILS_FUNCTIONS
 */
 
-int		ft_error(char *str);
+int		ft_error(char *str, int perror_flag);
 void	print_list(t_list *lst, char *lstmane);
 int		close_files_and_pipe(t_cmd *cmd);
 int		is_space(char c);

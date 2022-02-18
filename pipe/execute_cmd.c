@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/18 21:40:04 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/18 22:32:27 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,13 @@ static void	run_child(t_data *data)
 	new_argv = transform_list_to_array(data->cmd->cmd);
 	cmd = get_cmd(data->env, new_argv[0]);
 	if (!cmd)
-		exit(ft_error(new_argv[0]));
+		exit(ft_error(new_argv[0], 1));
 	env = transform_env_to_array(data->env);
-	print_arr(env);
 	ft_lstclear(&data->cmd->cmd, free);
 	free(data->cmd);
 	free_data(&data);
 	execve(cmd, new_argv, env);
-	ft_error(new_argv[0]);
+	ft_error(new_argv[0], 1);
 	free(cmd);
 	ft_freearr(&new_argv);
 	ft_freearr(&env);

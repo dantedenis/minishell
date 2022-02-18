@@ -9,10 +9,13 @@ void	print_arr(char **arr)
 	}
 }
 
-int	ft_error(char *str)
+int	ft_error(char *str, int perror_flag)
 {
 	ft_putstr_fd("minishell: ", 2);
-	perror(str);
+	if (perror_flag)
+		perror(str);
+	else
+		ft_putendl_fd(str, 2);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/17 15:30:07 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/18 22:34:36 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
 			ft_lstadd_back(arg, ft_lstnew(slash(str, i, 0)));
 		else if (str[*i] == '<' || str[*i] == '>')
 		{
-			if (redir(cmd, str, i) == 1)
+			if (redir(cmd, str, i) != 0)
 				return (-1);
 		}
 		if (str[*i] && (!is_redirect(str[*i]) && str[*i] != '$'))

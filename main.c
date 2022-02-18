@@ -26,10 +26,10 @@ int main(int argc, char **argv, char **env)
 	sigaction(SIGQUIT, &sig_act, NULL);
 	//sigaction(SIGQUIT, &sig_act, NULL);		//найти инфу какие сигналы ловить
 	put_wellcome(data);
-	//int i = 0;
-	while (1)
+	int i = -1;
+	while (++i < 5)
 	{
-		if (!(str_input = readline(get_value_env(data->env, "PROMT"))))
+		if (!(str_input = readline("minishell: ")))
 			return (EXIT_FAILER);
 		add_history(str_input);
 		if (preparser(str_input))
@@ -39,7 +39,7 @@ int main(int argc, char **argv, char **env)
 		free(str_input);
 		//++i;
 	}
-	//free_data(&data);
+	free_data(&data);
 	return (EXIT_SUCCESS);
 	// TODO: << stop cat | << stop cat
 	// insert builtin in execute cmd

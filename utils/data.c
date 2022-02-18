@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:26:56 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/18 21:39:00 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/18 22:05:07 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_data	*init_data(char **env)
 	data->dup_stdin = dup(0);
 	data->status = 0;
 	parse_env(env, &data->env);
-	bin_export(&data->env, "PROMT", PROMT);
+	//bin_export(&data->env, "PROMT", PROMT);
 	return (data);
 }
 
