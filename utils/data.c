@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:26:56 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/18 23:17:18 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/19 00:26:13 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static void	free_env(t_env **env)
 	}
 	*env = NULL;
 }
-
 
 void	free_data(t_data **data)
 {

@@ -12,8 +12,9 @@
 
 #include "minishell.h"
 
-void	bin_exit(t_data *data) //+ то что нужно очистить
+void	bin_exit(t_data *data)
 {
+	tcsetattr(0, TCSANOW, &data->default_tty);
 	close_files_and_pipe(data->cmd);
 	ft_lstclear(&data->cmd->cmd, free);
 	free(data->cmd);
