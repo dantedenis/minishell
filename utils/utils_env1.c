@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   global_env.c                                       :+:      :+:    :+:   */
+/*   utils_env1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/04 23:33:22 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/04 23:33:22 by bstrong          ###   ########.fr       */
+/*   Created: 2022/02/19 20:23:55 by bstrong           #+#    #+#             */
+/*   Updated: 2022/02/19 20:23:55 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,6 @@ void	reverse_stack(t_env **head)
 	*head = prev;
 }
 
-void		parse_env(char **str, t_env **env)
-{
-	while (*str)
-		put_env(*str++, env);
-	reverse_stack(env);
-}
-
 char	*get_value_env(t_env *env, char *key)
 {
 	t_env	*temp;
@@ -96,37 +89,4 @@ t_env	*get_env(t_env *env, char *key)
 		temp = temp->next;
 	}
 	return (NULL);
-}
-
-char	*get_item(t_env *env)
-{
-	char	*tmp;
-	char	*ret;
-
-	tmp = ft_strjoin(env->key, "=");
-	ret = ft_strjoin(tmp, env->value);
-	free(tmp);
-	return (ret);	
-}
-
-char	**transform_env_to_array(t_env *env)
-{
-	char	**array;
-	t_env	*tmp;
-	int		i;
-
-	i = 0;
-	tmp = env;
-	while (tmp && ++i)
-		tmp = tmp->next;
-	array = (char **) malloc(sizeof(char *) * (i + 1));
-	i = 0;
-	while (env)
-	{
-		array[i] = get_item(env);
-		env = env->next;
-		++i;
-	}
-	array[i] = NULL;
-	return (array);
 }

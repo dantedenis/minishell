@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 13:56:29 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/19 14:41:52 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/20 00:55:36 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,47 @@ char *slash(char *str, int *i, int in_quotes)
 	return (ft_substr(str, j + hide_slash, *i - j - 1));
 }
 
-char *dollar(char *str, int *i, t_env *env)
+static char	*check_finish(char *item, char *str)
 {
-	int j;
-	char *tmp;
-	t_env *item;
+	char	*temp;
+
+	if (!str || !*str)
+		return (item);
+	temp = item;
+	item = ft_strjoin(item, str + 7);
+	free(temp);
+	return (item);
+}
+
+char	*dollar(char *str, int *i, t_data *data)
+{
+	int		j;
+	char	*tmp;
+	char	*item;
 
 	j = (*i)++;
-	while (str[*i] && ft_isalnum(str[*i]))
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '?'))
 		++(*i);
 	if (*i - j - 1 == 0)
 		return (ft_strdup("$"));
 	tmp = ft_substr(str, j + 1, *i - j - 1);
-	item = get_env(env, tmp);
+	j = 0;
+	if (!ft_strncmp("?", tmp, 1) && ++j)
+		item = ft_itoa(data->status);
+	else
+		item = get_value_env(data->env, tmp);
 	free(tmp);
 	if (item == NULL)
 		return (NULL);
-	tmp = ft_strdup(item->value);
-	return (tmp);
+	if (j)
+	{
+		item = check_finish(item, str);
+		return (item);
+	}
+	return (ft_strdup(item));
 }
 
-char *quote(char *str, int *i)
+char	*quote(char *str, int *i)
 {
 	int j;
 
@@ -57,11 +77,11 @@ char *quote(char *str, int *i)
 	return (ft_substr(str, j + 1, *i - j - 1));
 }
 
-char *double_quote(char *str, int *i, t_env *env)
+char	*double_quote(char *str, int *i, t_data *data)
 {
-	int j;
-	t_list *lst;
-	char *tmp;
+	int		j;
+	t_list	*lst;
+	char	*tmp;
 
 	j = ++(*i);
 	lst = NULL;
@@ -71,7 +91,7 @@ char *double_quote(char *str, int *i, t_env *env)
 		{
 			if (*i != j)
 				ft_lstadd_back(&lst, ft_lstnew(ft_substr(str, j, *i - j)));
-			tmp = dollar(str, i, env);
+			tmp = dollar(str, i, data);
 			if (tmp)
 				ft_lstadd_back(&lst, ft_lstnew(tmp));
 			j = *i;

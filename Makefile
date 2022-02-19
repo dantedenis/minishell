@@ -6,7 +6,7 @@
 #    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/02/18 21:04:38 by bstrong          ###   ########.fr        #
+#    Updated: 2022/02/19 20:59:12 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +36,8 @@ SRC_LST_PARS	=	handle_signs.c		parser.c			preparser.c\
 
 SRC_LST_PIPE	=	execute_cmd.c		get_cmd.c
 
-SRC_LST_UTILS	=	utils.c				global_env.c		signal_well.c\
-					data.c
+SRC_LST_UTILS	=	utils.c				utils_env1.c		utils_env2.c\
+					signal_well.c		data.c
 
 OBJ_PATH		=	./bin/
 
@@ -52,7 +52,7 @@ OBJ				=	$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_BIN)))\
 all	:	$(LIBS) $(OBJ_PATH) $(NAME)
 
 $(LIBS)	:
-		@make -C ./libft
+		make -C ./libft all
 
 $(OBJ_PATH)	:
 		mkdir -p $(OBJ_PATH)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/19 16:14:24 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/19 20:22:05 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static char **transform_list_to_array(t_list *lst)
 {
-	char    **array;
-	int     size;
-	int     i;
+	char	**array;
+	int		size;
+	int		i;
 
 	i = 0;
 	size = ft_lstsize(lst);
@@ -36,7 +36,7 @@ static char	**get_key_value(char *str)
 	int		i;
 	char	**ret;
 	char	*tmp;
-	
+
 	tmp = ft_strchr(str, '=');
 	ret = (char **) malloc(sizeof(char *) * 3);
 	i = tmp - str;
@@ -97,6 +97,9 @@ static void	run_child(t_data *data)
 	char	**new_argv;
 	char	**env;
 
+	signal(SIGQUIT, SIG_DFL);
+	tcsetattr(0, TCSANOW, &data->default_tty);
+	sigaction(SIGQUIT, &data->sig_act, NULL);
 	new_argv = transform_list_to_array(data->cmd->cmd);
 	cmd = get_cmd(data->env, new_argv[0]);
 	if (!cmd)

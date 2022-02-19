@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/19 14:49:45 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/19 23:46:09 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*parse_argument(char *str, int is_heredoc, t_env *env)
+static char	*parse_argument(char *str, int is_heredoc, t_data *data)
 {
 	int 	j;
 	int 	started_i;
@@ -31,9 +31,9 @@ static char	*parse_argument(char *str, int is_heredoc, t_env *env)
 		if (!is_heredoc && str[i] == '\'')
 			ft_lstadd_back(&arg, ft_lstnew(quote(str, &i)));
 		else if (!is_heredoc && str[i] == '"')
-			ft_lstadd_back(&arg, ft_lstnew(double_quote(str, &i, env)));
+			ft_lstadd_back(&arg, ft_lstnew(double_quote(str, &i, data)));
 		else if (str[i] == '$')
-			ft_lstadd_back(&arg, ft_lstnew(dollar(str, &i, env)));
+			ft_lstadd_back(&arg, ft_lstnew(dollar(str, &i, data)));
 		if (str[i] && str[i] != '$')
 			++i;
 		if (started_i + 1 != i)
@@ -50,7 +50,7 @@ static int	open_file(t_data *data, char *file)
 {
 	char	*parsed_file;
 
-	parsed_file = parse_argument(file, 0, data->env);
+	parsed_file = parse_argument(file, 0, data);
 	if (data->cmd->type_redirect == RIGHT_REDIR)
 	{
 		if (data->cmd->outf >= 0)
@@ -95,7 +95,7 @@ static int	here_doc(t_data *data, char *stop)
 	{
 		if (!ft_strcmp(stop, line))
 			break ;
-		parsed_line = parse_argument(line, 1, data->env);
+		parsed_line = parse_argument(line, 1, data);
 		ft_putendl_fd(parsed_line, data->cmd->heredoc_pipe[1]);
 		free(line);
 		free(parsed_line);

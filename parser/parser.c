@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/19 16:28:29 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/19 23:43:31 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static int parse_argument(t_data *data, t_list **arg, char *str, int *i)
 		if (str[*i] == '\'')
 			ft_lstadd_back(arg, ft_lstnew(quote(str, i)));
 		else if (str[*i] == '"')
-			ft_lstadd_back(arg, ft_lstnew(double_quote(str, i, data->env)));
+			ft_lstadd_back(arg, ft_lstnew(double_quote(str, i, data)));
 		else if (str[*i] == '$')
-			ft_lstadd_back(arg, ft_lstnew(dollar(str, i, data->env)));
+			ft_lstadd_back(arg, ft_lstnew(dollar(str, i, data)));
 		else if (str[*i] == '\\')
 			ft_lstadd_back(arg, ft_lstnew(slash(str, i, 0)));
 		else if (str[*i] == '<' || str[*i] == '>')
@@ -109,6 +109,7 @@ static int parser(char *str, int have_pipe, t_data *data)
 	}
 	ft_lstclear(&data->cmd->cmd, free);
 	free(data->cmd);
+	data->cmd = NULL;
 	return (0);
 }
 

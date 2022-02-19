@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/19 16:13:12 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/19 23:44:01 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include <stdio.h>
 # include <signal.h>
 # include <termios.h>
 # include <fcntl.h>
-# include <stdio.h>
+# include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <errno.h>
@@ -52,12 +53,13 @@ typedef struct s_cmd
 
 typedef struct s_data
 {
-	t_env			*env;
-	t_cmd			*cmd;
-	int				dup_stdin;
-	int				status;
-	int				fork_status;
-	struct termios	default_tty;
+	t_env				*env;
+	t_cmd				*cmd;
+	int					dup_stdin;
+	int					status;
+	int					fork_status;
+	struct termios		default_tty;
+	struct sigaction	sig_act;
 }	t_data;
 
 /*
@@ -71,7 +73,7 @@ int		split_cmds(char *str, t_data *env);
 ** PIPE_&&_EXECUTION
 */
 
-int	execute_cmd(t_data *data, int *pipefd);
+int		execute_cmd(t_data *data, int *pipefd);
 char	*get_cmd(t_env *env, char *str);
 
 /*
@@ -94,9 +96,9 @@ void	print_arr(char **arr);
 */
 
 char	*slash(char *str, int *i, int in_quotes);
-char	*dollar(char *str, int *i, t_env *env);
+char	*dollar(char *str, int *i, t_data *data);
 char	*quote(char *str, int *i);
-char	*double_quote(char *str, int *i, t_env *env);
+char	*double_quote(char *str, int *i, t_data *data);
 int		redir(t_data *data, char *str, int *i);
 
 /*

@@ -12,36 +12,34 @@
 
 #include "minishell.h"
 
-static void	echo_ctrl_off(t_data *data)
+static void	echo_ctrl_off()
 {
 	struct termios	new;
 
+	signal(SIGQUIT, SIG_IGN);
 	tcgetattr(0, &new);
-	data->default_tty = new;
 	new.c_lflag &= ~ECHOCTL;
+	new.c_lflag &= ~ICANON;
 	tcsetattr(0, TCSANOW, &new);
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-	struct sigaction	sig_act;
 	char				*str_input;
 	t_data				*data;
 
 	if (argc != 1 && argv)
 		return (write(2, "Too much args!\n", 15) == 15);
 	data = init_data(env);
-	echo_ctrl_off(data);
-	sig_act.sa_sigaction = sig_handler;
-	sig_act.sa_flags = SA_SIGINFO;
-	sigaction(SIGINT, &sig_act, NULL);
-	signal(SIGQUIT, SIG_IGN);
-	put_wellcome(data);
+	if (sigaction(SIGINT, &data->sig_act, NULL) == -1)
+		bin_exit(data);
 	while (1)
 	{
+		echo_ctrl_off();
 		data->fork_status = 0;
-		if (!(str_input = readline(get_value_env(data->env, "PROMT"))))
-			return (EXIT_FAILER);
+		str_input = readline(get_value_env(data->env, "PROMT"));
+		if (!str_input)
+			bin_exit(data);
 		add_history(str_input);
 		if (preparser(str_input))
 			ft_putendl_fd("Error: unclosed quotes", 2);
@@ -49,6 +47,5 @@ int main(int argc, char **argv, char **env)
 			split_cmds(str_input, data);
 		free(str_input);
 	}
-	//free_data(&data);
 	return (EXIT_SUCCESS);
 }

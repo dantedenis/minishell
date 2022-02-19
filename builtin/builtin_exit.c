@@ -17,10 +17,13 @@ void	bin_exit(t_data *data)
 	tcsetattr(0, TCSANOW, &data->default_tty);
 	if (!data->fork_status)
 		write(1, "exit\n", 5);
-	close_files_and_pipe(data->cmd);
-	ft_lstclear(&data->cmd->cmd, free);
+	if (data->cmd)
+	{
+		close_files_and_pipe(data->cmd);
+		ft_lstclear(&data->cmd->cmd, free);
+	}
 	free(data->cmd);
 	free_data(&data);
 	rl_clear_history();	
-	exit(1);
+	exit(EXIT_SUCCESS);
 }

@@ -6,13 +6,13 @@
 #    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/08 09:38:50 by bstrong           #+#    #+#              #
-#    Updated: 2022/02/17 20:47:09 by bstrong          ###   ########.fr        #
+#    Updated: 2022/02/19 20:52:48 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= libft.a
 CC		= clang
-FLAGS	= -Wall -Wextra -Werror
+FLAGS	= -Wall -Wextra -Werror -g
 
 HEADER = libft.h
 
