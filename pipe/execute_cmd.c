@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/18 23:17:07 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/19 16:14:24 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,40 @@ static char **transform_list_to_array(t_list *lst)
 	return (array);
 }
 
+static char	**get_key_value(char *str)
+{
+	int		i;
+	char	**ret;
+	char	*tmp;
+	
+	tmp = ft_strchr(str, '=');
+	ret = (char **) malloc(sizeof(char *) * 3);
+	i = tmp - str;
+	ret[0] = ft_substr(str, 0, i);
+	ret[1] = ft_strdup(tmp + 1);
+	ret[2] = NULL;
+	return (ret);	
+}
+
 static int	check_builtin(char *str, t_data *data)
 {
 	char	**tmp;
+	int		tmp_status;
 	
-	data->fork_status = 0;
+	if (data->cmd->have_pipe && !data->fork_status)
+		return (data->fork_status = 1);
+	if (data->fork_status == 1)
+		data->fork_status = 2;
 	if (!ft_strncmp(str, "export", 7))
 	{
-		tmp = ft_split(data->cmd->cmd->next->content, '=');
-		data->status = bin_export(&data->env, tmp[0], tmp[1]);
-		ft_freearr(&tmp);
+		if (!data->cmd->cmd->next)
+			data->status = bin_env(data->env);
+		else if (data->cmd->cmd->next->content && ft_strchr(data->cmd->cmd->next->content, '='))
+		{
+			tmp = get_key_value(data->cmd->cmd->next->content);
+			data->status = bin_export(&data->env, tmp[0], tmp[1]);
+			ft_freearr(&tmp);
+		}
 	}
 	else if (!ft_strncmp(str, "echo", 5))
 		data->status = bin_echo(data->cmd->cmd->next);
@@ -53,9 +77,17 @@ static int	check_builtin(char *str, t_data *data)
 	else if (!ft_strncmp(str, "cd", 3))
 		data->status = bin_cd(&data->env, data->cmd->cmd->next);
 	else if (!ft_strncmp(str, "unset", 6))
-		data->status = bin_unset(&data->env, data->cmd->cmd->next->content);
+		data->status = bin_unset(&data->env, data->cmd->cmd->next);
 	else
 		data->fork_status = 1;
+	if (data->fork_status == 2)
+	{
+		tmp_status = data->status;
+		ft_lstclear(&data->cmd->cmd, free);
+		free(data->cmd);
+		free_data(&data);
+		exit(tmp_status);
+	}
 	return (data->fork_status);
 }
 
@@ -100,9 +132,12 @@ int	execute_cmd(t_data *data, int *pipefd)
 		if (data->cmd->outf != -1)
 			dup2(data->cmd->outf, 1);
 		close_files_and_pipe(data->cmd);
-		run_child(data);
+		if (check_builtin(data->cmd->cmd->content, data))
+			run_child(data);
 	}
 	close_files_and_pipe(data->cmd);
 	wait(&status);
+	if (WIFEXITED(status))
+		data->status = WEXITSTATUS(status);
 	return (0);
 }

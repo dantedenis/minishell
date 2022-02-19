@@ -39,6 +39,7 @@ int main(int argc, char **argv, char **env)
 	put_wellcome(data);
 	while (1)
 	{
+		data->fork_status = 0;
 		if (!(str_input = readline(get_value_env(data->env, "PROMT"))))
 			return (EXIT_FAILER);
 		add_history(str_input);
@@ -50,9 +51,4 @@ int main(int argc, char **argv, char **env)
 	}
 	//free_data(&data);
 	return (EXIT_SUCCESS);
-	// TODO: << stop cat | << stop cat
-	// (done) insert builtin in execute cmd
-	// skip some builtins in pipes
-	// replace getenv in dollar to get_env and change prototype from t_cmd * to t_data*
-
 }

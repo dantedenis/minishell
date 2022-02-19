@@ -72,7 +72,7 @@ char	*join_list(t_list *lst)
 	{
 		if (!ret && lst->content)
 			ret = ft_strdup(lst->content);
-		if (ret && lst->next->content)
+		if (ret && lst->next && lst->next->content)
 		{
 			tmp = ft_strjoin(ret, lst->next->content);
 			free(ret);

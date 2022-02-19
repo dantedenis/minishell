@@ -23,24 +23,24 @@ static int	free_list(t_env *ptr)
 	return (0);
 }
 
-int	bin_unset(t_env **env, char *key)
+int	bin_unset(t_env **env, t_list *key)
 {
 	t_env	*temp;
 	t_env	*pre;
 	int		len_key;
 
-	temp = *env;
-	len_key = ft_strlen(key) + 1;
 	if (!key)
-		return (1);
+		return (0);
+	temp = *env;
+	len_key = ft_strlen(key->content) + 1;
 	while (temp->next)
 	{
-		if (!ft_strncmp(key, temp->key, len_key))
+		if (!ft_strncmp(key->content, temp->key, len_key))
 		{
 			*env = temp->next;
 			return (free_list(temp));
 		}
-		else if (!ft_strncmp(key, temp->next->key, len_key))
+		else if (!ft_strncmp(key->content, temp->next->key, len_key))
 		{
 			pre = temp->next;
 			temp->next = temp->next->next;

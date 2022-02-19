@@ -30,7 +30,13 @@ int	bin_echo(t_list *cmd)
 		flag_n = ft_strncmp(cmd->content, "-n", 3);
 		if (!flag_n)
 			cmd = cmd->next;
-		ft_putstr_fd(cmd->content, 1);
+		while (cmd)
+		{
+			ft_putstr_fd(cmd->content, 1);
+			if (cmd->next)
+				ft_putchar_fd(' ', 1);
+			cmd = cmd->next;
+		}
 		if (flag_n)
 			write(1, "\n", 1);
 	}

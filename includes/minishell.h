@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/18 23:11:36 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/19 16:13:12 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,10 @@ void	print_arr(char **arr);
 */
 
 char	*slash(char *str, int *i, int in_quotes);
-char	*dollar(char *str, int *i);
+char	*dollar(char *str, int *i, t_env *env);
 char	*quote(char *str, int *i);
-char	*double_quote(char *str, int *i);
-int		redir(t_cmd *cmd, char *str, int *i);
+char	*double_quote(char *str, int *i, t_env *env);
+int		redir(t_data *data, char *str, int *i);
 
 /*
 **	GLOBAL_VALUE_&&_UTILS
@@ -120,7 +120,7 @@ int		bin_echo(t_list *cmd);
 int		bin_env(t_env *env);
 void	bin_exit(t_data *data);
 int		bin_pwd(void);
-int		bin_unset(t_env **env, char *key);
+int		bin_unset(t_env **env, t_list *key);
 int		bin_export(t_env **env, char *key, char *value);
 int		bin_cd(t_env **env, t_list *cmd);
 

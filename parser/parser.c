@@ -6,13 +6,13 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/18 22:34:36 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/19 16:28:29 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
+static int parse_argument(t_data *data, t_list **arg, char *str, int *i)
 {
 	int j;
 	int started_i;
@@ -26,25 +26,25 @@ static int parse_argument(t_cmd *cmd, t_list **arg, char *str, int *i)
 		if (str[*i] == '\'')
 			ft_lstadd_back(arg, ft_lstnew(quote(str, i)));
 		else if (str[*i] == '"')
-			ft_lstadd_back(arg, ft_lstnew(double_quote(str, i)));
+			ft_lstadd_back(arg, ft_lstnew(double_quote(str, i, data->env)));
 		else if (str[*i] == '$')
-			ft_lstadd_back(arg, ft_lstnew(dollar(str, i)));
+			ft_lstadd_back(arg, ft_lstnew(dollar(str, i, data->env)));
 		else if (str[*i] == '\\')
 			ft_lstadd_back(arg, ft_lstnew(slash(str, i, 0)));
 		else if (str[*i] == '<' || str[*i] == '>')
 		{
-			if (redir(cmd, str, i) != 0)
+			if (redir(data, str, i) != 0)
 				return (-1);
 		}
+		if (started_i != *i)
+			j = *i + (str[*i] == '\'' || str[*i] == '"');
 		if (str[*i] && (!is_redirect(str[*i]) && str[*i] != '$'))
 			++(*i);
-		if (started_i + 1 != *i)
-			j = *i;
 	}
 	return (j);
 }
 
-static int get_arguments(t_cmd *cmd, char *str)
+static int get_arguments(t_data *data, char *str)
 {
 	t_list *arg;
 	int i;
@@ -58,7 +58,7 @@ static int get_arguments(t_cmd *cmd, char *str)
 			++i;
 		if (!str[i])
 			break;
-		j = parse_argument(cmd, &arg, str, &i);
+		j = parse_argument(data, &arg, str, &i);
 		if (j == -1)
 		{
 			ft_lstclear(&arg, free);
@@ -68,7 +68,8 @@ static int get_arguments(t_cmd *cmd, char *str)
 			ft_lstadd_back(&arg, ft_lstnew(ft_substr(str, j, i - j)));
 		if (arg)
 		{
-			ft_lstadd_back(&cmd->cmd, ft_lstnew(join_list(arg)));
+			if (arg->content)
+				ft_lstadd_back(&data->cmd->cmd, ft_lstnew(join_list(arg)));
 			ft_lstclear(&arg, free);
 		}
 	}
@@ -95,7 +96,7 @@ static int parser(char *str, int have_pipe, t_data *data)
 	if (have_pipe)
 		pipe(pipefd);
 	data->cmd = init_cmd(have_pipe);
-	if (get_arguments(data->cmd, str) == 0)
+	if (get_arguments(data, str) == 0)
 	{
 		free(str);
 		execute_cmd(data, pipefd);
