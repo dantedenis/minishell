@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 13:56:29 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 00:55:36 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/20 01:15:45 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	*check_finish(char *item, char *str)
 	char	*temp;
 
 	if (!str || !*str)
-		return (item);
+		return (item);		//TODO!!! копию делать из подстроки, от ? до пробела или 0
 	temp = item;
 	item = ft_strjoin(item, str + 7);
 	free(temp);
