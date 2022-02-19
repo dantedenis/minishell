@@ -11,7 +11,7 @@ void	put_wellcome(t_data *data)
 		ft_putstr_fd("!\nWhat will we do? ) \033[0m\n", 1);
 	}
 	else
-		ft_putstr_fd("\033[5m\033[34m HI anonim,!\nWhat will we do? ) \033[0m", 1);
+		ft_putstr_fd("\033[5;34m HI anonim,!\nWhat will we do? ) \033[0m", 1);
 }
 
 void	sig_handler(int signal, siginfo_t *siginfo, void *context)
@@ -20,22 +20,9 @@ void	sig_handler(int signal, siginfo_t *siginfo, void *context)
 	(void) siginfo;
 	if (signal == SIGINT)
 	{
-		//rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
-	}
-	if (signal == SIGQUIT)
-	{
-		//rl_replace_line("", 0);
-		//write(1, "\n", 1);
-		//rl_on_new_line();
-		//rl_redisplay();
-		return ;
-	}
-	if (signal == SIGKILL)
-	{
-		ft_putstr_fd("exit\n", 1);
-		exit(1);
 	}
 }

@@ -12,22 +12,32 @@
 
 #include "minishell.h"
 
+static void	echo_ctrl_off(t_data *data)
+{
+	struct termios	new;
+
+	tcgetattr(0, &new);
+	data->default_tty = new;
+	new.c_lflag &= ~ECHOCTL;
+	tcsetattr(0, TCSANOW, &new);
+}
+
 int main(int argc, char **argv, char **env)
 {
 	struct sigaction	sig_act;
 	char				*str_input;
 	t_data				*data;
 
-	(void) argc;
-	(void) argv;
+	if (argc != 1 && argv)
+		return (write(2, "Too much args!\n", 15) == 15);
 	data = init_data(env);
+	echo_ctrl_off(data);
 	sig_act.sa_sigaction = sig_handler;
 	sig_act.sa_flags = SA_SIGINFO;
-	sigaction(SIGQUIT, &sig_act, NULL);
-	//sigaction(SIGQUIT, &sig_act, NULL);		//найти инфу какие сигналы ловить
+	sigaction(SIGINT, &sig_act, NULL);
+	signal(SIGQUIT, SIG_IGN);
 	put_wellcome(data);
-	int i = -1;
-	while (++i < 5)
+	while (1)
 	{
 		if (!(str_input = readline(get_value_env(data->env, "PROMT"))))
 			return (EXIT_FAILER);
@@ -37,9 +47,8 @@ int main(int argc, char **argv, char **env)
 		else
 			split_cmds(str_input, data);
 		free(str_input);
-		//++i;
 	}
-	free_data(&data);
+	//free_data(&data);
 	return (EXIT_SUCCESS);
 	// TODO: << stop cat | << stop cat
 	// (done) insert builtin in execute cmd
