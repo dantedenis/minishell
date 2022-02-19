@@ -42,6 +42,8 @@ int main(int argc, char **argv, char **env)
 	free_data(&data);
 	return (EXIT_SUCCESS);
 	// TODO: << stop cat | << stop cat
-	// insert builtin in execute cmd
+	// (done) insert builtin in execute cmd
 	// skip some builtins in pipes
+	// replace getenv in dollar to get_env and change prototype from t_cmd * to t_data*
+
 }
