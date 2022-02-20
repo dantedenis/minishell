@@ -11,18 +11,17 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
+
 static void	echo_ctrl_off()
 {
 	struct termios	new;
 
-	signal(SIGQUIT, SIG_IGN);
 	tcgetattr(0, &new);
 	new.c_lflag &= ~ECHOCTL;
 	new.c_lflag &= ~ICANON;
 	tcsetattr(0, TCSANOW, &new);
 }
-*/
+
 int	main(int argc, char **argv, char **env)
 {
 	char				*str_input;
@@ -31,13 +30,14 @@ int	main(int argc, char **argv, char **env)
 	if (argc != 1 && argv)
 		return (write(2, "Too much args!\n", 15) == 15);
 	data = init_data(env);
-	if (sigaction(SIGINT, &data->sig_act, NULL) == -1)		//TODO: ctrl+\ когда чтото написано должен выйти -_- (wat?)
+	if (sigaction(SIGINT, &data->sig_act, NULL) == -1)
 		bin_exit(data);
 	while (1)
 	{
+		signal(SIGQUIT, SIG_IGN);
 		data->fork_status = 0;
-		str_input = readline(get_value_env(data->env, "PROMT"));	//TODO: readline когда печатаешь больше символов чем длина терминала перезаписывают первую строку, а потом делает перевод
-		//echo_ctrl_off();
+		str_input = readline(get_value_env(data->env, "PROMT"));		//TODO: readline когда печатаешь больше символов чем длина терминала перезаписывают первую строку, а потом делает перевод
+		echo_ctrl_off();
 		if (!str_input)
 			bin_exit(data);
 		else if (!is_empty_line(str_input))

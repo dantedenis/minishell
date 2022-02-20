@@ -26,20 +26,24 @@ void	put_wellcome(t_data *data)
 		ft_putstr_fd("\033[5;34m HI anonim,!\nWhat will we do? ) \033[0m", 1);
 }
 
-void	sig_handler(int signal, siginfo_t *siginfo, void *context)
+void	sig_handler(int sig, siginfo_t *siginfo, void *context)
 {
 	(void) context;
 	(void) siginfo;
-	if (signal == SIGINT)
+
+	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
-	if (signal == SIGQUIT)
-	{
+}
+
+void	sig_handler_quit(int sig, siginfo_t *siginfo, void *context)
+{
+	(void) context;
+	(void) siginfo;
+	if (sig == SIGQUIT)
 		ft_putendl_fd("Quit (core dumped)", 1);
-		exit(130);
-	}
 }
