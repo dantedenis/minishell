@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:26:56 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/19 21:03:32 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/20 17:19:41 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_data	*init_data(char **env)
 	data->cmd = NULL;
 	tcgetattr(0, &data->default_tty);
 	data->dup_stdin = dup(0);
+	data->dup_stdout = dup(1);
 	data->status = 0;
 	data->sig_act.sa_sigaction = sig_handler;
 	data->sig_act.sa_flags = SA_SIGINFO;
@@ -55,6 +56,7 @@ void	free_data(t_data **data)
 
 	tmp = *data;
 	close(tmp->dup_stdin);
+	close(tmp->dup_stdout);
 	free_env(&tmp->env);
 	free(*data);
 	*data = NULL;

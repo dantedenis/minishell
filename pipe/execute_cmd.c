@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 14:32:29 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/20 18:23:28 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,25 @@ static int	check_builtin(char *str, t_data *data)
 	char	**tmp;
 	int		tmp_status;
 	
+	// Чекаем про билтины в пайпах, если да, то запускаем в дочери
+	// Если нет, то в родителе. fork_status - сообщает в каком процессе надо запускать
+	// Флаг have_pipe сообщает где билтин находится и меняем соответствующее значение форкстатуса
 	if (data->cmd->have_pipe && !data->fork_status)
 		return (data->fork_status = 1);
+	// Костыль: если в дочери, то меняем форк статус на какоето значение
+	// Если после всех проверок форкстатус равен 2, значит билтин исполнился и надо чистить память и exit
+	// Если форкстатус == 1, то эта команда не билтин и запускаемся бин через run_child
 	if (data->fork_status == 1)
 		data->fork_status = 2;
+	// Редирект
+	if (!data->fork_status && data->cmd->outf != -1)
+		dup2(data->cmd->outf, 1);
 	if (!ft_strncmp(str, "export", 7))
 	{
+		// проверка на наличие аргумента, если нет, то пока запускаем env
 		if (!data->cmd->cmd->next)
 			data->status = bin_env(data->env);
+		// если есть агрумент в котором есть =, то исполняется export. Иначе ничего не происходит
 		else if (data->cmd->cmd->next->content && ft_strchr(data->cmd->cmd->next->content, '='))
 		{
 			tmp = get_key_value(data->cmd->cmd->next->content);
@@ -80,6 +91,7 @@ static int	check_builtin(char *str, t_data *data)
 		data->status = bin_unset(&data->env, data->cmd->cmd->next);
 	else
 		data->fork_status = 1;
+	// здесь используется костыльное значение форкстатуса
 	if (data->fork_status == 2)
 	{
 		tmp_status = data->status;
@@ -88,6 +100,9 @@ static int	check_builtin(char *str, t_data *data)
 		free_data(&data);
 		exit(tmp_status);
 	}
+	// возвращаем stdout на место
+	if (!data->fork_status && data->cmd->outf != -1)
+		dup2(data->dup_stdout, 1);
 	return (data->fork_status);
 }
 
@@ -120,7 +135,7 @@ int	execute_cmd(t_data *data, int *pipefd)
 {
 	int		status;
 
-	if (check_builtin(data->cmd->cmd->content, data) && !fork()) //TODO : тут сегаемся если на вход поступает только пробел(или видимо любая строка без печатных символов)
+	if (check_builtin(data->cmd->cmd->content, data) && !fork())
 	{
 		if (data->cmd->have_pipe)
 		{

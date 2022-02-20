@@ -19,6 +19,13 @@ int	ft_error(char *str, int perror_flag)
 	return (1);
 }
 
+int	is_empty_line(char *s)
+{
+	while (is_space(*s))
+		++s;
+	return (!*s);
+}
+
 int		is_space(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\r' ||

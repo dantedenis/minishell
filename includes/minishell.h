@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/19 23:44:01 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/20 18:37:59 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define DOUBLE_LEFT_REDIR 3
 # define EXIT_FAILER 1
 # define PROMT "👹\033[31;47mMINI⊗HELL\033[0m ⋙  "
+# define SYNTAX_ERROR(x) "syntax error near unexpected token "#x
 
 typedef struct s_env
 {
@@ -56,6 +57,7 @@ typedef struct s_data
 	t_env				*env;
 	t_cmd				*cmd;
 	int					dup_stdin;
+	int					dup_stdout;
 	int					status;
 	int					fork_status;
 	struct termios		default_tty;
@@ -90,6 +92,7 @@ int		is_redirect(char c);
 int		check_redirect(char *str);
 void	free_data(t_data **data);
 void	print_arr(char **arr);
+int		is_empty_line(char *s);
 
 /*
 ** HANDLE_SPEC_SYMBOLS

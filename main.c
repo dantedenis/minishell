@@ -35,17 +35,16 @@ int	main(int argc, char **argv, char **env)
 		bin_exit(data);
 	while (1)
 	{
-		
 		data->fork_status = 0;
 		str_input = readline(get_value_env(data->env, "PROMT"));		//TODO: readline когда печатаешь больше символов чем длина терминала перезаписывают первую строку, а потом делает перевод
 		//echo_ctrl_off();
 		if (!str_input)
 			bin_exit(data);
-		//else if(*str_input != '\n')
-			add_history(str_input);		//TODO:	Не знаю корректно или нет, принимает в историю все что угодня (несколько пустых строк - воспринимает как комунду) else if не решил проблему
+		else if(!is_empty_line(str_input))
+			add_history(str_input);
 		if (preparser(str_input))
 			ft_putendl_fd("Error: unclosed quotes", 2);
-		else
+		else if (!is_empty_line(str_input))
 			split_cmds(str_input, data);
 		free(str_input);
 	}

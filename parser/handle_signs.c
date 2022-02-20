@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 13:56:29 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 14:41:29 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/20 18:17:38 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,6 @@ char *slash(char *str, int *i, int in_quotes)
 	return (ft_substr(str, j + hide_slash, *i - j - 1));
 }
 
-static char	*check_finish(char *item, char *str)
-{
-	char	*temp;
-
-	if (!str || !*str)
-		return (item);		//TODO!!! копию делать из подстроки, от ? до пробела или 0 (решится проблемa echo $?+$?)
-	temp = item;
-	item = ft_strjoin(item, str + 7);
-	free(temp);
-	return (item);
-}
-
 char	*dollar(char *str, int *i, t_data *data)
 {
 	int		j;
@@ -46,24 +34,17 @@ char	*dollar(char *str, int *i, t_data *data)
 	char	*item;
 
 	j = (*i)++;
-	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '?'))
+	if (str[*i] == '?' && (*i)++)
+		return (ft_itoa(data->status));
+	while (str[*i] && (ft_isalnum(str[*i])))
 		++(*i);
 	if (*i - j - 1 == 0)
 		return (ft_strdup("$"));
 	tmp = ft_substr(str, j + 1, *i - j - 1);
-	j = 0;
-	if (!ft_strncmp("?", tmp, 1) && ++j)
-		item = ft_itoa(data->status);
-	else
-		item = get_value_env(data->env, tmp);
+	item = get_value_env(data->env, tmp);
 	free(tmp);
 	if (item == NULL)
 		return (NULL);
-	if (j)
-	{
-		item = check_finish(item, str);
-		return (item);
-	}
 	return (ft_strdup(item));
 }
 
