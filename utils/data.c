@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:26:56 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 17:19:41 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/20 21:26:52 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_data	*init_data(char **env)
 	data->status = 0;
 	data->sig_act.sa_sigaction = sig_handler;
 	data->sig_act.sa_flags = SA_SIGINFO;
+	data->sig_qt.sa_sigaction = sig_handler_quit;
 	parse_env(env, &data->env);
 	bin_export(&data->env, "PROMT", PROMT);
 	put_wellcome(data);

@@ -14,9 +14,9 @@
 
 void	bin_exit(t_data *data)
 {
-	tcsetattr(0, TCSANOW, &data->default_tty);
 	if (!data->fork_status)
 		write(1, "exit\n", 5);
+	tcsetattr(0, TCSANOW, &data->default_tty);
 	if (data->cmd)
 	{
 		close_files_and_pipe(data->cmd);

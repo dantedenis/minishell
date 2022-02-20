@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 18:23:28 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/20 21:29:44 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,7 @@ static void	run_child(t_data *data)
 	char	**new_argv;
 	char	**env;
 
-	signal(SIGQUIT, SIG_DFL);
 	tcsetattr(0, TCSANOW, &data->default_tty);
-	sigaction(SIGQUIT, &data->sig_act, NULL);
 	new_argv = transform_list_to_array(data->cmd->cmd);
 	cmd = get_cmd(data->env, new_argv[0]);
 	if (!cmd)
@@ -135,6 +133,7 @@ int	execute_cmd(t_data *data, int *pipefd)
 {
 	int		status;
 
+	sigaction(SIGQUIT, &data->sig_qt, NULL);
 	if (check_builtin(data->cmd->cmd->content, data) && !fork())
 	{
 		if (data->cmd->have_pipe)

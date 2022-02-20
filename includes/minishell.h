@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/20 18:37:59 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/20 21:26:32 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_data
 	int					fork_status;
 	struct termios		default_tty;
 	struct sigaction	sig_act;
+	struct sigaction	sig_qt;
 }	t_data;
 
 /*
@@ -134,6 +135,7 @@ int		bin_cd(t_env **env, t_list *cmd);
 */
 
 void	sig_handler(int signal, siginfo_t *siginfo, void *context);
+void	sig_handler_quit(int sig, siginfo_t *siginfo, void *context);
 void	put_wellcome(t_data *data);
 
 #endif
