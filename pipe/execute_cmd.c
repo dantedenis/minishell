@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/19 20:22:05 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/20 14:32:29 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	execute_cmd(t_data *data, int *pipefd)
 {
 	int		status;
 
-	if (check_builtin(data->cmd->cmd->content, data) && !fork())
+	if (check_builtin(data->cmd->cmd->content, data) && !fork()) //TODO : тут сегаемся если на вход поступает только пробел(или видимо любая строка без печатных символов)
 	{
 		if (data->cmd->have_pipe)
 		{
