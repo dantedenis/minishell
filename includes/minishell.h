@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/20 18:37:59 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/20 22:21:51 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct s_data
 	t_env				*env;
 	t_cmd				*cmd;
 	int					dup_stdin;
-	int					dup_stdout;
 	int					status;
 	int					fork_status;
 	struct termios		default_tty;
@@ -93,6 +92,7 @@ int		check_redirect(char *str);
 void	free_data(t_data **data);
 void	print_arr(char **arr);
 int		is_empty_line(char *s);
+int		is_quote(char c);
 
 /*
 ** HANDLE_SPEC_SYMBOLS

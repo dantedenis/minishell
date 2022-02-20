@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 18:23:28 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/20 22:11:55 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,6 @@ static int	check_builtin(char *str, t_data *data)
 	// Если форкстатус == 1, то эта команда не билтин и запускаемся бин через run_child
 	if (data->fork_status == 1)
 		data->fork_status = 2;
-	// Редирект
-	if (!data->fork_status && data->cmd->outf != -1)
-		dup2(data->cmd->outf, 1);
 	if (!ft_strncmp(str, "export", 7))
 	{
 		// проверка на наличие аргумента, если нет, то пока запускаем env
@@ -100,9 +97,6 @@ static int	check_builtin(char *str, t_data *data)
 		free_data(&data);
 		exit(tmp_status);
 	}
-	// возвращаем stdout на место
-	if (!data->fork_status && data->cmd->outf != -1)
-		dup2(data->dup_stdout, 1);
 	return (data->fork_status);
 }
 

@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 13:56:29 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 18:17:38 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/20 22:38:11 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,15 @@ char	*dollar(char *str, int *i, t_data *data)
 
 char	*quote(char *str, int *i)
 {
-	int j;
+	int		j;
+	char	*tmp;
 
 	j = (*i)++;
 	while (str[*i] && str[*i] != '\'')
 		(*i)++;
-	return (ft_substr(str, j + 1, *i - j - 1));
+	tmp = ft_substr(str, j + 1, *i - j - 1);
+	++(*i);
+	return (tmp);
 }
 
 char	*double_quote(char *str, int *i, t_data *data)
@@ -91,5 +94,6 @@ char	*double_quote(char *str, int *i, t_data *data)
 		ft_lstadd_back(&lst, ft_lstnew(ft_substr(str, j, *i - j)));
 	tmp = join_list(lst);
 	ft_lstclear(&lst, free);
+	++(*i);
 	return (tmp);
 }

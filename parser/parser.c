@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 17:57:50 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/20 22:40:21 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,33 @@
 
 static int parse_argument(t_data *data, t_list **arg, char *str, int *i)
 {
-	int j;
-	int started_i;
+	int		j;
+	int		started_i;
+	char	*tmp;
 
 	j = *i;
 	while (str[*i] && !is_space(str[*i]))
 	{
+		tmp = NULL;
 		started_i = *i;
 		if (is_desired_sign(str[*i], 0) && *i != j)
 			ft_lstadd_back(arg, ft_lstnew(ft_substr(str, j, *i - j)));
 		if (str[*i] == '\'')
-			ft_lstadd_back(arg, ft_lstnew(quote(str, i)));
+			tmp = quote(str, i);
 		else if (str[*i] == '"')
-			ft_lstadd_back(arg, ft_lstnew(double_quote(str, i, data)));
+			tmp = double_quote(str, i, data);
 		else if (str[*i] == '$')
-			ft_lstadd_back(arg, ft_lstnew(dollar(str, i, data)));
-		else if (str[*i] == '\\')
-			ft_lstadd_back(arg, ft_lstnew(slash(str, i, 0)));
+			tmp = dollar(str, i, data);
 		else if (str[*i] == '<' || str[*i] == '>')
 		{
 			if (redir(data, str, i) != 0)
 				return (-1);
 		}
+		if (tmp)
+			ft_lstadd_back(arg, ft_lstnew(tmp));
 		if (started_i != *i)
-			j = *i + (str[*i] == '\'' || str[*i] == '"');
-		if (str[*i] && (!is_redirect(str[*i]) && str[*i] != '$'))
+			j = *i;
+		if (str[*i] && (started_i == *i))
 			++(*i);
 	}
 	return (j);
@@ -68,8 +70,7 @@ static int get_arguments(t_data *data, char *str)
 			ft_lstadd_back(&arg, ft_lstnew(ft_substr(str, j, i - j)));
 		if (arg)
 		{
-			if (arg->content)
-				ft_lstadd_back(&data->cmd->cmd, ft_lstnew(join_list(arg)));
+			ft_lstadd_back(&data->cmd->cmd, ft_lstnew(join_list(arg)));
 			ft_lstclear(&arg, free);
 		}
 	}

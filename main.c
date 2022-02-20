@@ -31,16 +31,16 @@ int	main(int argc, char **argv, char **env)
 	if (argc != 1 && argv)
 		return (write(2, "Too much args!\n", 15) == 15);
 	data = init_data(env);
-	if (sigaction(SIGINT, &data->sig_act, NULL) == -1)			//TODO: ctrl+\ когда чтото написано должен выйти -_- (wat?)
+	if (sigaction(SIGINT, &data->sig_act, NULL) == -1)		//TODO: ctrl+\ когда чтото написано должен выйти -_- (wat?)
 		bin_exit(data);
 	while (1)
 	{
 		data->fork_status = 0;
-		str_input = readline(get_value_env(data->env, "PROMT"));		//TODO: readline когда печатаешь больше символов чем длина терминала перезаписывают первую строку, а потом делает перевод
+		str_input = readline(get_value_env(data->env, "PROMT"));	//TODO: readline когда печатаешь больше символов чем длина терминала перезаписывают первую строку, а потом делает перевод
 		//echo_ctrl_off();
 		if (!str_input)
 			bin_exit(data);
-		else if(!is_empty_line(str_input))
+		else if (!is_empty_line(str_input))
 			add_history(str_input);
 		if (preparser(str_input))
 			ft_putendl_fd("Error: unclosed quotes", 2);

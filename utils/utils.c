@@ -75,6 +75,8 @@ char	*join_list(t_list *lst)
 	char	*ret;
 
 	ret = NULL;
+	if (!lst)
+		return (NULL);
 	while (lst->next)
 	{
 		if (!ret && lst->content)
@@ -96,12 +98,17 @@ int	is_desired_sign(char c, int is_heredoc)
 {
 	if (is_heredoc)
 		return (c == '$');
-	return (c == '\'' || c == '"' || c == '$' || c == '\\');
+	return (c == '\'' || c == '"' || c == '$');
 }
 
 int	is_redirect(char c)
 {
 	return (c == '<' || c == '>');
+}
+
+int	is_quote(char c)
+{
+	return (c == '\'' || c == '"');
 }
 
 int	check_redirect(char *str)
