@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 18:01:05 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 18:11:12 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,10 @@ int	redir(t_data *data, char *str, int *i)
 			find_word = *i;
 		++(*i);
 	}
-	if (find_word == 0)
-		return (ft_error(SYNTAX_ERROR('newline'), 0) + 1);
+	if (find_word == 0 && !str[*i])
+		return (data->status = syntax_error("'newline'"));
+	else if (find_word == 0 && is_redirect(str[*i]))
+		return (data->status = syntax_error(str + *i));
 	file = ft_substr(str, find_word, *i - find_word);
 	if (data->cmd->type_redirect == DOUBLE_LEFT_REDIR)
 		here_doc(data, file);

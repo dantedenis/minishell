@@ -14,9 +14,14 @@
 
 void	bin_exit(t_data *data)
 {
+	int	tmp_status;
+
+	tmp_status = 0;
 	if (!data->fork_status)
 		write(1, "exit\n", 5);
 	tcsetattr(0, TCSANOW, &data->default_tty);
+	if (data->cmd->cmd->next)
+		tmp_status = ft_atoi(data->cmd->cmd->next->content);
 	if (data->cmd)
 	{
 		close_files_and_pipe(data->cmd);
@@ -24,6 +29,6 @@ void	bin_exit(t_data *data)
 	}
 	free(data->cmd);
 	free_data(&data);
-	rl_clear_history();	
-	exit(EXIT_SUCCESS);
+	rl_clear_history();
+	exit(tmp_status);
 }

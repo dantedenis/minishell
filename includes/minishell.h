@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/20 22:45:05 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 18:16:25 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # define DOUBLE_LEFT_REDIR 3
 # define EXIT_FAILER 1
 # define PROMT "👹\033[31;47mMINI⊗HELL\033[0m ⋙  "
-# define SYNTAX_ERROR(x) "syntax error near unexpected token "#x
 
 typedef struct s_env
 {
@@ -94,6 +93,8 @@ void	free_data(t_data **data);
 void	print_arr(char **arr);
 int		is_empty_line(char *s);
 int		is_quote(char c);
+int		syntax_error(char *str);
+void	free_cmd(t_cmd **cmd, int *pipefd);
 
 /*
 ** HANDLE_SPEC_SYMBOLS

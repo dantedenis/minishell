@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 22:45:39 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 18:31:50 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ int	execute_cmd(t_data *data, int *pipefd)
 {
 	int		status;
 
+	status = 0;
 	sigaction(SIGQUIT, &data->sig_qt, NULL);
 	if (check_builtin(data->cmd->cmd->content, data) && !fork())
 	{

@@ -20,9 +20,12 @@ int	bin_echo(t_list *cmd)
 		write(1, "\n", 1);
 	else
 	{
-		flag_n = ft_strncmp(cmd->content, "-n", 3);
-		if (!flag_n)
+		flag_n = 1;
+		while (cmd && !ft_strncmp(cmd->content, "-n", 3))
+		{
+			flag_n = 0;
 			cmd = cmd->next;
+		}
 		while (cmd)
 		{
 			ft_putstr_fd(cmd->content, 1);

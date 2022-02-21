@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/20 22:40:21 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 18:33:07 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,22 +99,17 @@ static int parser(char *str, int have_pipe, t_data *data)
 	data->cmd = init_cmd(have_pipe);
 	if (get_arguments(data, str) == 0)
 	{
-		free(str);
 		if (data->cmd->cmd)
 			execute_cmd(data, pipefd);
 		else if (have_pipe)
-			return (data->status = ft_error(SYNTAX_ERROR('|'), 0) + 1);
+		{
+			free(str);
+			free_cmd(&data->cmd, pipefd);
+			return (data->status = syntax_error("'|'"));
+		}
 	}
-	if (have_pipe)
-	{
-		dup2(pipefd[0], 0);
-		close(pipefd[0]);
-		close(pipefd[1]);
-	}
-	if (data->cmd->cmd)
-		ft_lstclear(&data->cmd->cmd, free);
-	free(data->cmd);
-	data->cmd = NULL;
+	free(str);
+	free_cmd(&data->cmd, pipefd);
 	return (0);
 }
 
@@ -138,7 +133,11 @@ static int split_pipe(char *str, t_data *data)
 			++i;
 		}
 		if (!quote && parser(ft_substr(str, j, i - j), str[i] == '|', data))
+		{
+			dup2(data->dup_stdin, 0);
+			free(str);
 			return (1);
+		}
 		if (str[i])
 			++i;
 	}
