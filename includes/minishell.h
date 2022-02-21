@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/21 19:09:47 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/21 19:58:11 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ typedef struct s_data
 
 int		preparser(char *str);
 int		split_cmds(char *str, t_data *env);
+int		parser(char *str, int have_pipe, t_data *data);
+t_cmd	*init_cmd(int have_pipe);
 
 /*
 ** PIPE_&&_EXECUTION

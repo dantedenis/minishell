@@ -66,7 +66,7 @@ char	*get_value_env(t_env *env, char *key)
 
 	temp = env;
 	len_key = ft_strlen(key) + 1;
-	while(temp)
+	while (temp)
 	{
 		if (!ft_strncmp(key, temp->key, len_key))
 			return (temp->value);

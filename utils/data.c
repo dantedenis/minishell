@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:26:56 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 18:12:17 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 20:06:24 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	free_data(t_data **data)
 	*data = NULL;
 }
 
-void		parse_env(char **str, t_env **env)
+void	parse_env(char **str, t_env **env)
 {
 	while (*str)
 		put_env(*str++, env);
