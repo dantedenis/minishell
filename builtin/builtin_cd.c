@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	cd_error(char *path, int point)
+static int	cd_error(char *path, int point)
 {
 	ft_putstr_fd(" cd: ", 2);
 	if (point)
@@ -25,9 +25,10 @@ static void	cd_error(char *path, int point)
 		ft_putendl_fd(": permission denied", 2);
 	else
 		ft_putendl_fd(": not a directory", 2);
+	return (1);
 }
 
-static void	change_dir(t_env **env, char *path, int flag, int fd)
+static int	change_dir(t_env **env, char *path, int flag, int fd)
 {
 	char	*cwd;
 	int		point_path;
@@ -46,10 +47,11 @@ static void	change_dir(t_env **env, char *path, int flag, int fd)
 		free(cwd);
 		cwd = getcwd(NULL, 0);
 		bin_export(env, "PWD", cwd);
+		free(cwd);
 	}
 	else
-		cd_error(path, point_path);
-	free(cwd);
+		return (cd_error(path, point_path));
+	return (0);
 }
 
 int	bin_cd(t_env **env, t_list *cmd, int fd)
