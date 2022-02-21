@@ -12,12 +12,14 @@
 
 #include "minishell.h"
 
-int	bin_echo(t_list *cmd)
+int	bin_echo(t_list *cmd, int fd)
 {
 	int		flag_n;
 
+	if (fd < 0)
+		fd = 1;
 	if (!cmd)
-		write(1, "\n", 1);
+		write(1, "\n", fd);
 	else
 	{
 		flag_n = 1;
@@ -28,13 +30,13 @@ int	bin_echo(t_list *cmd)
 		}
 		while (cmd)
 		{
-			ft_putstr_fd(cmd->content, 1);
+			ft_putstr_fd(cmd->content, fd);
 			if (cmd->next)
-				ft_putchar_fd(' ', 1);
+				ft_putchar_fd(' ', fd);
 			cmd = cmd->next;
 		}
 		if (flag_n)
-			write(1, "\n", 1);
+			ft_putstr_fd("\n", fd);
 	}
 	return (0);
 }

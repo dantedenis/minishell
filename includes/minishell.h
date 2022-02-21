@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/21 18:16:25 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 20:08:33 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,13 +123,13 @@ char	**transform_env_to_array(t_env *env);
 **	BUILTIN_UTILS
 */
 
-int		bin_echo(t_list *cmd);
-int		bin_env(t_env *env);
+int		bin_echo(t_list *cmd, int fd);
+int		bin_env(t_env *env, int fd);
 void	bin_exit(t_data *data);
-int		bin_pwd(void);
+int		bin_pwd(int fd);
 int		bin_unset(t_env **env, t_list *key);
 int		bin_export(t_env **env, char *key, char *value);
-int		bin_cd(t_env **env, t_list *cmd);
+int		bin_cd(t_env **env, t_list *cmd, int fd);
 
 /*
 **	SIGNAL_UTILS_&&_WELCOME

@@ -12,15 +12,17 @@
 
 #include "minishell.h"
 
-static void	change_dir(t_env **env, char *path, int flag)
+static void	change_dir(t_env **env, char *path, int flag, int fd)
 {
 	char	*cwd;
 	
+	if (fd < 0)
+		fd = 1;
 	cwd = getcwd(NULL, 0);
 	if (!chdir(path))
 	{
 		if (flag)
-			ft_putendl_fd(path, 1);
+			ft_putendl_fd(path, fd);
 		bin_export(env, "OLDPWD", cwd);
 		free(cwd);
 		cwd = getcwd(NULL, 0);
@@ -40,20 +42,23 @@ static void	change_dir(t_env **env, char *path, int flag)
 	free(cwd);
 }
 
-int	bin_cd(t_env **env, t_list *cmd)
+int	bin_cd(t_env **env, t_list *cmd, int fd)
 {
 	if (!cmd)
-		change_dir(env, get_value_env(*env, "HOME"), 0);
+		change_dir(env, get_value_env(*env, "HOME"), 0, fd);
 	else if (!ft_strncmp(cmd->content, "--", 3))
-		change_dir(env, get_value_env(*env, "HOME"), 0);
+		change_dir(env, get_value_env(*env, "HOME"), 0, fd);
 	else if (!ft_strncmp(cmd->content, "-", 2))
-		change_dir(env, get_value_env(*env, "OLDPWD"), 1);
+		change_dir(env, get_value_env(*env, "OLDPWD"), 1, fd);
 	else if (cmd->next)
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
 		return (1);
 	}
 	else
-		change_dir(env, cmd->content, 0);
+		change_dir(env, cmd->content, 0, fd);
 	return (0);
 }
+
+// TODO: возвращать в случае ошибки - 1. для этого поменять возвращаемое значение у change_dir
+//и возвращать его вывод

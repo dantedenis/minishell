@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 13:56:29 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 18:26:48 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 18:57:23 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*dollar(char *str, int *i, t_data *data)
 		return (ft_itoa(data->status));
 	if (ft_isdigit(str[*i]) && (*i)++)
 		return (NULL);
-	while (str[*i] && (ft_isalnum(str[*i])))
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		++(*i);
 	if (*i - j - 1 == 0)
 		return (ft_strdup("$"));

@@ -20,10 +20,10 @@ void	bin_exit(t_data *data)
 	if (!data->fork_status)
 		write(1, "exit\n", 5);
 	tcsetattr(0, TCSANOW, &data->default_tty);
-	if (data->cmd->cmd->next)
-		tmp_status = ft_atoi(data->cmd->cmd->next->content);
 	if (data->cmd)
 	{
+		if (data->cmd->cmd->next)
+			tmp_status = ft_atoi(data->cmd->cmd->next->content); // TODO: проверка аргумента на наличие только цифр
 		close_files_and_pipe(data->cmd);
 		ft_lstclear(&data->cmd->cmd, free);
 	}

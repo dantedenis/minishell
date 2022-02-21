@@ -12,14 +12,16 @@
 
 #include "minishell.h"
 
-int	bin_pwd(void)
+int	bin_pwd(int fd)
 {
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (1);
-	ft_putendl_fd(pwd, 1);
+	if (fd < 0)
+		fd = 1;
+	ft_putendl_fd(pwd, fd);
 	free(pwd);
 	return (0);
 }

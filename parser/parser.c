@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 18:33:07 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 19:58:42 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ static int parser(char *str, int have_pipe, t_data *data)
 		else if (have_pipe)
 		{
 			free(str);
+			close_files_and_pipe(data->cmd);
 			free_cmd(&data->cmd, pipefd);
 			return (data->status = syntax_error("'|'"));
 		}

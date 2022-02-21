@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 18:31:50 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 19:57:07 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,25 +65,25 @@ static int	check_builtin(char *str, t_data *data)
 	{
 		// проверка на наличие аргумента, если нет, то пока запускаем env
 		if (!data->cmd->cmd->next)
-			data->status = bin_env(data->env);
+			data->status = bin_env(data->env, data->cmd->inf);
 		// если есть агрумент в котором есть =, то исполняется export. Иначе ничего не происходит
 		else if (data->cmd->cmd->next->content && ft_strchr(data->cmd->cmd->next->content, '='))
 		{
 			tmp = get_key_value(data->cmd->cmd->next->content);
 			data->status = bin_export(&data->env, tmp[0], tmp[1]);
 			ft_freearr(&tmp);
-		}
+		} // TODO: проверять аргумент export такие же правила как у unset, написать функцию проверки аргумента
 	}
 	else if (!ft_strncmp(str, "echo", 5))
-		data->status = bin_echo(data->cmd->cmd->next);
+		data->status = bin_echo(data->cmd->cmd->next, data->cmd->outf);
 	else if (!ft_strncmp(str, "exit", 5))
 		bin_exit(data);
 	else if (!ft_strncmp(str, "env", 4))
-		data->status = bin_env(data->env);
+		data->status = bin_env(data->env, data->cmd->outf);
 	else if (!ft_strncmp(str, "pwd", 4))
-		data->status = bin_pwd();
+		data->status = bin_pwd(data->cmd->outf);
 	else if (!ft_strncmp(str, "cd", 3))
-		data->status = bin_cd(&data->env, data->cmd->cmd->next);
+		data->status = bin_cd(&data->env, data->cmd->cmd->next, data->cmd->outf);
 	else if (!ft_strncmp(str, "unset", 6))
 		data->status = bin_unset(&data->env, data->cmd->cmd->next);
 	else
@@ -137,6 +137,7 @@ int	execute_cmd(t_data *data, int *pipefd)
 			close(pipefd[0]);
 			close(pipefd[1]);
 		}
+		check_builtin(data->cmd->cmd->content, data);
 		if (data->cmd->inf != -1)
 			dup2(data->cmd->inf, 0);
 		if (data->cmd->heredoc_flag)
@@ -144,8 +145,7 @@ int	execute_cmd(t_data *data, int *pipefd)
 		if (data->cmd->outf != -1)
 			dup2(data->cmd->outf, 1);
 		close_files_and_pipe(data->cmd);
-		if (check_builtin(data->cmd->cmd->content, data))
-			run_child(data);
+		run_child(data);
 	}
 	close_files_and_pipe(data->cmd);
 	wait(&status);
