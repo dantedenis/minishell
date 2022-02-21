@@ -81,7 +81,7 @@ static int	check_builtin(char *str, t_data *data)
 	else if (!ft_strncmp(str, "env", 4))
 		data->status = bin_env(data->env);
 	else if (!ft_strncmp(str, "pwd", 4))
-		data->status = bin_pwd();
+		data->status = bin_pwd(data->env);
 	else if (!ft_strncmp(str, "cd", 3))
 		data->status = bin_cd(&data->env, data->cmd->cmd->next);
 	else if (!ft_strncmp(str, "unset", 6))
