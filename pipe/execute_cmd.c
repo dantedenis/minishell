@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 18:31:50 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 19:10:20 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static int	check_builtin(char *str, t_data *data)
 	else if (!ft_strncmp(str, "env", 4))
 		data->status = bin_env(data->env);
 	else if (!ft_strncmp(str, "pwd", 4))
-		data->status = bin_pwd();
+		data->status = bin_pwd(data->env);
 	else if (!ft_strncmp(str, "cd", 3))
 		data->status = bin_cd(&data->env, data->cmd->cmd->next);
 	else if (!ft_strncmp(str, "unset", 6))

@@ -12,11 +12,30 @@
 
 #include "minishell.h"
 
+static void	cd_error(char *path, int point)
+{
+	ft_putstr_fd(" cd: ", 2);
+	if (point)
+		ft_putstr_fd(".", 2);
+	else
+		ft_putstr_fd(path, 2);
+	if (access(path, F_OK) == -1)
+		ft_putendl_fd(": no such file or directory", 2);
+	else if (access(path, R_OK) == -1)
+		ft_putendl_fd(": permission denied", 2);
+	else
+		ft_putendl_fd(": not a directory", 2);
+}
+
 static void	change_dir(t_env **env, char *path, int flag)
 {
 	char	*cwd;
-	
+	int		point_path;
+
+	point_path = 0;
 	cwd = getcwd(NULL, 0);
+	if (!ft_strncmp(path, ".", 2) && ++point_path)
+		path = get_value_env(*env, "PWD");
 	if (!chdir(path))
 	{
 		if (flag)
@@ -27,16 +46,7 @@ static void	change_dir(t_env **env, char *path, int flag)
 		bin_export(env, "PWD", cwd);
 	}
 	else
-	{
-		ft_putstr_fd(" cd: ", 2);
-		ft_putstr_fd(path, 2);
-		if (access(path, F_OK) == -1)
-			ft_putendl_fd(": no such file or directory", 2);
-		else if (access(path, R_OK) == -1)
-			ft_putendl_fd(": permission denied", 2);
-		else
-			ft_putendl_fd(": not a directory", 2);
-	}
+		cd_error(path, point_path);
 	free(cwd);
 }
 
