@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 18:11:12 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 19:59:13 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static char	*parse_argument(char *str, int is_heredoc, t_data *data)
 {
-	int 	j;
-	int 	started_i;
+	int		j;
+	int		started_i;
 	t_list	*arg;
 	int		i;
 	char	*ret;
@@ -116,8 +116,8 @@ int	redir(t_data *data, char *str, int *i)
 	find_word = 0;
 	data->cmd->type_redirect = check_redirect(str + *i);
 	*i += data->cmd->type_redirect % 2 + 1;
-	while (str[*i] && ((!find_word && is_space(str[*i])) ||
-			(!is_space(str[*i]) && !is_redirect(str[*i]))))
+	while (str[*i] && ((!find_word && is_space(str[*i]))
+			|| (!is_space(str[*i]) && !is_redirect(str[*i]))))
 	{
 		if (!find_word && !is_space(str[*i]))
 			find_word = *i;

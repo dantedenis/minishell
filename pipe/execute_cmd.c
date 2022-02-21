@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 19:57:07 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 20:14:23 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	check_builtin(char *str, t_data *data)
 {
 	char	**tmp;
 	int		tmp_status;
-	
+
 	// Чекаем про билтины в пайпах, если да, то запускаем в дочери
 	// Если нет, то в родителе. fork_status - сообщает в каком процессе надо запускать
 	// Флаг have_pipe сообщает где билтин находится и меняем соответствующее значение форкстатуса
@@ -81,7 +81,7 @@ static int	check_builtin(char *str, t_data *data)
 	else if (!ft_strncmp(str, "env", 4))
 		data->status = bin_env(data->env, data->cmd->outf);
 	else if (!ft_strncmp(str, "pwd", 4))
-		data->status = bin_pwd(data->cmd->outf);
+		data->status = bin_pwd(data->env, data->cmd->outf);
 	else if (!ft_strncmp(str, "cd", 3))
 		data->status = bin_cd(&data->env, data->cmd->cmd->next, data->cmd->outf);
 	else if (!ft_strncmp(str, "unset", 6))

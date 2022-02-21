@@ -12,16 +12,15 @@
 
 #include "minishell.h"
 
-int	bin_pwd(int fd)
+int	bin_pwd(t_env *env, int fd)
 {
 	char	*pwd;
 
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-		return (1);
 	if (fd < 0)
 		fd = 1;
+	pwd = get_value_env(env, "PWD");
+	if (!pwd)
+		return (1);
 	ft_putendl_fd(pwd, fd);
-	free(pwd);
 	return (0);
 }

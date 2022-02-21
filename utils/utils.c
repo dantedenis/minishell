@@ -50,7 +50,7 @@ int	syntax_error(char *str)
 			str = "'<<'";
 		else if (type == RIGHT_REDIR)
 			str = "'>'";
-		else 
+		else
 			str = "'>>'";
 	}
 	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
@@ -65,17 +65,16 @@ int	is_empty_line(char *s)
 	return (!*s);
 }
 
-int		is_space(char c)
+int	is_space(char c)
 {
-	return (c == ' ' || c == '\t' || c == '\r' ||
-		c == '\f' || c == '\n' || c == '\v');
+	return (c == ' ' || c == '\t' || c == '\r'
+			|| c == '\f' || c == '\n' || c == '\v');
 }
-
 
 void	print_list(t_list *lst, char *lstname)
 {
 	int	i;
-	
+
 	i = 0;
 	while (lst)
 	{

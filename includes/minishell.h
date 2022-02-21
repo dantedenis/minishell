@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/21 20:08:33 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 20:13:56 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ typedef struct s_data
 
 int		preparser(char *str);
 int		split_cmds(char *str, t_data *env);
+int		parser(char *str, int have_pipe, t_data *data);
+t_cmd	*init_cmd(int have_pipe);
 
 /*
 ** PIPE_&&_EXECUTION
@@ -126,7 +128,7 @@ char	**transform_env_to_array(t_env *env);
 int		bin_echo(t_list *cmd, int fd);
 int		bin_env(t_env *env, int fd);
 void	bin_exit(t_data *data);
-int		bin_pwd(int fd);
+int		bin_pwd(t_env *env, int fd);
 int		bin_unset(t_env **env, t_list *key);
 int		bin_export(t_env **env, char *key, char *value);
 int		bin_cd(t_env **env, t_list *cmd, int fd);

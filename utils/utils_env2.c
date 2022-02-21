@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 20:24:12 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/19 20:24:41 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/21 20:02:39 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*get_item(t_env *env)
 	tmp = ft_strjoin(env->key, "=");
 	ret = ft_strjoin(tmp, env->value);
 	free(tmp);
-	return (ret);	
+	return (ret);
 }
 
 char	**transform_env_to_array(t_env *env)
