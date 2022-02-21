@@ -1,40 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   global_env.c                                       :+:      :+:    :+:   */
+/*   utils_env1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/04 23:33:22 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/04 23:33:22 by bstrong          ###   ########.fr       */
+/*   Created: 2022/02/19 20:23:55 by bstrong           #+#    #+#             */
+/*   Updated: 2022/02/19 20:23:55 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	put_env(char *data)
+void	put_env(char *data, t_env **env)
 {
 	t_env	*new;
+	char	**item;
 
 	new = (t_env *) malloc(sizeof(t_env));
 	if (!new)
 		return ;
-	if (g_env)
+	if (*env)
 	{
-		new->str = ft_split(data, '=');
-		new->key = new->str[0];
-		new->value = new->str[1];
-		new->next = g_env;
-		g_env = new;
+		item = ft_split(data, '=');
+		new->key = ft_strdup(item[0]);
+		new->value = ft_strdup(item[1]);
+		new->next = *env;
+		*env = new;
 	}
 	else
 	{
-		g_env = new;
+		*env = new;
 		new->next = NULL;
-		new->str = ft_split(data, '=');
-		new->key = new->str[0];
-		new->value = new->str[1];
+		item = ft_split(data, '=');
+		new->key = ft_strdup(item[0]);
+		new->value = ft_strdup(item[1]);
 	}
+	ft_freearr(&item);
 }
 
 void	reverse_stack(t_env **head)
@@ -57,19 +59,12 @@ void	reverse_stack(t_env **head)
 	*head = prev;
 }
 
-void		parse_env(char **str)
-{
-	while (*str)
-		put_env(*str++);
-	reverse_stack(&g_env);
-}
-
-char	*get_value_env(char *key)
+char	*get_value_env(t_env *env, char *key)
 {
 	t_env	*temp;
 	int		len_key;
 
-	temp = g_env;
+	temp = env;
 	len_key = ft_strlen(key) + 1;
 	while(temp)
 	{
@@ -80,14 +75,14 @@ char	*get_value_env(char *key)
 	return (NULL);
 }
 
-t_env	*get_env(char *key)
+t_env	*get_env(t_env *env, char *key)
 {
 	t_env	*temp;
 	int		len_key;
 
-	temp = g_env;
+	temp = env;
 	len_key = ft_strlen(key) + 1;
-	while(temp)
+	while (temp)
 	{
 		if (!ft_strncmp(key, temp->key, len_key))
 			return (temp);

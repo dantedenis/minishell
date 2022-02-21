@@ -6,13 +6,13 @@
 #    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/02/15 09:29:13 by bstrong          ###   ########.fr        #
+#    Updated: 2022/02/19 20:59:12 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
 CC		= clang
-FLAGS	= -Wall -Wextra -Werror
+FLAGS	= -Wall -Wextra -Werror -g
 
 INCLUDE	= -I ./includes -I ./libft -I /opt/homebrew/opt/readline/include
 
@@ -34,23 +34,25 @@ SRC_LST_BIN		=	builtin_cd.c		builtin_echo.c		builtin_env.c\
 SRC_LST_PARS	=	handle_signs.c		parser.c			preparser.c\
 					redirect.c
 
-SRC_LST_PIPE	=	execute_cmd.c		parser_pipe.c
+SRC_LST_PIPE	=	execute_cmd.c		get_cmd.c
 
-SRC_LST_UTILS	=	utils.c				global_env.c		signal_well.c
+SRC_LST_UTILS	=	utils.c				utils_env1.c		utils_env2.c\
+					signal_well.c		data.c
 
 OBJ_PATH		=	./bin/
 
 OBJ				=	$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_BIN)))\
 					$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_PARS)))\
 					$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_PIPE)))\
-					$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_UTILS)))
+					$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_UTILS)))\
+					$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, main.c))
 
 .PHONY	:	all clean fclean re
 
 all	:	$(LIBS) $(OBJ_PATH) $(NAME)
 
 $(LIBS)	:
-		@make -C ./libft
+		make -C ./libft all
 
 $(OBJ_PATH)	:
 		mkdir -p $(OBJ_PATH)

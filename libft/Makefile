@@ -6,13 +6,13 @@
 #    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/08 09:38:50 by bstrong           #+#    #+#              #
-#    Updated: 2022/02/15 20:32:21 by bstrong          ###   ########.fr        #
+#    Updated: 2022/02/19 20:52:48 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= libft.a
 CC		= clang
-FLAGS	= -Wall -Wextra -Werror
+FLAGS	= -Wall -Wextra -Werror -g
 
 HEADER = libft.h
 
@@ -26,7 +26,8 @@ LIST =	ft_atoi.c		ft_bzero.c		ft_calloc.c \
 		ft_strnstr.c	ft_strrchr.c	ft_tolower.c \
 		ft_itoa.c		ft_memmove.c	ft_toupper.c \
 		ft_striteri.c	ft_strjoin.c	ft_strmapi.c \
-		ft_strtrim.c	ft_substr.c		ft_putstr_fd.c	ft_putnbr_fd.c
+		ft_strtrim.c	ft_substr.c		ft_putstr_fd.c\
+		ft_putnbr_fd.c	ft_freearr.c	ft_strcmp.c
 
 LIST_B =	ft_lstnew.c		ft_lstadd_front.c	ft_lstsize.c \
 			ft_lstlast.c	ft_lstadd_back.c	ft_lstiter.c \
@@ -36,7 +37,7 @@ OBJ			= $(addprefix $(OBJ_PATH), $(patsubst %.c,%.o,$(LIST)))
 OBJ_B		= $(addprefix $(OBJ_PATH), $(patsubst %.c,%.o,$(LIST_B)))
 OBJ_PATH	= ./bin/
 
-.PHONY : all clean fclean re bonus
+.PHONY : all clean fclean re
 
 all: $(OBJ_PATH) $(NAME)
 

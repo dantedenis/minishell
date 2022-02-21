@@ -1,10 +1,29 @@
 #include "minishell.h"
 
-int	ft_error(char *str)
+void	print_arr(char **arr)
+{
+	while (*arr)
+	{
+		printf("%s\n", *arr);
+		arr++;
+	}
+}
+
+int	ft_error(char *str, int perror_flag)
 {
 	ft_putstr_fd("minishell: ", 2);
-	perror(str);
+	if (perror_flag)
+		perror(str);
+	else
+		ft_putendl_fd(str, 2);
 	return (1);
+}
+
+int	is_empty_line(char *s)
+{
+	while (is_space(*s))
+		++s;
+	return (!*s);
 }
 
 int		is_space(char c)
@@ -56,11 +75,13 @@ char	*join_list(t_list *lst)
 	char	*ret;
 
 	ret = NULL;
+	if (!lst)
+		return (NULL);
 	while (lst->next)
 	{
 		if (!ret && lst->content)
 			ret = ft_strdup(lst->content);
-		if (ret && lst->next->content)
+		if (ret && lst->next && lst->next->content)
 		{
 			tmp = ft_strjoin(ret, lst->next->content);
 			free(ret);
@@ -77,12 +98,17 @@ int	is_desired_sign(char c, int is_heredoc)
 {
 	if (is_heredoc)
 		return (c == '$');
-	return (c == '\'' || c == '"' || c == '$' || c == '\\');
+	return (c == '\'' || c == '"' || c == '$');
 }
 
 int	is_redirect(char c)
 {
 	return (c == '<' || c == '>');
+}
+
+int	is_quote(char c)
+{
+	return (c == '\'' || c == '"');
 }
 
 int	check_redirect(char *str)
