@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/20 22:45:05 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 20:13:56 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # define DOUBLE_LEFT_REDIR 3
 # define EXIT_FAILER 1
 # define PROMT "👹\033[31;47mMINI⊗HELL\033[0m ⋙  "
-# define SYNTAX_ERROR(x) "syntax error near unexpected token "#x
 
 typedef struct s_env
 {
@@ -70,6 +69,8 @@ typedef struct s_data
 
 int		preparser(char *str);
 int		split_cmds(char *str, t_data *env);
+int		parser(char *str, int have_pipe, t_data *data);
+t_cmd	*init_cmd(int have_pipe);
 
 /*
 ** PIPE_&&_EXECUTION
@@ -94,6 +95,8 @@ void	free_data(t_data **data);
 void	print_arr(char **arr);
 int		is_empty_line(char *s);
 int		is_quote(char c);
+int		syntax_error(char *str);
+void	free_cmd(t_cmd **cmd, int *pipefd);
 
 /*
 ** HANDLE_SPEC_SYMBOLS
@@ -122,13 +125,13 @@ char	**transform_env_to_array(t_env *env);
 **	BUILTIN_UTILS
 */
 
-int		bin_echo(t_list *cmd);
-int		bin_env(t_env *env);
+int		bin_echo(t_list *cmd, int fd);
+int		bin_env(t_env *env, int fd);
 void	bin_exit(t_data *data);
-int		bin_pwd(t_env *env);
+int		bin_pwd(t_env *env, int fd);
 int		bin_unset(t_env **env, t_list *key);
 int		bin_export(t_env **env, char *key, char *value);
-int		bin_cd(t_env **env, t_list *cmd);
+int		bin_cd(t_env **env, t_list *cmd, int fd);
 
 /*
 **	SIGNAL_UTILS_&&_WELCOME

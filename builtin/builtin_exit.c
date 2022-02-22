@@ -14,16 +14,21 @@
 
 void	bin_exit(t_data *data)
 {
+	int	tmp_status;
+
+	tmp_status = 0;
+	tcsetattr(0, TCSANOW, &data->default_tty);
 	if (!data->fork_status)
 		write(1, "exit\n", 5);
-	tcsetattr(0, TCSANOW, &data->default_tty);
 	if (data->cmd)
 	{
+		if (data->cmd->cmd->next)
+			tmp_status = ft_atoi(data->cmd->cmd->next->content); // TODO: проверка аргумента на наличие только цифр
 		close_files_and_pipe(data->cmd);
 		ft_lstclear(&data->cmd->cmd, free);
 	}
 	free(data->cmd);
 	free_data(&data);
-	rl_clear_history();	
-	exit(EXIT_SUCCESS);
+	rl_clear_history();
+	exit(tmp_status);
 }

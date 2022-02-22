@@ -16,7 +16,8 @@ void	put_wellcome(t_data *data)
 {
 	char	*buf;
 
-	if ((buf = get_value_env(data->env, "LOGNAME")))
+	buf = get_value_env(data->env, "LOGNAME");
+	if (buf)
 	{
 		ft_putstr_fd("\033[5;34mHI ", 1);
 		ft_putendl_fd(buf, 1);
@@ -30,7 +31,6 @@ void	sig_handler(int sig, siginfo_t *siginfo, void *context)
 {
 	(void) context;
 	(void) siginfo;
-
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);

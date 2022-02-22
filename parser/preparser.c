@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   preparser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 18:10:27 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/13 18:10:28 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/21 19:47:01 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int preparser(char *str)
+int	preparser(char *str)
 {
-	char quote;
+	char	quote;
 
 	quote = 0;
 	while (*str)

@@ -1,5 +1,22 @@
 #include "minishell.h"
 
+void	free_cmd(t_cmd **cmd, int *pipefd)
+{
+	t_cmd	*tmp;
+
+	tmp = *cmd;
+	if (tmp->have_pipe)
+	{
+		dup2(pipefd[0], 0);
+		close(pipefd[0]);
+		close(pipefd[1]);
+	}
+	if (tmp->cmd)
+		ft_lstclear(&tmp->cmd, free);
+	free(tmp);
+	*cmd = NULL;
+}
+
 void	print_arr(char **arr)
 {
 	while (*arr)
@@ -19,6 +36,28 @@ int	ft_error(char *str, int perror_flag)
 	return (1);
 }
 
+int	syntax_error(char *str)
+{
+	int	type;
+
+	type = 0;
+	if (is_redirect(*str))
+	{
+		type = check_redirect(str);
+		if (type == LEFT_REDIR)
+			str = "'<'";
+		else if (type == DOUBLE_LEFT_REDIR)
+			str = "'<<'";
+		else if (type == RIGHT_REDIR)
+			str = "'>'";
+		else
+			str = "'>>'";
+	}
+	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
+	ft_putendl_fd(str, 2);
+	return (2);
+}
+
 int	is_empty_line(char *s)
 {
 	while (is_space(*s))
@@ -26,17 +65,16 @@ int	is_empty_line(char *s)
 	return (!*s);
 }
 
-int		is_space(char c)
+int	is_space(char c)
 {
-	return (c == ' ' || c == '\t' || c == '\r' ||
-		c == '\f' || c == '\n' || c == '\v');
+	return (c == ' ' || c == '\t' || c == '\r'
+			|| c == '\f' || c == '\n' || c == '\v');
 }
-
 
 void	print_list(t_list *lst, char *lstname)
 {
 	int	i;
-	
+
 	i = 0;
 	while (lst)
 	{
@@ -58,15 +96,6 @@ int	close_files_and_pipe(t_cmd *cmd)
 		close(cmd->heredoc_pipe[1]);
 	}
 	return (0);
-}
-
-void	free_cmd(void *cmd)
-{
-	t_cmd	*tmp;
-
-	tmp = (t_cmd *) cmd;
-	free(tmp->cmd);
-	free(tmp);
 }
 
 char	*join_list(t_list *lst)
