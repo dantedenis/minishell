@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	echo_ctrl_off()
+static void	echo_ctrl_off(void)
 {
 	struct termios	new;
 
@@ -24,8 +24,8 @@ static void	echo_ctrl_off()
 
 int	main(int argc, char **argv, char **env)
 {
-	char				*str_input;
-	t_data				*data;
+	char	*str_input;
+	t_data	*data;
 
 	if (argc != 1 && argv)
 		return (write(2, "Too much args!\n", 15) == 15);
@@ -36,7 +36,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		signal(SIGQUIT, SIG_IGN);
 		data->fork_status = 0;
-		str_input = readline(get_value_env(data->env, "PROMT"));		//TODO: readline когда печатаешь больше символов чем длина терминала перезаписывают первую строку, а потом делает перевод
+		str_input = readline(get_value_env(data->env, "PROMT"));
 		echo_ctrl_off();
 		if (!str_input)
 			bin_exit(data);

@@ -23,7 +23,7 @@ void	bin_exit(t_data *data)
 	if (data->cmd)
 	{
 		if (data->cmd->cmd->next)
-			tmp_status = ft_atoi(data->cmd->cmd->next->content); // TODO: проверка аргумента на наличие только цифр
+			tmp_status = ft_atoi(data->cmd->cmd->next->content);
 		close_files_and_pipe(data->cmd);
 		ft_lstclear(&data->cmd->cmd, free);
 	}
