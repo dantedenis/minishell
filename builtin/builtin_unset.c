@@ -12,6 +12,33 @@
 
 #include "minishell.h"
 
+static int	checker(char *key)
+{
+	int	error;
+	int	i;
+
+	error = 0;
+	i = 0;
+	if (!(ft_isalpha(key[i]) || key[i] == '_'))
+		error = 1;
+	while (key[++i])
+	{
+		if (!(ft_isalpha(key[i]) || ft_isdigit(key[i])))
+		{
+			error = 1;
+			break ;
+		}
+	}
+	if (error)
+	{
+		ft_putstr_fd("unset: ", 2);
+		ft_putstr_fd(key, 2);
+		ft_putendl_fd(": invalid parameter name", 2);
+		return (1);
+	}
+	return (0);
+}
+
 static int	free_list(t_env *ptr)
 {
 	free(ptr->key);
@@ -31,6 +58,8 @@ int	bin_unset(t_env **env, t_list *key)
 
 	if (!key)
 		return (0);
+	if (checker(key->content))
+		return (1);
 	temp = *env;
 	len_key = ft_strlen(key->content) + 1;
 	while (temp->next)
