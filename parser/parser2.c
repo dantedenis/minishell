@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-t_cmd	*init_cmd(int have_pipe)
+t_cmd *init_cmd(int have_pipe)
 {
-	t_cmd	*ret;
+	t_cmd *ret;
 
-	ret = (t_cmd *) malloc(sizeof(t_cmd));
+	ret = (t_cmd *)malloc(sizeof(t_cmd));
 	ret->inf = -2;
 	ret->outf = -2;
 	ret->have_pipe = have_pipe;
@@ -13,11 +13,79 @@ t_cmd	*init_cmd(int have_pipe)
 	return (ret);
 }
 
-static int	split_pipe(char *str, t_data *data)
+static int count_pipe(char *str)
 {
-	char	quote;
-	int		i;
-	int		j;
+	char quote;
+	int i;
+	int j;
+	int ret;
+
+	quote = 0;
+	i = 0;
+	ret = 0;
+	while (str[i])
+	{
+		j = i;
+		while (str[i] && (str[i] != '|' || quote))
+		{
+			if (!quote && (str[i] == '\'' || str[i] == '"'))
+				quote = str[i];
+			else if (quote && str[i] == quote)
+				quote = 0;
+			++i;
+		}
+		if (!quote)
+			++ret;
+		if (str[i])
+			++i;
+	}
+	return (ret);
+}
+
+static void	ft_newline_sigint(int wstatus, int *newline)
+{
+        if (WTERMSIG(wstatus) == SIGINT && *newline == 0)
+        {
+                *newline = *newline + 1;
+                printf("\n");
+        }
+}
+
+
+static void wait_cmds(t_data *data, char *str)
+{
+	int i;
+	int size;
+	int status;
+	int	newline;
+
+	size = count_pipe(str);
+	i = 0;
+	newline = 0;
+	while (i < size)
+	{
+		waitpid(-1, &status, WUNTRACED);
+		// wexit = waitpid(pid_arr[i], &status, WUNTRACED);
+		// if (wexit == -1)
+		// 		ft_error_exit(errno, "waitpid", EXIT_FAILURE);
+		if (WIFSTOPPED(status))
+			data->status = WSTOPSIG(status) + 128;
+		if (WIFSIGNALED(status))
+		{
+			ft_newline_sigint(status, &newline);
+			data->status = WTERMSIG(status) + 128;
+		}
+		if (WIFEXITED(status))
+			data->status = WEXITSTATUS(status);
+		i++;
+	}
+}
+
+static int split_pipe(char *str, t_data *data)
+{
+	char quote;
+	int i;
+	int j;
 
 	quote = 0;
 	i = 0;
@@ -41,16 +109,17 @@ static int	split_pipe(char *str, t_data *data)
 		if (str[i])
 			++i;
 	}
+	wait_cmds(data, str);
 	dup2(data->dup_stdin, 0);
 	free(str);
 	return (0);
 }
 
-int	split_cmds(char *str, t_data *data)
+int split_cmds(char *str, t_data *data)
 {
-	char	quote;
-	int		i;
-	int		j;
+	char quote;
+	int i;
+	int j;
 
 	quote = 0;
 	i = 0;

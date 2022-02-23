@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 20:14:23 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/23 23:07:03 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,8 @@ int	execute_cmd(t_data *data, int *pipefd)
 		run_child(data);
 	}
 	close_files_and_pipe(data->cmd);
-	wait(&status);
-	if (WIFEXITED(status))
-		data->status = WEXITSTATUS(status);
+	dup2(pipefd[0], 0);
+	close(pipefd[0]);
+	close(pipefd[1]);
 	return (0);
 }
