@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	bin_exit(t_data *data)
+void	bin_exit(t_data *data, int i)
 {
 	int	tmp_status;
 
@@ -20,14 +20,12 @@ void	bin_exit(t_data *data)
 	tcsetattr(0, TCSANOW, &data->default_tty);
 	if (!data->fork_status)
 		write(1, "exit\n", 5);
-	if (data->cmd)
+	if (i >= 0 && data->c[i])
 	{
-		if (data->cmd->cmd->next)
-			tmp_status = ft_atoi(data->cmd->cmd->next->content);
-		close_files_and_pipe(data->cmd);
-		ft_lstclear(&data->cmd->cmd, free);
+		if (data->c[i]->cmd->next)
+			tmp_status = ft_atoi(data->c[i]->cmd->next->content);
+		close_files_and_pipe(data->c[i]);
 	}
-	free(data->cmd);
 	free_data(&data);
 	rl_clear_history();
 	exit(tmp_status);

@@ -1,19 +1,30 @@
 #include "minishell.h"
 
-void	free_cmd(t_cmd **cmd, int *pipefd)
+void	free_cmd(t_cmd **cmd)
 {
 	t_cmd	*tmp;
 
 	tmp = *cmd;
-	if (tmp->have_pipe)
-	{
-		dup2(pipefd[0], 0);
-		close(pipefd[0]);
-		close(pipefd[1]);
-	}
 	if (tmp->cmd)
 		ft_lstclear(&tmp->cmd, free);
+	free(tmp->str);
 	free(tmp);
+	*cmd = NULL;
+}
+
+void	free_array_cmd(t_cmd ***cmd, int size)
+{
+	int		i;
+	t_cmd	**tmp;
+
+	i = 0;
+	tmp = *cmd;
+	while (i < size)
+	{
+		if (tmp[i])
+			free_cmd(tmp + i);
+		++i;
+	}
 	*cmd = NULL;
 }
 

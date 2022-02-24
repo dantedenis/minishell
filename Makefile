@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
+#    By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/02/21 19:55:19 by bstrong          ###   ########.fr        #
+#    Updated: 2022/02/24 18:52:25 by lcoreen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,10 +31,10 @@ SRC_LST_BIN		=	builtin_cd.c		builtin_echo.c		builtin_env.c\
 					builtin_exit.c		builtin_export.c	builtin_pwd.c\
 					builtin_unset.c
 
-SRC_LST_PARS	=	handle_signs.c		parser1.c			parser2.c\
+SRC_LST_PARS	=	handle_signs.c		parser.c			init_cmds.c\
 					preparser.c			redirect.c
 
-SRC_LST_PIPE	=	execute_cmd.c		get_cmd.c
+SRC_LST_PIPE	=	execute_cmd.c		get_cmd.c			wait.c
 
 SRC_LST_UTILS	=	utils.c				utils_env1.c		utils_env2.c\
 					signal_well.c		data.c

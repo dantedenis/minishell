@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 19:59:13 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/24 19:39:16 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,47 +46,47 @@ static char	*parse_argument(char *str, int is_heredoc, t_data *data)
 	return (ret);
 }
 
-static int	open_file(t_data *data, char *file)
+static int	open_file(t_data *data, char *file, int k)
 {
 	char	*parsed_file;
 
 	parsed_file = parse_argument(file, 0, data);
-	if (data->cmd->type_redirect == RIGHT_REDIR)
+	if (data->c[k]->type_redirect == RIGHT_REDIR)
 	{
-		if (data->cmd->outf >= 0)
-			close(data->cmd->outf);
-		data->cmd->outf = open(parsed_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (data->c[k]->outf >= 0)
+			close(data->c[k]->outf);
+		data->c[k]->outf = open(parsed_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	}
-	else if (data->cmd->type_redirect == LEFT_REDIR)
+	else if (data->c[k]->type_redirect == LEFT_REDIR)
 	{
-		if (data->cmd->inf >= 0)
-			close(data->cmd->inf);
-		data->cmd->inf = open(parsed_file, O_RDONLY, 0644);
+		if (data->c[k]->inf >= 0)
+			close(data->c[k]->inf);
+		data->c[k]->inf = open(parsed_file, O_RDONLY, 0644);
 	}
-	else if (data->cmd->type_redirect == DOUBLE_RIGHT_REDIR)
+	else if (data->c[k]->type_redirect == DOUBLE_RIGHT_REDIR)
 	{
-		if (data->cmd->outf >= 0)
-			close(data->cmd->outf);
-		data->cmd->outf = open(parsed_file, O_CREAT | O_RDWR | O_APPEND, 0644);
+		if (data->c[k]->outf >= 0)
+			close(data->c[k]->outf);
+		data->c[k]->outf = open(parsed_file, O_CREAT | O_RDWR | O_APPEND, 0644);
 	}
-	if (data->cmd->inf == -1 || data->cmd->outf == -1)
+	if (data->c[k]->inf == -1 || data->c[k]->outf == -1)
 		return (ft_error(file, 1));
 	free(parsed_file);
 	return (0);
 }
 
-static int	here_doc(t_data *data, char *stop)
+static int	here_doc(t_data *data, char *stop, int k)
 {
 	char	*line;
 	char	*parsed_line;
 
 	dup2(data->dup_stdin, 0);
-	if (data->cmd->heredoc_flag)
+	if (data->c[k]->heredoc_flag)
 	{
-		close(data->cmd->heredoc_pipe[0]);
-		close(data->cmd->heredoc_pipe[1]);
+		close(data->c[k]->heredoc_pipe[0]);
+		close(data->c[k]->heredoc_pipe[1]);
 	}
-	if (pipe(data->cmd->heredoc_pipe) < 0)
+	if (pipe(data->c[k]->heredoc_pipe) < 0)
 		return (ft_error("pipe", 1));
 	line = readline("> ");
 	if (!line)
@@ -96,26 +96,26 @@ static int	here_doc(t_data *data, char *stop)
 		if (!ft_strcmp(stop, line))
 			break ;
 		parsed_line = parse_argument(line, 1, data);
-		ft_putendl_fd(parsed_line, data->cmd->heredoc_pipe[1]);
+		ft_putendl_fd(parsed_line, data->c[k]->heredoc_pipe[1]);
 		free(line);
 		free(parsed_line);
 		line = readline("> ");
 		if (!line)
 			return (ft_error("readline", 1));
 	}
-	data->cmd->heredoc_flag = 1;
+	data->c[k]->heredoc_flag = 1;
 	free(line);
 	return (0);
 }
 
-int	redir(t_data *data, char *str, int *i)
+int	redir(t_data *data, char *str, int *i, int k)
 {
 	int		find_word;
 	char	*file;
 
 	find_word = 0;
-	data->cmd->type_redirect = check_redirect(str + *i);
-	*i += data->cmd->type_redirect % 2 + 1;
+	data->c[k]->type_redirect = check_redirect(str + *i);
+	*i += data->c[k]->type_redirect % 2 + 1;
 	while (str[*i] && ((!find_word && is_space(str[*i]))
 			|| (!is_space(str[*i]) && !is_redirect(str[*i]))))
 	{
@@ -123,14 +123,14 @@ int	redir(t_data *data, char *str, int *i)
 			find_word = *i;
 		++(*i);
 	}
-	if (find_word == 0 && !str[*i])
-		return (data->status = syntax_error("'newline'"));
-	else if (find_word == 0 && is_redirect(str[*i]))
-		return (data->status = syntax_error(str + *i));
+	// if (find_word == 0 && !str[*i])
+	// 	return (data->status = syntax_error("'newline'"));
+	// else if (find_word == 0 && is_redirect(str[*i]))
+	// 	return (data->status = syntax_error(str + *i));
 	file = ft_substr(str, find_word, *i - find_word);
-	if (data->cmd->type_redirect == DOUBLE_LEFT_REDIR)
-		here_doc(data, file);
-	else if (open_file(data, file) == 1)
+	if (data->c[k]->type_redirect == DOUBLE_LEFT_REDIR)
+		here_doc(data, file, k);
+	else if (open_file(data, file, k) == 1)
 	{
 		free(file);
 		return (EXIT_FAILER);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:26:56 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 20:06:24 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/02/24 19:42:33 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ t_data	*init_data(char **env)
 	if (!data)
 		exit(1);
 	data->env = NULL;
-	data->cmd = NULL;
+	data->c = NULL;
+	data->pid_arr = NULL;
 	tcgetattr(0, &data->default_tty);
 	data->dup_stdin = dup(0);
 	data->status = 0;
@@ -56,6 +57,10 @@ void	free_data(t_data **data)
 
 	tmp = *data;
 	close(tmp->dup_stdin);
+	if (tmp->c)
+		free_array_cmd(&tmp->c, tmp->count_cmds);
+	if (tmp->pid_arr)
+		free(tmp->pid_arr);
 	free_env(&tmp->env);
 	free(*data);
 	*data = NULL;

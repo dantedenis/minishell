@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/23 22:54:52 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/24 19:41:18 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_env
 typedef struct s_cmd
 {
 	t_list	*cmd;
+	char	*str;
 	int		inf;
 	int		outf;
 	int		have_pipe;
@@ -54,7 +55,9 @@ typedef struct s_cmd
 typedef struct s_data
 {
 	t_env				*env;
-	t_cmd				*cmd;
+	t_cmd				**c;
+	pid_t				*pid_arr;
+	int					count_cmds;
 	int					dup_stdin;
 	int					status;
 	int					fork_status;
@@ -68,17 +71,16 @@ typedef struct s_data
 */
 
 int		preparser(char *str);
-int		split_cmds(char *str, t_data *env);
-int		parser(char *str, int have_pipe, t_data *data);
-t_cmd	*init_cmd(int have_pipe);
+int		split_pipe(char *str, t_data *env);
+void	parser(t_data *data);
 
 /*
 ** PIPE_&&_EXECUTION
 */
 
-int		execute_cmd(t_data *data, int *pipefd);
+int		execute_cmd(t_data *data, int *pipefd, int i);
 char	*get_cmd(t_env *env, char *str);
-
+void 	wait_cmds(t_data *data);
 /*
 ** UTILS_FUNCTIONS
 */
@@ -96,7 +98,8 @@ void	print_arr(char **arr);
 int		is_empty_line(char *s);
 int		is_quote(char c);
 int		syntax_error(char *str);
-void	free_cmd(t_cmd **cmd, int *pipefd);
+void	free_cmd(t_cmd **cmd);
+void	free_array_cmd(t_cmd ***cmd, int size);
 
 /*
 ** HANDLE_SPEC_SYMBOLS
@@ -106,7 +109,7 @@ char	*slash(char *str, int *i, int in_quotes);
 char	*dollar(char *str, int *i, t_data *data);
 char	*quote(char *str, int *i);
 char	*double_quote(char *str, int *i, t_data *data);
-int		redir(t_data *data, char *str, int *i);
+int		redir(t_data *data, char *str, int *i, int k);
 
 /*
 **	GLOBAL_VALUE_&&_UTILS
@@ -127,7 +130,7 @@ char	**transform_env_to_array(t_env *env);
 
 int		bin_echo(t_list *cmd, int fd);
 int		bin_env(t_env *env, int fd);
-void	bin_exit(t_data *data);
+void	bin_exit(t_data *data, int i);
 int		bin_pwd(t_env *env, int fd);
 int		bin_unset(t_env **env, t_list *key);
 int		bin_export(t_env **env, char *key, char *value);
