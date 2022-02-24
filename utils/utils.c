@@ -25,6 +25,7 @@ void	free_array_cmd(t_cmd ***cmd, int size)
 			free_cmd(tmp + i);
 		++i;
 	}
+	free(tmp);
 	*cmd = NULL;
 }
 

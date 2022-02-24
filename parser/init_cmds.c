@@ -4,7 +4,7 @@ static t_cmd	*init_cmd(char *str)
 {
 	t_cmd *ret;
 
-	ret = (t_cmd *)malloc(sizeof(t_cmd));
+	ret = (t_cmd *) malloc(sizeof(t_cmd));
 	ret->inf = -2;
 	ret->outf = -2;
 	ret->str = str;

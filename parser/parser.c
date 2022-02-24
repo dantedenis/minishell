@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/24 19:36:35 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/24 20:55:53 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	parser(t_data *data)
 	i = 0;
 	while (i < data->count_cmds)
 	{
+		data->fork_status = 0;
 		if (data->count_cmds > 1 && i < data->count_cmds - 1)
 			pipe(pipefd);
 		if (get_arguments(data, i) == 0)
