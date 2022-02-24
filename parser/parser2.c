@@ -65,9 +65,6 @@ static void wait_cmds(t_data *data, char *str)
 	while (i < size)
 	{
 		waitpid(-1, &status, WUNTRACED);
-		// wexit = waitpid(pid_arr[i], &status, WUNTRACED);
-		// if (wexit == -1)
-		// 		ft_error_exit(errno, "waitpid", EXIT_FAILURE);
 		if (WIFSTOPPED(status))
 			data->status = WSTOPSIG(status) + 128;
 		if (WIFSIGNALED(status))
@@ -89,6 +86,7 @@ static int split_pipe(char *str, t_data *data)
 
 	quote = 0;
 	i = 0;
+	signal(SIGINT, SIG_IGN);
 	while (str[i])
 	{
 		j = i;
@@ -100,7 +98,7 @@ static int split_pipe(char *str, t_data *data)
 				quote = 0;
 			++i;
 		}
-		if (!quote && parser(ft_substr(str, j, i - j), str[i] == '|', data))
+		if (!quote && parser(ft_substr(str, j, i - j), str[i] == '|', data, )
 		{
 			dup2(data->dup_stdin, 0);
 			free(str);
