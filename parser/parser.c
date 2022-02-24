@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/24 20:55:53 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/24 22:31:13 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,25 @@ void	parser(t_data *data)
 {
 	int	i;
 	int	pipefd[2];
+	int	input;
 
 	i = 0;
+	input = -1;
 	while (i < data->count_cmds)
 	{
-		data->fork_status = 0;
-		if (data->count_cmds > 1 && i < data->count_cmds - 1)
+		if (data->count_cmds > 1 && i + 1 < data->count_cmds)
 			pipe(pipefd);
+		data->fork_status = 0;
 		if (get_arguments(data, i) == 0)
-			execute_cmd(data, pipefd, i);
+			execute_cmd(data, pipefd, input, i);
+		if (data->count_cmds > 1)
+		{
+			if (i)
+				close(input);
+			input = pipefd[0];
+			if (i + 1 < data->count_cmds)
+				close(pipefd[1]);
+		}
 		++i;
 	}
 }

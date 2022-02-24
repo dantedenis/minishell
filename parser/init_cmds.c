@@ -57,6 +57,8 @@ static int	check_cmd(t_data *data, char *str)
 	int	i;
 	int	find_word;
 	
+	// TODO: редиректы неправильно чекаются находим редирект, после него если нет слова
+	// то ошибка синтаксиса прикол с хердоком он почему то сразу читает лул 
 	find_word = 0;
 	if (is_empty_line(str))
 		return (data->status = syntax_error("'|'"));
@@ -86,6 +88,8 @@ int	split_pipe(char *str, t_data *data)
 	cur_cmd = 0;
 	k = 0;
 	signal(SIGINT, SIG_IGN);
+	if (is_empty_line(str))
+		return (1);
 	alloc_array_cmds(data, str);
 	while (str[i])
 	{
@@ -104,6 +108,8 @@ int	split_pipe(char *str, t_data *data)
 	}
 	parser(data);
 	wait_cmds(data);
-	dup2(data->dup_stdin, 0);
+	free(data->pid_arr);
+	data->pid_arr = NULL;
+	free_array_cmd(&data->c, data->count_cmds);
 	return (0);
 }

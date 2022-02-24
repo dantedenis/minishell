@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/24 19:41:18 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/24 22:27:27 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef struct s_data
 	t_cmd				**c;
 	pid_t				*pid_arr;
 	int					count_cmds;
-	int					dup_stdin;
 	int					status;
 	int					fork_status;
 	struct termios		default_tty;
@@ -78,9 +77,10 @@ void	parser(t_data *data);
 ** PIPE_&&_EXECUTION
 */
 
-int		execute_cmd(t_data *data, int *pipefd, int i);
+int		execute_cmd(t_data *data, int *pipefd, int input, int i);
 char	*get_cmd(t_env *env, char *str);
 void 	wait_cmds(t_data *data);
+
 /*
 ** UTILS_FUNCTIONS
 */
@@ -135,6 +135,7 @@ int		bin_pwd(t_env *env, int fd);
 int		bin_unset(t_env **env, t_list *key);
 int		bin_export(t_env **env, char *key, char *value);
 int		bin_cd(t_env **env, t_list *cmd, int fd);
+int		check_builtin(char *str, t_data *data, int i);
 
 /*
 **	SIGNAL_UTILS_&&_WELCOME

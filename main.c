@@ -47,9 +47,6 @@ int	main(int argc, char **argv, char **env)
 		else if (!is_empty_line(str_input))
 			split_pipe(str_input, data);
 		free(str_input);
-		free(data->pid_arr);
-		data->pid_arr = NULL;
-		free_array_cmd(&data->c, data->count_cmds);
 		sigaction(SIGINT, &data->sig_act, NULL);
 	}
 	return (EXIT_SUCCESS);

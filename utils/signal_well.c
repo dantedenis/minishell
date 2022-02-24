@@ -33,7 +33,7 @@ void	sig_handler(int sig, siginfo_t *siginfo, void *context)
 	(void) siginfo;
 	if (sig == SIGINT)
 	{
-		write(1, "\n", 1);
+		write(1, "^C\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();

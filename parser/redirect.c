@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/24 19:39:16 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/24 22:11:14 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ static int	here_doc(t_data *data, char *stop, int k)
 	char	*line;
 	char	*parsed_line;
 
-	dup2(data->dup_stdin, 0);
 	if (data->c[k]->heredoc_flag)
 	{
 		close(data->c[k]->heredoc_pipe[0]);
