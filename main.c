@@ -34,8 +34,8 @@ int	main(int argc, char **argv, char **env)
 		bin_exit(data);
 	while (1)
 	{
-		signal(SIGQUIT, SIG_IGN);
 		data->fork_status = 0;
+		signal(SIGQUIT, SIG_IGN);
 		str_input = readline(get_value_env(data->env, "PROMT"));
 		echo_ctrl_off();
 		if (!str_input)
@@ -47,6 +47,7 @@ int	main(int argc, char **argv, char **env)
 		else if (!is_empty_line(str_input))
 			split_cmds(str_input, data);
 		free(str_input);
+		sigaction(SIGINT, &data->sig_act, NULL);
 	}
 	return (EXIT_SUCCESS);
 }
