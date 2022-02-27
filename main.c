@@ -35,6 +35,7 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		data->fork_status = 0;
+		data->valid_cmds = 0;
 		signal(SIGQUIT, SIG_IGN);
 		str_input = readline(get_value_env(data->env, "PROMT"));
 		echo_ctrl_off();

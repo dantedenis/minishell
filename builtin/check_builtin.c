@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 21:38:53 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/24 21:40:02 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/27 17:07:32 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	check_builtin(char *str, t_data *data, int i)
 	else if (!ft_strncmp(str, "unset", 6))
 		data->status = bin_unset(&data->env, data->c[i]->cmd->next);
 	else
-		data->fork_status = 1;
+		return (data->fork_status = 1);
 	// здесь используется костыльное значение форкстатуса
 	if (data->fork_status == 2)
 	{
@@ -77,5 +77,5 @@ int	check_builtin(char *str, t_data *data, int i)
 		free_data(&data);
 		exit(tmp_status);
 	}
-	return (data->fork_status);
+	return (0);
 }

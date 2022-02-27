@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/24 22:27:27 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/27 18:00:04 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define RIGHT_REDIR 0
+# define RIGHT_REDIR 2
 # define DOUBLE_RIGHT_REDIR 1
-# define LEFT_REDIR 2
+# define LEFT_REDIR 4
 # define DOUBLE_LEFT_REDIR 3
 # define EXIT_FAILER 1
 # define PROMT "👹\033[31;47mMINI⊗HELL\033[0m ⋙  "
@@ -57,6 +57,7 @@ typedef struct s_data
 	t_env				*env;
 	t_cmd				**c;
 	pid_t				*pid_arr;
+	int					valid_cmds;
 	int					count_cmds;
 	int					status;
 	int					fork_status;

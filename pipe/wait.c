@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 18:50:37 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/24 19:41:06 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/27 17:13:04 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void wait_cmds(t_data *data)
 
 	i = 0;
 	newline = 0;
-	while (i < data->count_cmds)
+	while (i < data->valid_cmds)
 	{
 		waitpid(data->pid_arr[i], &status, WUNTRACED);
 		if (WIFSTOPPED(status))

@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/24 22:11:14 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/27 18:01:33 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static int	here_doc(t_data *data, char *stop, int k)
 		return (ft_error("pipe", 1));
 	line = readline("> ");
 	if (!line)
-		return (ft_error("malloc", 1));
+		return (ft_error("readline", 1));
 	while (line)
 	{
 		if (!ft_strcmp(stop, line))
@@ -122,17 +122,13 @@ int	redir(t_data *data, char *str, int *i, int k)
 			find_word = *i;
 		++(*i);
 	}
-	// if (find_word == 0 && !str[*i])
-	// 	return (data->status = syntax_error("'newline'"));
-	// else if (find_word == 0 && is_redirect(str[*i]))
-	// 	return (data->status = syntax_error(str + *i));
 	file = ft_substr(str, find_word, *i - find_word);
 	if (data->c[k]->type_redirect == DOUBLE_LEFT_REDIR)
 		here_doc(data, file, k);
 	else if (open_file(data, file, k) == 1)
 	{
 		free(file);
-		return (EXIT_FAILER);
+		return (data->status = EXIT_FAILER);
 	}
 	free(file);
 	return (0);

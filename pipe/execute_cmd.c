@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/24 22:20:46 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/27 17:07:17 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,10 @@ int	execute_cmd(t_data *data, int *pipefd, int input, int i)
 		if (!pid)
 			child(data, pipefd, input, i);
 		else
-			data->pid_arr[i] = pid;
+			data->pid_arr[data->valid_cmds] = pid;
+		++data->valid_cmds;
 	}
 	close_files_and_pipe(data->c[i]);
+	
 	return (0);
 }

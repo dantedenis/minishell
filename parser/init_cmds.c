@@ -55,25 +55,28 @@ static void	alloc_array_cmds(t_data *data, char *str)
 static int	check_cmd(t_data *data, char *str)
 {
 	int	i;
-	int	find_word;
+	int	found_redirect;
 	
-	// TODO: редиректы неправильно чекаются находим редирект, после него если нет слова
-	// то ошибка синтаксиса прикол с хердоком он почему то сразу читает лул 
-	find_word = 0;
+	found_redirect = 0;
 	if (is_empty_line(str))
 		return (data->status = syntax_error("'|'"));
 	i = 0;
-	while (str[i] && ((!find_word && is_space(str[i]))
-			|| (!is_space(str[i]) && !is_redirect(str[i]))))
+	while (str[i])
 	{
-		if (!find_word && !is_space(str[i]))
-			find_word = i;
+		if (!found_redirect && is_redirect(str[i]))
+		{
+			found_redirect = check_redirect(str + i);
+			if (found_redirect == DOUBLE_LEFT_REDIR || found_redirect == DOUBLE_RIGHT_REDIR)
+				++i;
+		}
+		else if (found_redirect && is_redirect(str[i]))
+			return (data->status = syntax_error(str + i));
+		else if (!is_space(str[i]))
+			return (0);
 		++i;
 	}
-	if (find_word == 0 && !str[i])
+	if (found_redirect && !str[i])
 		return (data->status = syntax_error("'newline'"));
-	else if (find_word == 0 && is_redirect(str[i]))
-		return (data->status = syntax_error(str + i));
 	return (0);
 }
 
@@ -99,6 +102,9 @@ int	split_pipe(char *str, t_data *data)
 		if (check_cmd(data, cur_cmd))
 		{
 			free(cur_cmd);
+			free(data->pid_arr);
+			data->pid_arr = NULL;
+			free_array_cmd(&data->c, data->count_cmds);
 			return (1);
 		}
 		data->c[k] = init_cmd(cur_cmd);
