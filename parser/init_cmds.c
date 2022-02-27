@@ -52,6 +52,13 @@ static void	alloc_array_cmds(t_data *data, char *str)
 	data->pid_arr = (pid_t *) malloc(sizeof(pid_t) * data->count_cmds);
 }
 
+void	free_alloc_arrays(t_data *data)
+{
+	free(data->pid_arr);
+	data->pid_arr = NULL;
+	free_array_cmd(&data->c, data->count_cmds);
+}
+
 static int	check_cmd(t_data *data, char *str)
 {
 	int	i;
@@ -93,6 +100,8 @@ int	split_pipe(char *str, t_data *data)
 	signal(SIGINT, SIG_IGN);
 	if (is_empty_line(str))
 		return (1);
+	if (str[ft_strlen(str) - 1] == '|')
+		return (data->status = syntax_error("'|'"));
 	alloc_array_cmds(data, str);
 	while (str[i])
 	{
@@ -102,9 +111,7 @@ int	split_pipe(char *str, t_data *data)
 		if (check_cmd(data, cur_cmd))
 		{
 			free(cur_cmd);
-			free(data->pid_arr);
-			data->pid_arr = NULL;
-			free_array_cmd(&data->c, data->count_cmds);
+			free_alloc_arrays(data);
 			return (1);
 		}
 		data->c[k] = init_cmd(cur_cmd);
@@ -114,8 +121,6 @@ int	split_pipe(char *str, t_data *data)
 	}
 	parser(data);
 	wait_cmds(data);
-	free(data->pid_arr);
-	data->pid_arr = NULL;
-	free_array_cmd(&data->c, data->count_cmds);
+	free_alloc_arrays(data);
 	return (0);
 }

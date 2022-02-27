@@ -5,10 +5,14 @@ void	free_cmd(t_cmd **cmd)
 	t_cmd	*tmp;
 
 	tmp = *cmd;
-	if (tmp->cmd)
-		ft_lstclear(&tmp->cmd, free);
-	free(tmp->str);
-	free(tmp);
+	if (tmp)
+	{
+		if (tmp->cmd)
+			ft_lstclear(&tmp->cmd, free);
+		if (tmp->str)
+			free(tmp->str);
+		free(tmp);
+	}
 	*cmd = NULL;
 }
 
