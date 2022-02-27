@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/27 21:50:49 by lcoreen           #+#    #+#             */
+/*   Updated: 2022/02/27 22:24:56 by lcoreen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_cmd(t_cmd **cmd)
@@ -107,10 +119,7 @@ int	close_files_and_pipe(t_cmd *cmd)
 	if (cmd->outf >= 0)
 		close(cmd->outf);
 	if (cmd->heredoc_flag)
-	{
-		close(cmd->heredoc_pipe[0]);
-		close(cmd->heredoc_pipe[1]);
-	}
+		close_pipe(cmd->heredoc_pipe);
 	return (0);
 }
 
@@ -172,3 +181,10 @@ int	check_redirect(char *str)
 		return (RIGHT_REDIR);
 	return (LEFT_REDIR);
 }
+
+void	close_pipe(int *pipefd)
+{
+	close(pipefd[0]);
+	close(pipefd[1]);
+}
+

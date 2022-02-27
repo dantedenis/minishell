@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/27 18:00:04 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/27 22:36:56 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,17 @@ int		is_quote(char c);
 int		syntax_error(char *str);
 void	free_cmd(t_cmd **cmd);
 void	free_array_cmd(t_cmd ***cmd, int size);
+void	close_pipe(int *pipefd);
 
 /*
 ** HANDLE_SPEC_SYMBOLS
 */
 
-char	*slash(char *str, int *i, int in_quotes);
 char	*dollar(char *str, int *i, t_data *data);
 char	*quote(char *str, int *i);
 char	*double_quote(char *str, int *i, t_data *data);
 int		redir(t_data *data, char *str, int *i, int k);
+char	*handle_sign(t_data *data, char *str, int *i);
 
 /*
 **	GLOBAL_VALUE_&&_UTILS

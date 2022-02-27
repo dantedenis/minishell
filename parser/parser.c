@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/27 17:01:27 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/27 22:37:11 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,8 @@ static int	parse_argument(t_data *data, t_list **arg, int *i, int k)
 		started_i = *i;
 		if (is_desired_sign(data->c[k]->str[*i], 0) && *i != j)
 			ft_lstadd_back(arg, ft_lstnew(ft_substr(data->c[k]->str, j, *i - j)));
-		if (data->c[k]->str[*i] == '\'')
-			tmp = quote(data->c[k]->str, i);
-		else if (data->c[k]->str[*i] == '"')
-			tmp = double_quote(data->c[k]->str, i, data);
-		else if (data->c[k]->str[*i] == '$')
-			tmp = dollar(data->c[k]->str, i, data);
+		if (is_desired_sign(data->c[k]->str[*i], 0))
+			tmp = handle_sign(data, data->c[k]->str, i);
 		else if (data->c[k]->str[*i] == '<' || data->c[k]->str[*i] == '>')
 		{
 			if (redir(data, data->c[k]->str, i, k) != 0)

@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/27 18:01:33 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/27 22:40:48 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,9 @@ static char	*parse_argument(char *str, int is_heredoc, t_data *data)
 		started_i = i;
 		if (is_desired_sign(str[i], is_heredoc) && i != j)
 			ft_lstadd_back(&arg, ft_lstnew(ft_substr(str, j, i - j)));
-		if (!is_heredoc && str[i] == '\'')
-			ft_lstadd_back(&arg, ft_lstnew(quote(str, &i)));
-		else if (!is_heredoc && str[i] == '"')
-			ft_lstadd_back(&arg, ft_lstnew(double_quote(str, &i, data)));
-		else if (str[i] == '$')
-			ft_lstadd_back(&arg, ft_lstnew(dollar(str, &i, data)));
-		if (str[i] && str[i] != '$')
+		if (is_desired_sign(str[i], is_heredoc))
+			ft_lstadd_back(&arg, ft_lstnew(handle_sign(data, str, &i)));
+		if (str[i] && str[i] != '$' && started_i == i)
 			++i;
 		if (started_i + 1 != i)
 			j = i;
@@ -81,15 +77,11 @@ static int	here_doc(t_data *data, char *stop, int k)
 	char	*parsed_line;
 
 	if (data->c[k]->heredoc_flag)
-	{
-		close(data->c[k]->heredoc_pipe[0]);
-		close(data->c[k]->heredoc_pipe[1]);
-	}
-	if (pipe(data->c[k]->heredoc_pipe) < 0)
-		return (ft_error("pipe", 1));
+		close_pipe(data->c[k]->heredoc_pipe);
+	pipe(data->c[k]->heredoc_pipe);
 	line = readline("> ");
 	if (!line)
-		return (ft_error("readline", 1));
+		return (ft_error("warning: heredoc delimited by end-of-file", 0));
 	while (line)
 	{
 		if (!ft_strcmp(stop, line))
@@ -100,21 +92,18 @@ static int	here_doc(t_data *data, char *stop, int k)
 		free(parsed_line);
 		line = readline("> ");
 		if (!line)
-			return (ft_error("readline", 1));
+			return (ft_error("warning: heredoc delimited by end-of-file", 0));
 	}
 	data->c[k]->heredoc_flag = 1;
 	free(line);
 	return (0);
 }
 
-int	redir(t_data *data, char *str, int *i, int k)
+static int	go_to_end_redir(char *str, int *i)
 {
-	int		find_word;
-	char	*file;
-
+	int	find_word;
+	
 	find_word = 0;
-	data->c[k]->type_redirect = check_redirect(str + *i);
-	*i += data->c[k]->type_redirect % 2 + 1;
 	while (str[*i] && ((!find_word && is_space(str[*i]))
 			|| (!is_space(str[*i]) && !is_redirect(str[*i]))))
 	{
@@ -122,10 +111,27 @@ int	redir(t_data *data, char *str, int *i, int k)
 			find_word = *i;
 		++(*i);
 	}
+	return (find_word);
+}
+
+int	redir(t_data *data, char *str, int *i, int k)
+{
+	int		find_word;
+	char	*file;
+
+	data->c[k]->type_redirect = check_redirect(str + *i);
+	*i += data->c[k]->type_redirect % 2 + 1;
+	find_word = go_to_end_redir(str, i);
 	file = ft_substr(str, find_word, *i - find_word);
 	if (data->c[k]->type_redirect == DOUBLE_LEFT_REDIR)
-		here_doc(data, file, k);
-	else if (open_file(data, file, k) == 1)
+	{
+		if (here_doc(data, file, k))
+		{
+			free(file);
+			return (data->status = EXIT_FAILER);
+		}
+	}
+	else if (open_file(data, file, k))
 	{
 		free(file);
 		return (data->status = EXIT_FAILER);

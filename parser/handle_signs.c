@@ -6,11 +6,25 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 13:56:29 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/21 18:57:23 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/27 22:40:05 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*handle_sign(t_data *data, char *str, int *i)
+{
+	char	*tmp;
+
+	tmp = NULL;
+	if (str[*i] == '\'')
+		tmp = quote(str, i);
+	else if (str[*i] == '"')
+		tmp = double_quote(str, i, data);
+	else if (str[*i] == '$')
+		tmp = dollar(str, i, data);
+	return (tmp);
+}
 
 char	*dollar(char *str, int *i, t_data *data)
 {

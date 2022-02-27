@@ -119,6 +119,8 @@ int	split_pipe(char *str, t_data *data)
 		if (str[i])
 			++i;
 	}
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	parser(data);
 	wait_cmds(data);
 	free_alloc_arrays(data);
