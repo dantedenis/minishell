@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:31:08 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 16:15:06 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 20:51:40 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	parse_argument(t_data *data, t_list **arg, int *i, int k)
 			tmp = handle_sign(data, data->c[k]->str, i);
 		else if (is_redirect(data->c[k]->str[*i]) && \
 			redir(data, data->c[k]->str, i, k))
-				return (-1);
+			return (-1);
 		if (tmp)
 			ft_lstadd_back(arg, ft_lstnew(tmp));
 		if (started_i != *i)

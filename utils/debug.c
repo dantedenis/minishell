@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 15:31:40 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 15:32:54 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 20:52:50 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	print_arr(char **arr)
 		arr++;
 	}
 }
-
 
 void	print_list(t_list *lst, char *lstname)
 {

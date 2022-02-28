@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 16:20:06 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 20:55:16 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-static char **transform_list_to_array(t_list *lst)
+static char	**transform_list_to_array(t_list *lst)
 {
 	char	**array;
 	int		size;
@@ -95,6 +94,5 @@ int	execute_cmd(t_data *data, int *pipefd, int input, int i)
 		++data->valid_cmds;
 	}
 	close_files_and_pipe(data->c[i]);
-	
 	return (0);
 }

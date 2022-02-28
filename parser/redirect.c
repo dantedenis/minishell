@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 14:30:29 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 20:52:37 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static int	here_doc(t_data *data, char *stop, int k)
 static int	go_to_end_redir(char *str, int *i)
 {
 	int	find_word;
-	
+
 	find_word = 0;
 	while (str[*i] && ((!find_word && is_space(str[*i]))
 			|| (!is_space(str[*i]) && !is_redirect(str[*i]))))

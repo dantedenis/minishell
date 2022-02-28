@@ -37,8 +37,8 @@ int	main(int argc, char **argv, char **env)
 		data->fork_status = 0;
 		data->valid_cmds = 0;
 		signal(SIGQUIT, SIG_IGN);
-		str_input = readline(get_value_env(data->env, "PROMT"));
 		echo_ctrl_off();
+		str_input = readline(get_value_env(data->env, "PROMT"));
 		if (!str_input)
 			bin_exit(data, -1);
 		else if (!is_empty_line(str_input))

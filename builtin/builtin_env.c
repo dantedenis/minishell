@@ -12,7 +12,28 @@
 
 #include "minishell.h"
 
-int	bin_env(t_env *env, int fd)
+static void print_str(char *key, char *value, int export, int fd)
+{
+	if (export)
+	{
+		ft_putstr_fd("declare -x ", fd);
+		ft_putstr_fd(key, fd);
+	}
+	else if (value)
+		ft_putstr_fd(key, fd);
+	if (value)
+	{
+		ft_putchar_fd('=', fd);
+		if (export)
+			ft_putchar_fd('"', fd);
+		ft_putstr_fd(value, fd);
+		if (export)
+			ft_putchar_fd('"', fd);
+	}
+	ft_putchar_fd('\n', fd);
+}
+
+int	bin_env(t_env *env, int export, int fd)
 {
 	t_env	*temp;
 
@@ -21,9 +42,7 @@ int	bin_env(t_env *env, int fd)
 	temp = env;
 	while (temp)
 	{
-		ft_putstr_fd(temp->key, fd);
-		ft_putchar_fd('=', fd);
-		ft_putendl_fd(temp->value, fd);
+		print_str(temp->key, temp->value, export, fd);
 		temp = temp->next;
 	}
 	return (0);

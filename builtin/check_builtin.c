@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 21:38:53 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/27 17:07:32 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 21:05:00 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	check_builtin(char *str, t_data *data, int i)
 	{
 		// проверка на наличие аргумента, если нет, то пока запускаем env
 		if (!data->c[i]->cmd->next)
-			data->status = bin_env(data->env, data->c[i]->inf);
+			data->status = bin_env(data->env, 1, data->c[i]->inf);
 		// если есть агрумент в котором есть =, то исполняется export. Иначе ничего не происходит
 		else if (data->c[i]->cmd->next->content && ft_strchr(data->c[i]->cmd->next->content, '='))
 		{
@@ -60,7 +60,7 @@ int	check_builtin(char *str, t_data *data, int i)
 	else if (!ft_strncmp(str, "exit", 5))
 		bin_exit(data, i);
 	else if (!ft_strncmp(str, "env", 4))
-		data->status = bin_env(data->env, data->c[i]->outf);
+		data->status = bin_env(data->env, 0, data->c[i]->outf);
 	else if (!ft_strncmp(str, "pwd", 4))
 		data->status = bin_pwd(data->env, data->c[i]->outf);
 	else if (!ft_strncmp(str, "cd", 3))

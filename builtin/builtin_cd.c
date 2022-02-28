@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 21:15:54 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/28 17:21:53 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 20:48:01 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	change_dir(t_env **env, char *path, int flag, int fd)
 		fd = 1;
 	cwd = getcwd(NULL, 0);
 	if (!cwd && !ft_strncmp(".", path, 2))
-		return (ft_error("cd: the current working directory has been unlinked", 0));
+		return (ft_error(CD_ERROR, 0));
 	if (!cwd)
 		cwd = ft_strdup(get_value_env(*env, "PWD"));
 	if (!chdir(path))

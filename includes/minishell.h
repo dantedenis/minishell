@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/28 16:43:29 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 21:04:25 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define DOUBLE_LEFT_REDIR 3
 # define EXIT_FAILER 1
 # define PROMT "👹\033[31;47mMINI⊗HELL\033[0m ⋙  "
+# define CD_ERROR "cd: the current working directory has been unlinked"
 
 typedef struct s_env
 {
@@ -80,7 +81,7 @@ void	parser_and_execute(t_data *data);
 
 int		execute_cmd(t_data *data, int *pipefd, int input, int i);
 char	*get_cmd(t_env *env, char *str);
-void 	wait_cmds(t_data *data);
+void	wait_cmds(t_data *data);
 
 /*
 ** UTILS_FUNCTIONS
@@ -139,7 +140,7 @@ char	**transform_env_to_array(t_env *env);
 */
 
 int		bin_echo(t_list *cmd, int fd);
-int		bin_env(t_env *env, int fd);
+int		bin_env(t_env *env, int export, int fd);
 void	bin_exit(t_data *data, int i);
 int		bin_pwd(t_env *env, int fd);
 int		bin_unset(t_env **env, t_list *key);

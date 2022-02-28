@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wait.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 18:50:37 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/27 21:54:23 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 20:56:16 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,15 @@ static void	ft_newline_sigint(int wstatus, int *newline)
 {
 	if (WTERMSIG(wstatus) == SIGINT && *newline == 0)
 	{
-			*newline = *newline + 1;
-			printf("\n");
+		*newline = *newline + 1;
+		printf("\n");
 	}
 }
 
-
-void wait_cmds(t_data *data)
+void	wait_cmds(t_data *data)
 {
-	int i;
-	int status;
+	int	i;
+	int	status;
 	int	newline;
 
 	i = 0;

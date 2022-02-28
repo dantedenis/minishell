@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:22:42 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 16:43:50 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 20:53:20 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_cmd	*init_cmd(char *str)
 {
-	t_cmd *ret;
+	t_cmd	*ret;
 
 	ret = (t_cmd *) malloc(sizeof(t_cmd));
 	ret->inf = -2;
@@ -29,7 +29,7 @@ int	check_syntax(t_data *data, char *str)
 {
 	int	i;
 	int	found_redirect;
-	
+
 	found_redirect = 0;
 	if (is_empty_line(str))
 		return (data->status = syntax_error("'|'"));
@@ -39,7 +39,8 @@ int	check_syntax(t_data *data, char *str)
 		if (!found_redirect && is_redirect(str[i]))
 		{
 			found_redirect = check_redirect(str + i);
-			if (found_redirect == DOUBLE_LEFT_REDIR || found_redirect == DOUBLE_RIGHT_REDIR)
+			if (found_redirect == DOUBLE_LEFT_REDIR
+				|| found_redirect == DOUBLE_RIGHT_REDIR)
 				++i;
 		}
 		else if (found_redirect && is_redirect(str[i]))
