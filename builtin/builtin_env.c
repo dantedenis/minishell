@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	bin_env(t_env *env, int fd)
+int	bin_env(t_env *env, int export, int fd)
 {
 	t_env	*temp;
 
@@ -21,9 +21,14 @@ int	bin_env(t_env *env, int fd)
 	temp = env;
 	while (temp)
 	{
-		ft_putstr_fd(temp->key, fd);
-		ft_putchar_fd('=', fd);
-		ft_putendl_fd(temp->value, fd);
+		if (export)
+			ft_putsrt_fd("declare -x ", fd);
+		if (key->value || export)
+		{
+			ft_putstr_fd(temp->key, fd);
+			ft_putchar_fd('=', fd);
+			ft_putendl_fd(temp->value, fd);
+		}
 		temp = temp->next;
 	}
 	return (0);
