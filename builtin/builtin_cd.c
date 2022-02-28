@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 21:15:54 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/24 12:56:12 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 17:21:53 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ static int	change_dir(t_env **env, char *path, int flag, int fd)
 		free(cwd);
 	}
 	else
+	{
+		free(cwd);
 		return (cd_error(path));
+	}
 	return (0);
 }
 
