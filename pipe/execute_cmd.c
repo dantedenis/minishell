@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/27 21:55:05 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 16:20:06 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	execute_cmd(t_data *data, int *pipefd, int input, int i)
 	pid_t	pid;
 
 	sigaction(SIGQUIT, &data->sig_qt, NULL);
+	signal(SIGINT, SIG_IGN);
 	if (check_builtin(data->c[i]->cmd->content, data, i))
 	{
 		pid = fork();

@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/27 22:40:48 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 14:30:29 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ static char	*parse_argument(char *str, int is_heredoc, t_data *data)
 		if (started_i + 1 != i)
 			j = i;
 	}
-	if (i != j)
-		ft_lstadd_back(&arg, ft_lstnew(ft_substr(str, j, i - j)));
+	ft_lstadd_back(&arg, ft_lstnew(ft_substr(str, j, i - j)));
 	ret = join_list(arg);
 	ft_lstclear(&arg, free);
 	return (ret);
@@ -66,9 +65,9 @@ static int	open_file(t_data *data, char *file, int k)
 		data->c[k]->outf = open(parsed_file, O_CREAT | O_RDWR | O_APPEND, 0644);
 	}
 	if (data->c[k]->inf == -1 || data->c[k]->outf == -1)
-		return (ft_error(file, 1));
+		ft_error(file, 1);
 	free(parsed_file);
-	return (0);
+	return (data->c[k]->inf == -1 || data->c[k]->outf == -1);
 }
 
 static int	here_doc(t_data *data, char *stop, int k)

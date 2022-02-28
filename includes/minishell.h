@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/27 22:36:56 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 16:43:29 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ typedef struct s_data
 */
 
 int		preparser(char *str);
-int		split_pipe(char *str, t_data *env);
-void	parser(t_data *data);
+int		start(char *str, t_data *env);
+void	parser_and_execute(t_data *data);
 
 /*
 ** PIPE_&&_EXECUTION
@@ -86,22 +86,30 @@ void 	wait_cmds(t_data *data);
 ** UTILS_FUNCTIONS
 */
 
+t_cmd	*init_cmd(char *str);
+
 int		ft_error(char *str, int perror_flag);
+int		syntax_error(char *str);
+
 void	print_list(t_list *lst, char *lstmane);
-int		close_files_and_pipe(t_cmd *cmd);
-int		is_space(char c);
-char	*join_list(t_list *lst);
+void	print_arr(char **arr);
+
 int		is_desired_sign(char c, int is_heredoc);
 int		is_redirect(char c);
-int		check_redirect(char *str);
-void	free_data(t_data **data);
-void	print_arr(char **arr);
 int		is_empty_line(char *s);
 int		is_quote(char c);
-int		syntax_error(char *str);
-void	free_cmd(t_cmd **cmd);
+int		is_space(char c);
+
+void	free_data(t_data **data);
 void	free_array_cmd(t_cmd ***cmd, int size);
+void	free_alloc_arrays(t_data *data);
+
+int		close_files_and_pipe(t_cmd *cmd);
 void	close_pipe(int *pipefd);
+
+int		check_redirect(char *str);
+char	*join_list(t_list *lst);
+int		check_syntax(t_data *data, char *str);
 
 /*
 ** HANDLE_SPEC_SYMBOLS
@@ -114,7 +122,7 @@ int		redir(t_data *data, char *str, int *i, int k);
 char	*handle_sign(t_data *data, char *str, int *i);
 
 /*
-**	GLOBAL_VALUE_&&_UTILS
+**	ENV_&&_UTILS
 */
 
 t_data	*init_data(char **env);

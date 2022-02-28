@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:26:56 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/27 16:58:56 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/02/28 16:44:24 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_data	*init_data(char **env)
 {
 	t_data	*data;
 
-	data = (t_data *) malloc(sizeof(t_data));
+	data = (t_data *) ft_calloc(1, sizeof(t_data));
 	if (!data)
 		exit(1);
 	data->env = NULL;
@@ -55,10 +55,7 @@ void	free_data(t_data **data)
 	t_data	*tmp;
 
 	tmp = *data;
-	if (tmp->c)
-		free_array_cmd(&tmp->c, tmp->count_cmds);
-	if (tmp->pid_arr)
-		free(tmp->pid_arr);
+	free_alloc_arrays(tmp);
 	free_env(&tmp->env);
 	free(*data);
 	*data = NULL;

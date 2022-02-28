@@ -6,7 +6,7 @@
 #    By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/02/24 22:27:05 by lcoreen          ###   ########.fr        #
+#    Updated: 2022/02/28 16:26:09 by lcoreen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,14 +31,16 @@ SRC_LST_BIN		=	builtin_cd.c		builtin_echo.c		builtin_env.c\
 					builtin_exit.c		builtin_export.c	builtin_pwd.c\
 					builtin_unset.c		check_builtin.c
 
-SRC_LST_PARS	=	handle_signs.c		parser.c			init_cmds.c\
+SRC_LST_PARS	=	handle_signs.c		parser.c			start.c\
 					preparser.c			redirect.c
 
 SRC_LST_PIPE	=	execute_cmd.c		get_cmd.c			wait.c
 
 
 SRC_LST_UTILS	=	utils.c				utils_env1.c		utils_env2.c\
-					signal_well.c		data.c
+					signal_well.c		data.c				free_memory.c\
+					errors.c			debug.c				check_funcs.c\
+					cmd.c
 
 OBJ_PATH		=	./bin/
 

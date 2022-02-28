@@ -44,9 +44,9 @@ int	main(int argc, char **argv, char **env)
 		else if (!is_empty_line(str_input))
 			add_history(str_input);
 		if (preparser(str_input))
-			ft_putendl_fd("Error: unclosed quotes", 2);
+			ft_error("syntax error: unclosed quotes", 0);
 		else if (!is_empty_line(str_input))
-			split_pipe(str_input, data);
+			start(str_input, data);
 		free(str_input);
 		sigaction(SIGINT, &data->sig_act, NULL);
 	}
