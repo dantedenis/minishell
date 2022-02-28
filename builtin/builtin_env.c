@@ -22,10 +22,14 @@ int	bin_env(t_env *env, int export, int fd)
 	while (temp)
 	{
 		if (export)
+		{
 			ft_putsrt_fd("declare -x ", fd);
+			ft_putstr_fd(temp->key, fd);
+		}
+		else if (key->value)
+			ft_putstr_fd(temp->key, fd);
 		if (key->value || export)
 		{
-			ft_putstr_fd(temp->key, fd);
 			ft_putchar_fd('=', fd);
 			ft_putendl_fd(temp->value, fd);
 		}
