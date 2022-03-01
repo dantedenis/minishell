@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/01 12:41:34 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/02 00:39:48 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	run_child(t_data *data, int i)
 	new_argv = transform_list_to_array(data->c[i]->cmd);
 	cmd = get_cmd(data->env, new_argv[0]);
 	if (!cmd)
-		exit(ft_error(new_argv[0], 1));
+		exit(command_not_found(new_argv[0]));
 	env = transform_env_to_array(data->env);
 	free_data(&data);
 	signal(SIGINT, SIG_DFL);

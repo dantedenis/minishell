@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/03/01 13:52:04 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/02 00:46:54 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_data
 {
 	t_env				*env;
 	t_cmd				**c;
+	char				*dir;
 	pid_t				*pid_arr;
 	int					valid_cmds;
 	int					count_cmds;
@@ -92,6 +93,7 @@ t_cmd	*init_cmd(char *str);
 
 int		ft_error(char *str, int perror_flag);
 int		syntax_error(char *str);
+int		command_not_found(char *str);
 
 void	print_list(t_list *lst, char *lstmane);
 void	print_arr(char **arr);
@@ -144,9 +146,9 @@ char	**transform_env_to_array(t_env *env);
 int		bin_echo(t_list *cmd, int fd);
 int		bin_env(t_env *env, int export, int fd);
 int		bin_exit(t_data *data, int i);
-int		bin_pwd(t_env *env, int fd);
+int		bin_pwd(char *dir, int fd);
 int		bin_unset(t_env **env, t_list *key);
-int		bin_cd(t_env **env, t_list *cmd, int fd);
+int		bin_cd(t_data *data, t_list *cmd, int fd);
 int		bin_export(t_data *data, int i);
 int		export(t_env **env, char *key, char *value);
 int		check_builtin(char *str, t_data *data, int i);

@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 15:33:31 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 15:33:54 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/02 00:39:07 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,11 @@ int	syntax_error(char *str)
 	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
 	ft_putendl_fd(str, 2);
 	return (2);
+}
+
+int	command_not_found(char *str)
+{
+	ft_putstr_fd(str, 2);
+	ft_putendl_fd(": command not found", 2);
+	return (127);
 }

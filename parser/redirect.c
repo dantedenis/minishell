@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/01 19:12:49 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/02 00:50:24 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	here_doc(t_data *data, char *stop, int k)
 	signal(SIGINT, SIG_DFL);
 	line = readline("> ");
 	if (!line)
-		exit(ft_error("warning: heredoc delimited by end-of-file", 0));
+		exit(ft_error("warning: heredoc delimited by end-of-file", 0) - 1);
 	while (line)
 	{
 		if (!ft_strcmp(stop, line))
@@ -89,7 +89,7 @@ static int	here_doc(t_data *data, char *stop, int k)
 		free(parsed_line);
 		line = readline("> ");
 		if (!line)
-			exit(ft_error("warning: heredoc delimited by end-of-file", 0));
+			exit(ft_error("warning: heredoc delimited by end-of-file", 0) - 1);
 	}
 	close_pipe(data->c[k]->heredoc_pipe);
 	free(line);
