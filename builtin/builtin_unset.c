@@ -65,10 +65,7 @@ int	bin_unset(t_env **env, t_list *key)
 	while (temp->next)
 	{
 		if (!ft_strncmp(key->content, temp->key, len_key))
-		{
-			*env = temp->next;
-			return (free_list(temp));
-		}
+			return ((*env = temp->next) || free_list(temp));
 		else if (!ft_strncmp(key->content, temp->next->key, len_key))
 		{
 			pre = temp->next;

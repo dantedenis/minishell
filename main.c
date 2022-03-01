@@ -22,7 +22,6 @@ static void	settings_tty(t_data *data)
 	data->valid_cmds = 0;
 	tcgetattr(0, &new);
 	new.c_lflag &= ~ECHOCTL;
-	new.c_lflag &= ~ICANON;
 	tcsetattr(0, TCSANOW, &new);
 }
 
