@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/28 21:04:25 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/01 13:52:04 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	parser_and_execute(t_data *data);
 int		execute_cmd(t_data *data, int *pipefd, int input, int i);
 char	*get_cmd(t_env *env, char *str);
 void	wait_cmds(t_data *data);
+void	wait_here_doc(t_data *data, pid_t child);
 
 /*
 ** UTILS_FUNCTIONS
@@ -111,6 +112,7 @@ void	close_pipe(int *pipefd);
 int		check_redirect(char *str);
 char	*join_list(t_list *lst);
 int		check_syntax(t_data *data, char *str);
+int		go_to_end_redir(char *str, int *i);
 
 /*
 ** HANDLE_SPEC_SYMBOLS
@@ -141,11 +143,12 @@ char	**transform_env_to_array(t_env *env);
 
 int		bin_echo(t_list *cmd, int fd);
 int		bin_env(t_env *env, int export, int fd);
-void	bin_exit(t_data *data, int i);
+int		bin_exit(t_data *data, int i);
 int		bin_pwd(t_env *env, int fd);
 int		bin_unset(t_env **env, t_list *key);
-int		bin_export(t_env **env, char *key, char *value);
 int		bin_cd(t_env **env, t_list *cmd, int fd);
+int		bin_export(t_data *data, int i);
+int		export(t_env **env, char *key, char *value);
 int		check_builtin(char *str, t_data *data, int i);
 
 /*

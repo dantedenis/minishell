@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:38:05 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 20:52:37 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/01 13:31:26 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,11 @@ static int	here_doc(t_data *data, char *stop, int k)
 	char	*line;
 	char	*parsed_line;
 
-	if (data->c[k]->heredoc_flag)
-		close_pipe(data->c[k]->heredoc_pipe);
-	pipe(data->c[k]->heredoc_pipe);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 	line = readline("> ");
 	if (!line)
-		return (ft_error("warning: heredoc delimited by end-of-file", 0));
+		exit(ft_error("warning: heredoc delimited by end-of-file", 0));
 	while (line)
 	{
 		if (!ft_strcmp(stop, line))
@@ -91,26 +90,28 @@ static int	here_doc(t_data *data, char *stop, int k)
 		free(parsed_line);
 		line = readline("> ");
 		if (!line)
-			return (ft_error("warning: heredoc delimited by end-of-file", 0));
+			exit(ft_error("warning: heredoc delimited by end-of-file", 0));
 	}
-	data->c[k]->heredoc_flag = 1;
+	close_pipe(data->c[k]->heredoc_pipe);
 	free(line);
-	return (0);
+	exit(EXIT_SUCCESS);
 }
 
-static int	go_to_end_redir(char *str, int *i)
+static int	fork_here_doc(t_data *data, char *stop, int k)
 {
-	int	find_word;
+	pid_t	child;
 
-	find_word = 0;
-	while (str[*i] && ((!find_word && is_space(str[*i]))
-			|| (!is_space(str[*i]) && !is_redirect(str[*i]))))
-	{
-		if (!find_word && !is_space(str[*i]))
-			find_word = *i;
-		++(*i);
-	}
-	return (find_word);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	if (data->c[k]->heredoc_flag)
+		close_pipe(data->c[k]->heredoc_pipe);
+	pipe(data->c[k]->heredoc_pipe);
+	child = fork();
+	if (!child)
+		here_doc(data, stop, k);
+	wait_here_doc(data, child);
+	data->c[k]->heredoc_flag = 1;
+	return (data->status);
 }
 
 int	redir(t_data *data, char *str, int *i, int k)
@@ -124,10 +125,10 @@ int	redir(t_data *data, char *str, int *i, int k)
 	file = ft_substr(str, find_word, *i - find_word);
 	if (data->c[k]->type_redirect == DOUBLE_LEFT_REDIR)
 	{
-		if (here_doc(data, file, k))
+		if (fork_here_doc(data, file, k))
 		{
 			free(file);
-			return (data->status = EXIT_FAILER);
+			return (1);
 		}
 	}
 	else if (open_file(data, file, k))

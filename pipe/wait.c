@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wait.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 18:50:37 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 20:56:16 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/01 14:20:20 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,24 @@ void	wait_cmds(t_data *data)
 			data->status = WEXITSTATUS(status);
 		i++;
 	}
+}
+
+void	wait_here_doc(t_data *data, pid_t child)
+{
+	int	i;
+	int	status;
+	int	newline;
+
+	i = 0;
+	newline = 0;
+	waitpid(child, &status, WUNTRACED);
+	if (WIFSTOPPED(status))
+		data->status = WSTOPSIG(status) + 128;
+	if (WIFSIGNALED(status))
+	{
+		ft_newline_sigint(status, &newline);
+		data->status = WTERMSIG(status) + 128;
+	}
+	if (WIFEXITED(status))
+		data->status = WEXITSTATUS(status);
 }

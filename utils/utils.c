@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 21:50:49 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 15:36:38 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/01 13:03:42 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,19 @@ int	check_redirect(char *str)
 	if (str[0] == '>')
 		return (RIGHT_REDIR);
 	return (LEFT_REDIR);
+}
+
+int	go_to_end_redir(char *str, int *i)
+{
+	int	find_word;
+
+	find_word = 0;
+	while (str[*i] && ((!find_word && is_space(str[*i]))
+			|| (!is_space(str[*i]) && !is_redirect(str[*i]))))
+	{
+		if (!find_word && !is_space(str[*i]))
+			find_word = *i;
+		++(*i);
+	}
+	return (find_word);
 }

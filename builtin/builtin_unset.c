@@ -23,7 +23,7 @@ static int	checker(char *key)
 		error = 1;
 	while (key[++i])
 	{
-		if (!(ft_isalpha(key[i]) || ft_isdigit(key[i])))
+		if (!(ft_isalpha(key[i]) || ft_isdigit(key[i]) || key[i] == '_'))
 		{
 			error = 1;
 			break ;

@@ -12,7 +12,23 @@
 
 #include "minishell.h"
 
-void	bin_exit(t_data *data, int i)
+static int	is_number(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[0] == '-')
+		++i;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		++i;
+	}
+	return (1);
+}
+
+int	bin_exit(t_data *data, int i)
 {
 	int	tmp_status;
 
@@ -22,8 +38,15 @@ void	bin_exit(t_data *data, int i)
 		write(1, "exit\n", 5);
 	if (i >= 0 && data->c[i])
 	{
-		if (data->c[i]->cmd->next)
+		if (ft_lstsize(data->c[i]->cmd) > 2)
+			return (data->status = ft_error("exit: too many arguments", 0));
+		if (data->c[i]->cmd->next && is_number(data->c[i]->cmd->next->content))
 			tmp_status = ft_atoi(data->c[i]->cmd->next->content);
+		else if (data->c[i]->cmd->next)
+		{
+			ft_error("exit: numeric argument required", 0);
+			tmp_status = 2;
+		}
 		close_files_and_pipe(data->c[i]);
 	}
 	free_data(&data);

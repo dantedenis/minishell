@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void print_str(char *key, char *value, int export, int fd)
+static void	print_str(char *key, char *value, int export, int fd)
 {
 	if (export)
 	{

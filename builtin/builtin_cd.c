@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 21:15:54 by bstrong           #+#    #+#             */
-/*   Updated: 2022/02/28 20:48:01 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/01 13:41:07 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ static int	change_dir(t_env **env, char *path, int flag, int fd)
 	{
 		if (flag)
 			ft_putendl_fd(path, fd);
-		bin_export(env, "OLDPWD", cwd);
+		export(env, "OLDPWD", cwd);
 		free(cwd);
 		cwd = getcwd(NULL, 0);
-		bin_export(env, "PWD", cwd);
+		export(env, "PWD", cwd);
 		free(cwd);
 	}
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:13:58 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 20:55:16 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/01 12:41:34 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ int	execute_cmd(t_data *data, int *pipefd, int input, int i)
 {
 	pid_t	pid;
 
-	sigaction(SIGQUIT, &data->sig_qt, NULL);
+	if (sigaction(SIGQUIT, &data->sig_qt, NULL) == -1)
+		bin_exit(data, -1);
 	signal(SIGINT, SIG_IGN);
 	if (check_builtin(data->c[i]->cmd->content, data, i))
 	{
