@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 21:38:53 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/02 00:26:10 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/02 10:25:06 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	check_builtin(char *str, t_data *data, int i)
 	else if (!ft_strncmp(str, "env", 4))
 		data->status = bin_env(data->env, 0, data->c[i]->outf);
 	else if (!ft_strncmp(str, "pwd", 4))
-		data->status = bin_pwd(data->dir, data->c[i]->outf);
+		data->status = bin_pwd(data->pwd, data->c[i]->outf);
 	else if (!ft_strncmp(str, "cd", 3))
 		data->status = bin_cd(data, data->c[i]->cmd->next, data->c[i]->outf);
 	else if (!ft_strncmp(str, "unset", 6))

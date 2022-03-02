@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:26:56 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/02 00:25:20 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/02 10:33:51 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ t_data	*init_data(char **env)
 	data->sig_act.sa_flags = SA_SIGINFO;
 	data->sig_qt.sa_sigaction = sig_handler_quit;
 	parse_env(env, &data->env);
-	data->dir = ft_strdup(get_value_env(data->env, "PWD"));
+	data->pwd = ft_strdup(get_value_env(data->env, "PWD"));
 	export(&data->env, "PROMT", PROMT);
+	export(&data->env, "OLDPWD", NULL);
 	put_wellcome(data);
 	return (data);
 }
@@ -56,7 +57,8 @@ void	free_data(t_data **data)
 	t_data	*tmp;
 
 	tmp = *data;
-	free(tmp->dir);
+	free(tmp->pwd);
+	free(tmp->oldpwd);
 	free_alloc_arrays(tmp);
 	free_env(&tmp->env);
 	free(*data);

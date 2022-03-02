@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/03/02 00:46:54 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/02 10:24:27 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ typedef struct s_data
 {
 	t_env				*env;
 	t_cmd				**c;
-	char				*dir;
+	char				*pwd;
+	char				*oldpwd;
 	pid_t				*pid_arr;
 	int					valid_cmds;
 	int					count_cmds;
