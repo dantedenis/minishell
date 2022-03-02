@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 18:50:37 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/02 15:46:32 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/02 16:05:22 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	wait_cmds(t_data *data)
 		if (WIFSIGNALED(status))
 		{
 			ft_newline_sigint(status, &newline);
+			if (WTERMSIG(status) == SIGQUIT)
+				ft_putendl_fd("Quit (core dumped)", 1);
 			data->status = WTERMSIG(status) + 128;
 		}
 		if (WIFEXITED(status))

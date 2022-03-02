@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 14:20:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/02/28 20:52:27 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/02 16:00:58 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	start(char *str, t_data *data)
 	if (split_pipe(str, data))
 		return (1);
 	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 	parser_and_execute(data);
 	wait_cmds(data);
 	free_alloc_arrays(data);
