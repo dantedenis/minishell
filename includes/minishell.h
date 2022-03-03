@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 20:49:14 by bstrong           #+#    #+#             */
-/*   Updated: 2022/03/02 10:24:27 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/03 14:25:50 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int		bin_echo(t_list *cmd, int fd);
 int		bin_env(t_env *env, int export, int fd);
 int		bin_exit(t_data *data, int i);
 int		bin_pwd(char *dir, int fd);
-int		bin_unset(t_env **env, t_list *key);
+int		bin_unset(t_data *data, int i);
 int		bin_cd(t_data *data, t_list *cmd, int fd);
 int		bin_export(t_data *data, int i);
 int		export(t_env **env, char *key, char *value);

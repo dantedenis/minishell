@@ -50,7 +50,7 @@ static int	free_list(t_env *ptr)
 	return (0);
 }
 
-int	bin_unset(t_env **env, t_list *key)
+static int	unset(t_env **env, t_list *key)
 {
 	t_env	*temp;
 	t_env	*pre;
@@ -75,4 +75,24 @@ int	bin_unset(t_env **env, t_list *key)
 		temp = temp->next;
 	}
 	return (0);
+}
+
+int	bin_unset(t_data *data, int i)
+{
+	t_list	*cmd;
+	int		tmp;
+	int 	ret;
+
+	ret = 0;
+	cmd = data->c[i]->cmd->next;
+	if (!cmd)
+		return (0);
+	while (cmd)
+	{
+		tmp = unset(&data->env, cmd) != 0;
+		if (tmp != 0)
+			ret = tmp;
+		cmd = cmd->next;
+	}
+	return (ret);
 }

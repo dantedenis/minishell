@@ -94,14 +94,23 @@ int	export(t_env **env, char *key, char *value)
 int	bin_export(t_data *data, int i)
 {
 	char	**tmp;
+	t_list	*cmd;
 
-	if (!data->c[i]->cmd->next)
+	cmd = data->c[i]->cmd->next;
+	if (!cmd)
 		data->status = bin_env(data->env, 1, data->c[i]->inf);
-	else if (data->c[i]->cmd->next->content)
+	else
 	{
-		tmp = get_key_value(data->c[i]->cmd->next->content);
-		data->status = export(&data->env, tmp[0], tmp[1]);
-		ft_freearr(&tmp);
+		while (cmd)
+		{
+			if (cmd->content)
+			{
+				tmp = get_key_value(cmd->content);
+				data->status = export(&data->env, tmp[0], tmp[1]);
+				ft_freearr(&tmp);
+			}
+			cmd = cmd->next;
+		}
 	}
 	return (data->status);
 }

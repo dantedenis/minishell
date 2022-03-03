@@ -18,6 +18,8 @@ static void	print_str(char *key, char *value, int export, int fd)
 	{
 		ft_putstr_fd("declare -x ", fd);
 		ft_putstr_fd(key, fd);
+		if (!value)
+			ft_putchar_fd('\n', fd);
 	}
 	else if (value)
 		ft_putstr_fd(key, fd);
@@ -29,8 +31,8 @@ static void	print_str(char *key, char *value, int export, int fd)
 		ft_putstr_fd(value, fd);
 		if (export)
 			ft_putchar_fd('"', fd);
+		ft_putchar_fd('\n', fd);
 	}
-	ft_putchar_fd('\n', fd);
 }
 
 int	bin_env(t_env *env, int export, int fd)
